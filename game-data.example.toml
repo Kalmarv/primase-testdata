@@ -1,8 +1,7 @@
-# Copy to an ignored primase-data.toml, then set PRIMASE_DATA to its absolute path.
-# These are placeholders only. Keep private files outside the repository or under
-# the ignored primase-data.toml / primase-data.*.toml names; never commit real paths.
-# Every section and key is optional: a test whose input is not configured skips.
-# The keys are CONTRIBUTING.md's real-data tables; an unknown one is an error.
+# Copy outside the repository (or to an ignored game-data.toml), then set GAME_DATA to its absolute path.
+# These are placeholders only; never commit real paths. One file serves every repository that uses
+# primase-testdata. Every section and key is optional: a test whose input is not configured skips.
+# Each repository's README lists the keys its tests read; an unknown section is an error.
 
 [installs]
 sekiro = 'D:/placeholder/games/Sekiro'

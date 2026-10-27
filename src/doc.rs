@@ -1,12 +1,12 @@
-//! CONTRIBUTING.md's real-data tables, made from the registry ([`tables`]): the architecture check compares the
-//! document's block with them, so the two cannot drift.
-use crate::registry::{self, Status};
+//! A consumer's real-data tables, made from its registry ([`tables`]): its README holds them between [`BEGIN`] and
+//! [`END`], and [`crate::check_declared`] compares that block with them, so the two cannot drift.
+use crate::registry::{Registry, Status};
 
-/// The line before the tables in CONTRIBUTING.md.
+/// The line before the tables.
 pub const BEGIN: &str =
-    "<!-- real-data tables: made by primase_testdata::doc::tables from toolkit/testdata/src/registry.rs -->";
+    "<!-- real-data inputs: made by primase_testdata::doc::tables from tests/inputs/mod.rs -->";
 /// The line after them.
-pub const END: &str = "<!-- end of real-data tables -->";
+pub const END: &str = "<!-- end of real-data inputs -->";
 
 /// A table cell: `|` escaped, an empty text a dash.
 fn cell(text: &str) -> String {
@@ -17,7 +17,12 @@ fn cell(text: &str) -> String {
     }
 }
 
+/// A table under a heading; none when it has no rows.
 fn table(out: &mut String, title: &str, header: &[&str], rows: impl IntoIterator<Item = Vec<String>>) {
+    let rows: Vec<Vec<String>> = rows.into_iter().collect();
+    if rows.is_empty() {
+        return;
+    }
     out.push_str(&format!("#### {title}\n\n| {} |\n|", header.join(" | ")));
     out.push_str(&" --- |".repeat(header.len()));
     out.push('\n');
@@ -28,41 +33,32 @@ fn table(out: &mut String, title: &str, header: &[&str], rows: impl IntoIterator
 }
 
 /// The tables, between [`BEGIN`] and [`END`]: the configuration's keys, the oracle sets, every declared file and the
-/// debug keys.
-pub fn tables() -> String {
+/// debug keys (a table with no rows is left out).
+pub fn tables(registry: &Registry) -> String {
     let mut out = format!("{BEGIN}\n\n");
     let gate = |g: bool| if g { "yes" } else { "-" }.to_owned();
     table(
         &mut out,
         "Configuration keys",
         &["key", "gate", "about", "source"],
-        registry::INSTALLS
-            .iter()
-            .chain(registry::KEYS)
-            .chain(registry::TOOLS)
-            .chain([&registry::SCRATCH])
-            .map(|e| {
-                vec![
-                    format!("`{}`", e.key),
-                    gate(e.gate),
-                    cell(e.about),
-                    cell(e.source),
-                ]
-            }),
+        registry
+            .entries()
+            .map(|(key, e)| vec![format!("`{key}`"), gate(e.gate), cell(e.about), cell(e.source)]),
     );
     table(
         &mut out,
         "Oracle sets (`<oracles.root>/<set>/<game>/`)",
         &["set", "about", "source"],
-        registry::ORACLE_SETS
+        registry
+            .oracle_sets
             .iter()
-            .map(|s| vec![format!("`{}`", s.key), cell(s.about), cell(s.source)]),
+            .map(|s| vec![format!("`oracles.{}`", s.name), cell(s.about), cell(s.source)]),
     );
     table(
         &mut out,
         "Declared files",
         &["key", "status", "gate", "about", "source"],
-        registry::DECLARED.iter().map(|d| {
+        registry.declared.iter().map(|d| {
             let status = match d.status {
                 Status::Live => "live".to_owned(),
                 Status::Blocked => "blocked".to_owned(),
@@ -79,9 +75,10 @@ pub fn tables() -> String {
     );
     table(
         &mut out,
-        "Debug keys (`PRIMASE_DEBUG`)",
+        "Debug keys (`GAME_DATA_DEBUG`)",
         &["key", "about"],
-        registry::DEBUG
+        registry
+            .debug
             .iter()
             .map(|(k, about)| vec![format!("`{k}`"), cell(about)]),
     );

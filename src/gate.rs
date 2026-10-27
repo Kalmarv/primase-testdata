@@ -1,8 +1,8 @@
 //! Gates: correctness is part of the API.
 //!
 //! A gate compares two independent implementations (or one implementation and a fixture) item by item over a corpus
-//! and reports how many agree exactly, how many within a stated tolerance, and which differ. Every decoder in the
-//! workspace has one; every reader has a census over a game's real data. See CONTRIBUTING.md "Gates".
+//! and reports how many agree exactly, how many within a stated tolerance, and which differ: a decoder's gate against
+//! an independent decoder or fixtures, a reader's census over a game's real data.
 
 use std::fmt;
 
