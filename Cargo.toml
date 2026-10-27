@@ -29,7 +29,7 @@ edition = "2024"
 rust-version = "1.99"
 license = "GPL-3.0-or-later"
 repository = "https://github.com/Kalmarv/primase-testdata"
-publish = false
+publish = true
 
 [workspace.dependencies]
 serde_json = { version = "=1.0.154", default-features = false, features = ["std", "preserve_order", "float_roundtrip"] }
