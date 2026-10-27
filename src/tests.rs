@@ -305,6 +305,32 @@ fn the_example_configuration_is_valid() {
     config::validate(example).unwrap_or_else(|e| panic!("game-data.example.toml: {e}"));
 }
 
+/// The README's example and the crate documentation's are the code of `examples/declare_inputs.rs`.
+#[test]
+fn the_readme_and_crate_docs_show_the_example() {
+    let example = include_str!("../examples/declare_inputs.rs");
+    let code = example.splitn(3, '\n').nth(2).unwrap_or_default().trim_end();
+    assert!(
+        include_str!("../README.md").contains(code),
+        "README.md differs from examples/declare_inputs.rs"
+    );
+    let docs: String = include_str!("lib.rs")
+        .lines()
+        .filter_map(|l| l.strip_prefix("//!"))
+        .map(|l| {
+            format!(
+                "{}
+",
+                l.strip_prefix(' ').unwrap_or(l)
+            )
+        })
+        .collect();
+    assert!(
+        docs.contains(code),
+        "the crate docs differ from examples/declare_inputs.rs"
+    );
+}
+
 /// A whole registry reports nothing; one that is not names each fault.
 #[test]
 fn a_registry_reports_what_it_fails_to_say() {
@@ -360,7 +386,7 @@ fn a_registry_reports_what_it_fails_to_say() {
     for fault in [
         "installs.gta: say what it is",
         "oracles.corpus is not declared",
-        "blocked, so a landing-gate input",
+        "blocked, so a required input (gate: true)",
         "a relative, /-separated path",
         "installs.sekiro is not declared",
         "unheld, so never a gate input",

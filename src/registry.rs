@@ -1,11 +1,11 @@
 //! What a consumer's tests may ask the real-data configuration for ([`Registry`]): the games' installs and keys, the
-//! tools, the oracle sets and the debug keys, each declared once with what it is, where it comes from and whether the
-//! landing gate needs it. Every file a test asks for inside an install or an oracle set is declared too
+//! tools, the oracle sets and the debug keys, each declared once with what it is, where it comes from and whether a
+//! run that must be complete requires it. Every file a test asks for inside an install or an oracle set is declared too
 //! ([`Registry::declared`]), with what it holds, where it comes from and whether its obligation stands: a query for an
 //! undeclared file fails, so a mistyped path never skips quietly.
 //!
 //! A consumer declares its own registry in its test-support module with [`crate::inputs!`]; the configuration file
-//! names its entries by their keys (`installs.sekiro`, `tools.warp`, `oracles.root`), and one file serves every
+//! names its entries by their keys (`installs.sekiro`, `tools.codec`, `oracles.root`), and one file serves every
 //! consumer.
 
 use crate::query::Query;
@@ -13,18 +13,18 @@ use crate::query::Query;
 /// One declared configuration entry: an install or a game's keys (named by the game's key), or a tool.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Entry {
-    /// Its key within its section (`sekiro` of `installs.sekiro`, `warp` of `tools.warp`).
+    /// Its key within its section (`sekiro` of `installs.sekiro`, `codec` of `tools.codec`).
     pub name: &'static str,
     /// What it is and the layout it must have.
     pub about: &'static str,
     /// Where its data comes from, and so how far it is independent of what it checks.
     pub source: &'static str,
-    /// The landing gate must have it (`[run] require = 'gate'`).
+    /// A complete run must have it (`[run] require = 'gate'`).
     pub gate: bool,
 }
 
 /// An oracle set: one producer's outputs, under `<oracles.root>/<set>/<game>/`; its files are declared one by one
-/// ([`Registry::declared`]), each with whether the landing gate needs it.
+/// ([`Registry::declared`]), each with whether a complete run requires it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Set {
     /// Its folder under `oracles.root`.
@@ -41,22 +41,27 @@ pub enum Status {
     /// The obligation stands and the input it names is acceptable.
     Live,
     /// The obligation stands, but no acceptable input exists yet (the existing data is not independent, or its
-    /// producer is gone): `source` names the replacement. It is a landing-gate input, so a gate run without it fails:
-    /// its tests never pass by skipping.
+    /// producer is gone): `source` names the replacement. It is a required input, so a run with
+    /// `[run] require = 'gate'` fails without it: its tests never pass by skipping.
     Blocked,
     /// The obligation stands and the input is acceptable, but no machine here holds it (`why`: an install the owner
-    /// does not have). Never a landing-gate input: where it is not there, its tests skip naming `why`, whatever
+    /// does not have). Never a required input: where it is not there, its tests skip naming `why`, whatever
     /// `[run] require` says; a machine that comes to hold it configures it as any other.
-    Unheld { why: &'static str },
+    Unheld {
+        /// Why no machine holds it.
+        why: &'static str,
+    },
 }
 
 /// A file or folder a test asks for inside an install ([`Query::Install`] with a path) or an oracle set
 /// ([`Query::Oracle`]).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Declared {
+    /// The file or folder, as the configuration's names give it.
     pub query: Query,
+    /// Whether its obligation stands.
     pub status: Status,
-    /// The landing gate must have it (`[run] require = 'gate'`).
+    /// A complete run must have it (`[run] require = 'gate'`).
     pub gate: bool,
     /// What it is, its layout or schema, and the tests that read it.
     pub about: &'static str,
@@ -68,8 +73,11 @@ pub struct Declared {
 /// self-check ([`crate::check_declared`]) reads the queries a crate's sources write with them.
 #[derive(Clone, Copy, Debug)]
 pub struct Names {
+    /// The games: (variant name, configuration key).
     pub games: &'static [(&'static str, &'static str)],
+    /// The tools: (variant name, configuration key).
     pub tools: &'static [(&'static str, &'static str)],
+    /// The oracle sets: (variant name, folder name).
     pub oracle_sets: &'static [(&'static str, &'static str)],
 }
 
@@ -110,7 +118,7 @@ impl Registry {
         self.declared.iter().find(|d| d.query == query)
     }
 
-    /// The entry a configuration key names whole (`installs.sekiro`, `keys.gta`, `tools.warp`, `scratch.root`).
+    /// The entry a configuration key names whole (`installs.sekiro`, `keys.gta`, `tools.codec`, `scratch.root`).
     pub fn entry(&self, key: &str) -> Option<&'static Entry> {
         let (section, name) = key.split_once('.')?;
         let entries = match section {
@@ -201,9 +209,9 @@ impl Registry {
             if d.about.is_empty() || d.source.is_empty() {
                 problems.push(format!("{key}: say what it is and where it comes from"));
             }
-            // a blocked file is a landing-gate input: a gate run without it fails, it never passes by skipping
+            // a blocked file is a required input: a run that requires inputs fails without it, it never passes by skipping
             if d.status == Status::Blocked && !d.gate {
-                problems.push(format!("{key}: blocked, so a landing-gate input"));
+                problems.push(format!("{key}: blocked, so a required input (gate: true)"));
             }
             if let Status::Unheld { why } = d.status
                 && (d.gate || why.is_empty())

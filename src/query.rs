@@ -4,7 +4,7 @@
 use std::path::PathBuf;
 
 /// What a test asks the configuration for, by the configuration's own names: a game's key (`sekiro`), a tool's
-/// (`warp`), an oracle set's folder (`codewalker`).
+/// (`codec`), an oracle set's folder (`codewalker`).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Query {
     /// A game's install, or a file or folder inside it (relative, `/`-separated).

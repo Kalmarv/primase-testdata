@@ -20,22 +20,29 @@ pub enum Tolerance {
 pub struct GateFailure {
     /// Which item (fixture name, file path, texture key).
     pub item: String,
+    /// What differed.
     pub detail: String,
 }
 
 /// The outcome of a gate over a corpus.
 #[derive(Clone, Debug, PartialEq)]
 pub struct GateReport {
+    /// The gate's name, for its report line.
     pub name: String,
+    /// How far an item may differ and pass.
     pub tolerance: Tolerance,
+    /// Items recorded, passed or failed.
     pub checked: u64,
+    /// Items with no difference.
     pub exact: u64,
     /// Not exact but within the tolerance.
     pub within: u64,
+    /// The items that failed.
     pub failures: Vec<GateFailure>,
 }
 
 impl GateReport {
+    /// An empty report for the gate `name`.
     pub fn new(name: impl Into<String>, tolerance: Tolerance) -> Self {
         GateReport {
             name: name.into(),
@@ -82,6 +89,7 @@ impl GateReport {
         self.record(item, f64::from(max));
     }
 
+    /// Whether anything was checked and nothing failed: a gate that checked nothing has not passed.
     pub fn passed(&self) -> bool {
         self.failures.is_empty() && self.checked > 0
     }
@@ -115,7 +123,7 @@ impl fmt::Display for GateReport {
     }
 }
 
-/// How two JSON documents compare as their consumer reads them (CONTRIBUTING.md "What correct means").
+/// How two JSON documents compare ([`compare_json`] makes it).
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct JsonCompare {
     /// Numbers compared.
@@ -133,6 +141,7 @@ pub struct JsonCompare {
 }
 
 impl JsonCompare {
+    /// Whether no difference was found.
     pub fn equal(&self) -> bool {
         self.differences.is_empty()
     }

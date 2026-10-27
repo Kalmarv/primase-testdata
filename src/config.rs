@@ -8,7 +8,7 @@
 //! [keys]
 //! gta = 'D:/placeholder/gta-keys'
 //! [tools]
-//! warp = 'D:/placeholder/warp.exe'
+//! oodle6 = 'D:/placeholder/oo2core_6_win64.dll'
 //! [oracles]
 //! root = 'D:/placeholder/oracles'   # <root>/<set>/<game>/<file>
 //! [scratch]
@@ -16,7 +16,7 @@
 //! [run]
 //! require = 'gate'                  # or 'all': an unset input fails instead of skipping
 //! gate = 'smoke'                    # or 'full': how much the heavy real-data tests cover (smoke by default)
-//! seed = '20384'                     # the smoke sample's seed (the day's by default), to rerun one exactly
+//! seed = '20384'                    # the smoke sample's seed (the day's by default), to rerun one exactly
 //! threads = '1'                     # the threads a heavy real-data test's work may use (one by default)
 //! ```
 //!
@@ -32,7 +32,7 @@ use std::path::{Path, PathBuf};
 pub(crate) struct Config {
     /// The file it was read from; `None` when `GAME_DATA` is unset.
     pub file: Option<PathBuf>,
-    /// The structured sections, by full key (`installs.sekiro`, `tools.warp`, `oracles.root`, `scratch.root`).
+    /// The structured sections, by full key (`installs.sekiro`, `tools.oodle6`, `oracles.root`, `scratch.root`).
     pub roots: BTreeMap<String, PathBuf>,
     /// `[run] require`: `gate` or `all`.
     pub require: Option<String>,
@@ -44,12 +44,25 @@ pub(crate) struct Config {
     pub threads: Option<std::num::NonZeroUsize>,
 }
 
+/// Why the configuration file could not be used.
 #[derive(Debug, thiserror::Error)]
 pub enum ConfigError {
+    /// The file `GAME_DATA` names could not be read.
     #[error("cannot read GAME_DATA file {}: {source}", path.display())]
-    Read { path: PathBuf, source: std::io::Error },
+    Read {
+        /// The file.
+        path: PathBuf,
+        /// The I/O error.
+        source: std::io::Error,
+    },
+    /// The file is not a valid configuration: `detail` says which section, key or value and what was expected.
     #[error("GAME_DATA file {}: {detail}", path.display())]
-    Invalid { path: PathBuf, detail: String },
+    Invalid {
+        /// The file (`(text)` for [`validate`]).
+        path: PathBuf,
+        /// What is wrong with it.
+        detail: String,
+    },
 }
 
 /// The sections of the structured format and the keys each may hold; `None` for a section whose keys are the

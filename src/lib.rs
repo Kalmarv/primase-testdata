@@ -1,14 +1,75 @@
-//! Real-data configuration for tests: where a test finds the games' installs, keys, the tools it runs, the oracle sets
-//! it compares against and where it may write. `GAME_DATA` names one TOML file ([`config`] shows its layout), and one
-//! file serves every repository that uses this crate. Each consumer declares what its tests read in its own registry
-//! ([`inputs!`], in `tests/inputs/mod.rs`), and its tests ask through the typed queries that gives it (`install`,
-//! `install_file`, `keys`, `tool`, `oodle`, `oracle`, `debug`), every file of an install or an oracle set declared one
-//! by one. An unset entry skips the test with one line naming its configuration key, unless `[run] require` says the
-//! gate must have it; a set entry whose path is gone always fails, and so does a file the registry does not declare.
-//! Each consumer runs [`check_declared`] as one test, and its README lists its inputs ([`doc`]). What a test compares
-//! against its oracle it counts in a [`gate::GateReport`].
+//! Real-data inputs for tests: where a test finds a game's install, archive keys, a third-party tool or the reference
+//! output it compares against, without any path in the test itself.
 //!
-//! Add this crate only in dev-dependencies.
+//! A crate whose tests read files nobody can ship (a game's own data) declares what they read once, in
+//! `tests/inputs/mod.rs`, with [`inputs!`]. The macro gives the tests typed queries (`install`, `install_file`, `keys`,
+//! `tool`, `oodle`, `oracle`, `debug`). A person who has the files writes one TOML file, names it in the `GAME_DATA`
+//! environment variable ([`config`] shows its layout) and the same file serves every crate that uses this one.
+//!
+//! - An entry the file does not set makes the test print one `SKIP` line naming its configuration key and return,
+//!   unless `[run] require` says a complete run must have it.
+//! - A path the file sets that does not exist fails the test.
+//! - A file the crate has not declared fails the test: a mistyped path never skips quietly.
+//! - [`check_declared`] runs as one test in each consumer and checks its sources against its declarations; [`doc`] makes
+//!   the table of inputs for its README.
+//! - What a test compares against reference output it counts in a [`gate::GateReport`].
+//!
+//! Add this crate only under `[dev-dependencies]`.
+//!
+//! ```
+//! mod inputs {
+//!     primase_testdata::inputs! {
+//!         games {
+//!             Sekiro = "sekiro",
+//!         }
+//!         installs {
+//!             Sekiro {
+//!                 about: "Sekiro's install folder",
+//!                 source: "the user's own install",
+//!                 gate: true,
+//!             },
+//!         }
+//!         keys {}
+//!         tools {
+//!             Oodle6 = "oodle6" {
+//!                 about: "an Oodle version-6 DLL",
+//!                 source: "the game's own DLL from the user's install",
+//!                 gate: true,
+//!             },
+//!         }
+//!         oracle_sets {
+//!             Corpus = "corpus" {
+//!                 about: "the games' own files cut from their installs",
+//!                 source: "the user's own installs: files extracted as stored",
+//!             },
+//!         }
+//!         declared {
+//!             Query::Oracle(OracleSet::Corpus, Game::Sekiro, "dcx") => {
+//!                 status: Live,
+//!                 gate: false,
+//!                 about: "Sekiro's DCX files as stored",
+//!                 source: "the user's own install",
+//!             },
+//!         }
+//!         debug {
+//!             "oodle.dump" => "a folder under the scratch root the Oodle gate writes to",
+//!         }
+//!     }
+//! }
+//!
+//! use inputs::{Game, OracleSet};
+//!
+//! fn main() {
+//!     assert!(inputs::REGISTRY.problems().is_empty());
+//!     let Some(install) = inputs::install(Game::Sekiro) else {
+//!         return; // `installs.sekiro` is not configured here: the SKIP line names it
+//!     };
+//!     println!("Sekiro is installed at {}", install.display());
+//!     if let Some(folder) = inputs::oracle(OracleSet::Corpus, Game::Sekiro, "dcx") {
+//!         println!("DCX files are in {}", folder.display());
+//!     }
+//! }
+//! ```
 use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 
@@ -35,7 +96,7 @@ fn load() -> Config {
     Config::load(&environment, |path| std::fs::read_to_string(path)).unwrap_or_else(|e| panic!("{e}"))
 }
 
-/// Whether the landing gate must have what `query` names: a declared file's own flag ([`Registry::declared`]), else
+/// Whether a complete run must have what `query` names: a declared file's own flag ([`Registry::declared`]), else
 /// its configuration key's ([`Registry::installs`], [`Registry::keys`], [`Registry::tools`]). A file in an install or
 /// an oracle set that is not declared fails, and so does an install, keys or a tool the registry does not declare: a
 /// mistyped path must not skip quietly.
@@ -90,7 +151,7 @@ enum Decision {
 /// The decision for `query` under `config`: a configured path that exists is found and one that does not fails, except
 /// an oracle file whose set this machine does not hold (no `<oracles.root>/<set>` folder in a root that exists): that
 /// set is not configured here, as an unset key is. What is not configured skips, or fails where `[run] require` needs
-/// it (`all`, or `gate` and `gate` says the landing gate must have it).
+/// it (`all`, or `gate` and `gate` says a complete run must have it).
 fn decide(registry: &Registry, config: &Config, query: Query, gate: bool) -> Decision {
     // an input no machine here holds: used where it is there, else skipped naming why, whatever require says
     if let Some(Declared {
@@ -156,7 +217,7 @@ fn decide(registry: &Registry, config: &Config, query: Query, gate: bool) -> Dec
 
 /// Resolve `query`, which `registry` must declare, to an existing path, or skip: what is not configured prints one SKIP
 /// line naming the test and the configuration key, unless the configuration's `[run] require` is `all`, or `gate` and
-/// the entry is one the landing gate must have (a blocked file always is). An oracle set this machine does not hold
+/// the entry is one a complete run must have (a blocked file always is). An oracle set this machine does not hold
 /// (no `<oracles.root>/<set>` folder) counts as not configured; a configured path that does not exist fails (inside a
 /// set that is there: a typo or a broken tree), and so does an undeclared query.
 #[track_caller]
@@ -173,13 +234,13 @@ pub fn resolve(registry: &Registry, query: Query) -> Option<PathBuf> {
     }
 }
 
-/// Where a test gets its Oodle codec: the game's library where the platform loads one, else nothing to configure.
+/// Where a test gets its Oodle codec: the game's own library on Windows, else nothing to configure.
 #[derive(Clone, Debug)]
 pub struct OodleLibrary(Option<PathBuf>);
 
 impl OodleLibrary {
-    /// The configured game library: `Some` on Windows, where it is the codec; `None` elsewhere, where oozextract is
-    /// (`primase_foundations::compress::oodle::Oodle::open` takes it as it is).
+    /// The configured game library: `Some` on Windows, where the test loads it as the codec; `None` elsewhere, where
+    /// the test uses a portable decoder instead.
     pub fn path(&self) -> Option<&Path> {
         self.0.as_deref()
     }
@@ -187,7 +248,7 @@ impl OodleLibrary {
 
 /// The Oodle codec for a game's data (`version`: the tool's key, `oodle5`, `oodle6` or `oodle9`): on Windows the game's
 /// library, which `tools.<version>` names (a test skips, or fails under `[run] require`, where it is not configured);
-/// elsewhere oozextract decodes, so there is nothing to configure and nothing to skip for.
+/// elsewhere there is nothing to configure and nothing to skip for, and the result holds no path.
 #[track_caller]
 pub fn oodle(registry: &Registry, version: &'static str) -> Option<OodleLibrary> {
     if cfg!(windows) {
@@ -226,8 +287,8 @@ impl Drop for OwnScratch {
 }
 
 /// A folder `name` under [`scratch`] this call alone writes to (`<scratch>/<name>/p<pid>-<call>`, made): a test that
-/// exchanges files with an external program (WARP, a compiler) under fixed names writes them here, so two runs of it at
-/// once (a gate beside a developer's run, two checkouts) cannot overwrite or truncate each other's files while the program
+/// exchanges files with an external program (a compiler, a rasterizer) under fixed names writes them here, so two runs of
+/// it at once (two checkouts, a CI job beside a local run) cannot overwrite or truncate each other's files while the program
 /// reads them.
 #[track_caller]
 pub fn own_scratch(name: &str) -> OwnScratch {
@@ -241,7 +302,7 @@ pub fn own_scratch(name: &str) -> OwnScratch {
     OwnScratch(dir)
 }
 
-/// The machine-wide lock on the WARP oracle ([`warp_exclusive`]), released when it is dropped.
+/// The machine-wide lock on the WARP rasterizer program ([`warp_exclusive`]), released when it is dropped.
 #[derive(Debug)]
 pub struct WarpLock(std::fs::File);
 
@@ -252,13 +313,13 @@ impl Drop for WarpLock {
     }
 }
 
-/// Takes the lock on the WARP oracle, waiting for whoever holds it: a test runs `warp.exe` only while it holds it.
+/// Takes the lock on Microsoft's WARP software rasterizer program (`warp.exe`, a tool a consumer may configure),
+/// waiting for whoever holds it: a test runs the program only while it holds the lock.
 ///
-/// Several `warp.exe` runs at once (two test binaries, a gate beside a developer's run, an agent's run beside another's)
-/// do not give each their own results: four copies of `exec_warp_rq` started together failed their comparison against
-/// the executor in most rounds (the gate's `hits > 0 && mismatches.is_empty()`, a read of an empty results file, a
-/// parse of a cut line), where one copy alone passed 28 of 28 runs, under heavy CPU load too. The lock is a file in the
-/// scratch root held with the operating system's own file lock, so it is released if the holder dies.
+/// Several runs of that program at once (two test binaries, two checkouts) were observed not to give each run its own
+/// results: four copies of one comparison test started together mostly failed (an empty results file, a cut line),
+/// where a single copy passed every time. The lock is `warp/.oracle.lock` in the [`scratch`] root, held with the
+/// operating system's own file lock, so it is released if the holder dies.
 #[track_caller]
 pub fn warp_exclusive() -> WarpLock {
     let dir = scratch().join("warp");
@@ -286,8 +347,7 @@ pub fn debug(registry: &Registry, key: &str) -> Option<String> {
     config::debug(&environment, key)
 }
 
-/// How much a heavy real-data test covers (`[run] gate`): a smoke sample on every batch, or everything (the overnight
-/// gate).
+/// How much a heavy real-data test covers (`[run] gate`): a sample, or everything.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Depth {
     /// A sample, drawn with [`seed`]: the default.
@@ -316,14 +376,14 @@ pub fn seed() -> u64 {
     })
 }
 
-/// The threads a heavy real-data test's work may use (`[run] threads`, one by default): what a test states for its
-/// world (`core.threads`), so a machine opts into the load. Work whose result is the same on any count only.
+/// The threads a heavy real-data test's work may use (`[run] threads`, one by default), so a machine opts into the
+/// load. For work whose result is the same on any thread count only.
 pub fn threads() -> std::num::NonZeroUsize {
     load().threads.unwrap_or(std::num::NonZeroUsize::MIN)
 }
 
-/// The bytes of a real-data input file, for a unit test inside a library crate, which has no file access of its own:
-/// the file a query resolved, or one its input names.
+/// The bytes of a real-data input file: `std::fs::read` of the path a query resolved, or of a file inside the folder
+/// it resolved.
 pub fn read_input(path: impl AsRef<Path>) -> std::io::Result<Vec<u8>> {
     std::fs::read(path)
 }

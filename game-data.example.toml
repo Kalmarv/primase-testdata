@@ -1,6 +1,6 @@
 # Copy outside the repository (or to an ignored game-data.toml), then set GAME_DATA to its absolute path.
 # These are placeholders only; never commit real paths. One file serves every repository that uses
-# primase-testdata. Every section and key is optional: a test whose input is not configured skips.
+# primase-testdata, so it may name installs and tools some of them do not read. Every section and key is optional: a test whose input is not configured skips.
 # Each repository's README lists the keys its tests read; an unknown section is an error.
 
 [installs]
@@ -23,12 +23,12 @@ root = 'D:/placeholder/oracles'
 root = 'D:/placeholder/scratch'
 
 [run]
-# 'gate': every input the landing gate must have fails when missing; 'all': every input
+# 'gate': every input its crate marks `gate: true` fails when missing; 'all': every input
 require = 'gate'
-# how much the heavy tests cover: 'smoke' (a sample, by default) or 'full' (the overnight gate)
+# how much the heavy tests cover: 'smoke' (a sample, by default) or 'full' (everything)
 gate = 'smoke'
 # the smoke sample's seed: unset, the day's, so coverage accumulates; set it to rerun one sample exactly
 # seed = '20384'
-# the threads a heavy real-data test's work may use (the bakes' core.threads): unset, one, as light as the serial
-# run; its results are the same on any count
+# the threads a heavy real-data test's work may use : unset, one, as light as a serial
+# run; a test only uses this for work whose result is the same on any count
 # threads = '4'

@@ -1,6 +1,10 @@
 [package]
 name = "primase-testdata"
-description = "Real-data inputs for tests: each consumer declares the game files, tools and oracle outputs its tests read; one machine-wide TOML file (GAME_DATA) says where they are, and what is not configured skips; gate reports for comparing against an oracle"
+description = "Declare the game installs, tools and reference outputs your tests read; one TOML file per machine says where they are, and unconfigured inputs skip"
+readme = "README.md"
+keywords = ["testing", "test-data", "fixtures", "game-modding", "oracle"]
+categories = ["development-tools::testing"]
+documentation = "https://docs.rs/primase-testdata"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -35,6 +39,7 @@ toml = { version = "=1.1.8", default-features = false, features = ["parse", "ser
 [workspace.lints.rust]
 unsafe_code = "deny"
 missing_debug_implementations = "warn"
+missing_docs = "warn"
 unused_must_use = "deny"
 
 [workspace.lints.clippy]
