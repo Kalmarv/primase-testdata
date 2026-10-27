@@ -13,6 +13,23 @@
 ///   `expect_found`, and this crate's own helpers re-exported (`scratch`, `own_scratch`, `warp_exclusive`, `depth`,
 ///   `seed`, `threads`, `read_input`, `Depth`, `OodleLibrary`, `OwnScratch`, `WarpLock`).
 ///
+/// An entry of `installs` or `keys` is named by a `Game` variant, so its game must be declared in `games` first; a name
+/// that is not fails to compile with "no variant named ... found for enum `Game`":
+///
+/// ```compile_fail
+/// primase_testdata::inputs! {
+///     games {}
+///     installs {
+///         Sekiro { about: "an install", source: "the user's own", gate: false },
+///     }
+///     keys {}
+///     tools {}
+///     oracle_sets {}
+///     declared {}
+///     debug {}
+/// }
+/// ```
+///
 /// Every section is required, in this order, and may be empty. A declared file's `status` is `Live`, `Blocked` or
 /// `Unheld("why")` ([`Status`](crate::Status)).
 ///

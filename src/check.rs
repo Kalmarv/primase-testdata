@@ -34,6 +34,8 @@ pub fn check_declared(registry: &Registry, crate_dir: impl AsRef<Path>) {
 ///   set and path are literal (one file per game), and the run then refuses an undeclared game;
 /// - an install or keys query naming a game literally (`install(Game::Sekiro)`) whose install or keys the registry does
 ///   not declare, and a debug key that is not a declared literal (`debug("shader.diff_limit")`);
+/// - a source that re-exports the inputs module's query functions (`pub use` of them or of a glob), which the check
+///   cannot follow;
 /// - a source that names `GAME_DATA` or `GAME_DATA_DEBUG` itself: tests ask through their inputs module;
 /// - a README (`README.md`, `tests/inputs/README.md`) whose block between [`doc::BEGIN`] and [`doc::END`] is not
 ///   [`doc::tables`].
@@ -58,6 +60,11 @@ pub fn problems(registry: &Registry, crate_dir: &Path) -> Vec<String> {
                 .into_iter()
                 .map(|n| format!("{shown}: names {n}: ask through the inputs module")),
         );
+        problems.extend(reexports(&text).into_iter().map(|r| {
+            format!(
+                "{shown}: re-exports queries of the inputs module (`{r}`), which the check cannot follow: import them                  from the inputs module in each file that asks"
+            )
+        }));
         if !uses_inputs(&text) {
             continue;
         }
@@ -145,16 +152,7 @@ fn file_problems(registry: &Registry, text: &str) -> Vec<String> {
     // `Game as Data`: what the file calls the inputs' enums
     let aliases = |name: &str| -> Vec<String> {
         let mut out = vec![name.to_owned()];
-        let words: Vec<&str> = text
-            .split(|c: char| !(c.is_alphanumeric() || c == '_'))
-            .filter(|w| !w.is_empty())
-            .collect();
-        out.extend(
-            words
-                .windows(3)
-                .filter(|w| w[0] == name && w[1] == "as")
-                .map(|w| w[2].to_owned()),
-        );
+        out.extend(renames(&words(text), name).into_iter().map(str::to_owned));
         out
     };
     let (games, sets) = (aliases("Game"), aliases("OracleSet"));
@@ -265,61 +263,164 @@ fn file_problems(registry: &Registry, text: &str) -> Vec<String> {
     problems
 }
 
+/// The words of `text`: runs of letters, digits and `_`.
+fn words(text: &str) -> Vec<&str> {
+    text.split(|c: char| !(c.is_alphanumeric() || c == '_'))
+        .filter(|w| !w.is_empty())
+        .collect()
+}
+
+/// What `words` rename `name` to (`name as alias`).
+fn renames<'a>(words: &[&'a str], name: &str) -> Vec<&'a str> {
+    words
+        .windows(3)
+        .filter_map(|w| match w {
+            [n, "as", alias] if *n == name => Some(*alias),
+            _ => None,
+        })
+        .collect()
+}
+
+/// The query functions the inputs module gives a test, by the word each is called with in a call.
+const QUERY_FUNCTIONS: [&str; 5] = ["oracle", "install_file", "install", "keys", "debug"];
+
+/// One `use` statement that names the inputs module.
+struct Import<'a> {
+    words: Vec<&'a str>,
+    glob: bool,
+    /// `pub use`, `pub(crate) use`: it hands what it imports on.
+    public: bool,
+}
+
+/// Whether `before`, the text ahead of a `use`, ends in `pub` or `pub(..)`.
+fn is_pub(before: &str) -> bool {
+    let before = before.trim_end();
+    before.ends_with("pub")
+        || before.strip_suffix(')').is_some_and(|rest| {
+            rest.rsplit_once("pub(").is_some_and(|(_, scope)| {
+                scope
+                    .chars()
+                    .all(|c| c.is_alphanumeric() || c == '_' || c == ':' || c == ' ')
+            })
+        })
+}
+
+/// The `use` statements of `code` that name the inputs module.
+fn inputs_imports(code: &str) -> Vec<Import<'_>> {
+    code.match_indices("use ")
+        .filter(|&(at, _)| {
+            !code
+                .split_at(at)
+                .0
+                .chars()
+                .next_back()
+                .is_some_and(|c| c.is_alphanumeric() || c == '_')
+        })
+        .filter_map(|(at, _)| {
+            let (before, rest) = code.split_at(at);
+            let statement = rest.split(';').next().unwrap_or_default();
+            let words = words(statement);
+            let public = is_pub(before);
+            words.contains(&"inputs").then(|| Import {
+                words,
+                glob: statement.contains('*'),
+                public,
+            })
+        })
+        .collect()
+}
+
+/// The `pub use` statements of `text` that hand on the inputs module's query functions (by name or by a glob): a
+/// test that calls them through the re-export is out of the check's sight.
+pub(crate) fn reexports(text: &str) -> Vec<String> {
+    inputs_imports(text)
+        .into_iter()
+        .filter(|i| i.public && (i.glob || QUERY_FUNCTIONS.iter().any(|q| i.words.contains(q))))
+        .map(|i| i.words.join(" "))
+        .collect()
+}
+
 /// The calls of a typed real-data query in a source text, each with its arguments as written (top-level commas,
 /// comments left out, any path before the last `inputs::` dropped): `oracle(..)`, `install_file(..)`, `install(..)`,
-/// `keys(..)` and `debug(..)` called through `inputs::` or imported from it by a `use` through `inputs::`, and
-/// `Query::Oracle(..)`, `Query::Install(..)` and `Query::Keys(..)`.
+/// `keys(..)` and `debug(..)` called through `inputs::` (or the name a `use` renames the module to), imported from it
+/// by a `use` through `inputs::` (under the name the import gives, or by a glob), and `Query::Oracle(..)`,
+/// `Query::Install(..)` and `Query::Keys(..)`. A function re-exported from the inputs module is not followed:
+/// [`reexports`] names those.
 pub(crate) fn query_calls(text: &str) -> Vec<(&'static str, Vec<String>)> {
     let code: String = text
         .lines()
         .map(|l| if l.trim_start().starts_with("//") { "" } else { l })
         .collect::<Vec<_>>()
-        .join("\n");
+        .join(
+            "
+",
+        );
+    let imports = inputs_imports(&code);
+    // what the file calls the module: `inputs`, or a name a `use` gives it
+    let modules: Vec<String> = std::iter::once("inputs")
+        .chain(imports.iter().flat_map(|i| renames(&i.words, "inputs")))
+        .map(|m| format!("{m}::"))
+        .collect();
     // the names a `use ...inputs::...;` brings in, however many lines its braces take
-    let imported = |name: &str| {
-        code.match_indices("use ").any(|(at, _)| {
-            let statement = code[at..].split(';').next().unwrap_or_default();
-            statement.contains("inputs::")
-                && statement
-                    .split(|c: char| !(c.is_alphanumeric() || c == '_'))
-                    .any(|w| w == name)
-        })
+    let imported_as = |name: &str| -> Vec<String> {
+        let mut names = Vec::new();
+        for import in &imports {
+            let renamed = renames(&import.words, name);
+            if import.glob || import.words.contains(&name) {
+                names.push(name.to_owned());
+            }
+            names.extend(renamed.into_iter().map(str::to_owned));
+        }
+        names
     };
     let strip = |a: &str| -> String {
         let a = a.trim();
-        a.rfind("inputs::")
-            .map_or(a, |at| &a[at + "inputs::".len()..])
+        modules
+            .iter()
+            .filter_map(|m| a.rsplit_once(m.as_str()))
+            .map(|(_, rest)| rest)
+            .min_by_key(|rest| rest.len())
+            .unwrap_or(a)
             .to_owned()
     };
     let mut calls = Vec::new();
-    for (kind, word) in [
-        ("oracle", "oracle("),
-        ("install_file", "install_file("),
-        ("install", "install("),
-        ("keys", "keys("),
-        ("debug", "debug("),
-        ("Query::Oracle", "Query::Oracle("),
-        ("Query::Install", "Query::Install("),
-        ("Query::Keys", "Query::Keys("),
-    ] {
+    let typed = ["Query::Oracle", "Query::Install", "Query::Keys"];
+    let searched = QUERY_FUNCTIONS
+        .iter()
+        .flat_map(|&kind| {
+            let mut names = imported_as(kind);
+            names.push(kind.to_owned());
+            names.sort_unstable();
+            names.dedup();
+            names.into_iter().map(move |name| (kind, name, false))
+        })
+        .chain(typed.iter().map(|&kind| (kind, kind.to_owned(), true)));
+    for (kind, name, is_typed) in searched {
+        let word = format!("{name}(");
+        let imported = is_typed || imported_as(kind).contains(&name);
         let mut from = 0;
-        while let Some(i) = code[from..].find(word).map(|i| i + from) {
+        while let Some(i) = code
+            .get(from..)
+            .and_then(|rest| rest.find(&word))
+            .map(|i| i + from)
+        {
             from = i + word.len();
-            let before = code[..i].chars().next_back();
-            if before.is_some_and(|c| c.is_alphanumeric() || c == '_' || c == '.') {
+            let before = code.get(..i).unwrap_or_default();
+            let prev = before.chars().next_back();
+            if prev.is_some_and(|c| c.is_alphanumeric() || c == '_' || c == '.') {
                 continue;
             }
-            let qualified = code[..i].ends_with("inputs::");
-            if !word.starts_with("Query::") && !qualified && !(before != Some(':') && imported(kind)) {
+            let qualified = modules.iter().any(|m| before.ends_with(m.as_str()));
+            if !is_typed && !qualified && !(prev != Some(':') && imported) {
                 continue;
             }
-            if code[..i].trim_end().ends_with("fn") {
+            if before.trim_end().ends_with("fn") {
                 continue;
             }
             // the arguments up to the matching parenthesis
             let (mut depth, mut args, mut arg, mut quoted) = (1, Vec::new(), String::new(), false);
             let mut escaped = false;
-            for c in code[from..].chars() {
+            for c in code.get(from..).unwrap_or_default().chars() {
                 match c {
                     _ if escaped => escaped = false,
                     '\\' if quoted => escaped = true,

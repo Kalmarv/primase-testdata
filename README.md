@@ -115,7 +115,7 @@ Every section and key is optional, and every value is a string. `GAME_DATA_DEBUG
 
 - It ships no game data, keys or tools, and does not download or extract any. Every input is the user's own.
 - It does not run tools or parse game files; it only finds paths and reports comparisons.
-- The self-check reads source text, not syntax trees: it sees queries written in the forms it knows and says so for a call it cannot read.
+- The self-check reads source text, not syntax trees: it sees queries written in the forms it knows (called through `inputs::`, imported by name, renamed with `as`, imported by a glob, or through a renamed module) and says so for a call it cannot read. It cannot follow a query function re-exported from the inputs module, so a `pub use` of one is itself a problem it reports.
 - It is for tests; do not use it as a normal dependency.
 
 ## Running the tests
