@@ -74,6 +74,8 @@
 //!     }
 //! }
 //! ```
+#![deny(missing_docs)]
+
 use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 

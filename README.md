@@ -2,9 +2,9 @@
 
 Test support for crates whose tests read files that cannot be shipped (a game's own data, a third-party program, reference output made from them): the crate declares what its tests read, one TOML file per machine says where those files are, and a test whose input is not configured skips with one line naming the key.
 
-It was written for the real-data tests of format readers for game files: it resolves installs of games such as Sekiro and Grand Theft Auto V, their archive-key folders, tools such as Oodle libraries or Microsoft's WARP rasterizer, and "oracle" sets (output of an independent reader to compare against). Nothing in it depends on a game, so it works for any suite that reads machine-local files. It is used by primase, a game-asset conversion library.
+It was written for the real-data tests of format readers for game files: it resolves installs of games such as Sekiro and Grand Theft Auto V, their archive-key folders, tools such as Oodle libraries or Microsoft's WARP rasterizer, and "oracle" sets (output of an independent reader to compare against). Nothing in it depends on a game, so it works for any suite that reads machine-local files.
 
-Use it only as a dev-dependency.
+Use it only as a dev-dependency. "Gate" in this crate's vocabulary has three senses: an input declared `gate: true` must be present in a complete run; `[run] gate = 'smoke'|'full'` says how much a heavy test covers; and `gate::GateReport` is a comparison against reference output.
 
 ## Example
 
@@ -126,6 +126,8 @@ Every section and key is optional, and every value is a string. `GAME_DATA_DEBUG
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), which also says how to report a file a reader cannot read.
 
-## Licence
+The asset-conversion library [primase](https://github.com/Kalmarv/primase) uses this crate for its tests.
 
-GPL-3.0-or-later.
+## License
+
+GPL-3.0-or-later, see [LICENSE](LICENSE).
