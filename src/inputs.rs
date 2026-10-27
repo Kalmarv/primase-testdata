@@ -75,8 +75,8 @@
 ///     }
 /// }
 ///
-/// // GAME_DATA unset: a SKIP line naming `installs.sekiro`, and `None`
-/// assert_eq!(inputs::install(inputs::Game::Sekiro), None);
+/// // the configured folder, or `None` and a SKIP line naming `installs.sekiro` when GAME_DATA doesn't configure it
+/// let _sekiro = inputs::install(inputs::Game::Sekiro);
 /// assert!(inputs::REGISTRY.problems().is_empty());
 /// ```
 #[macro_export]
