@@ -76,6 +76,15 @@ fn section_keys(section: &str) -> Option<Option<&'static [&'static str]>> {
     }
 }
 
+/// `a, b or c`.
+fn or_list(words: &[&str]) -> String {
+    match words.split_last() {
+        Some((last, [])) => (*last).to_owned(),
+        Some((last, rest)) => format!("{} or {last}", rest.join(", ")),
+        None => String::new(),
+    }
+}
+
 impl Config {
     /// The configuration `GAME_DATA` (read through `environment`) names, read with `read`; empty when unset.
     pub(crate) fn load(
@@ -107,14 +116,21 @@ impl Config {
         }
         for (section, body) in &table {
             let Some(keys) = section_keys(section) else {
-                return Err(invalid(format!("unknown section [{section}]")));
+                return Err(invalid(format!(
+                    "unknown section [{section}]: expected installs, keys, tools, oracles, scratch or run"
+                )));
             };
             let body = body
                 .as_table()
                 .ok_or_else(|| invalid(format!("[{section}] is not a table")))?;
             for (key, value) in body {
-                if keys.is_some_and(|keys| !keys.contains(&key.as_str())) {
-                    return Err(invalid(format!("unknown key {key} in [{section}]")));
+                if let Some(keys) = keys
+                    && !keys.contains(&key.as_str())
+                {
+                    return Err(invalid(format!(
+                        "unknown key {key} in [{section}]: expected {}",
+                        or_list(keys)
+                    )));
                 }
                 let value = value
                     .as_str()

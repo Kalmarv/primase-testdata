@@ -524,3 +524,112 @@ fn the_self_check_finds_undeclared_queries_and_stale_tables() {
     assert_eq!(problems.len(), want.len(), "{}", problems.join("\n"));
     std::fs::remove_dir_all(&root).unwrap();
 }
+
+/// A query imported under another name, or through a glob or a renamed module, is still a query the check reads.
+#[test]
+fn query_calls_follow_aliases_globs_and_renamed_modules() {
+    // assembled, so this file's own text holds no such call
+    let q = '"';
+    let arg = format!("OracleSet::Corpus, Game::Sekiro, {q}dcx{q}");
+    let expected = |n: usize| {
+        let one = (
+            "oracle",
+            vec![
+                "OracleSet::Corpus".to_owned(),
+                "Game::Sekiro".to_owned(),
+                format!("{q}dcx{q}"),
+            ],
+        );
+        vec![one; n]
+    };
+    let renamed = format!("use crate::inputs::{{Game, OracleSet, oracle as find}};\nlet a = find({arg});\n");
+    assert_eq!(check::query_calls(&renamed), expected(1), "{renamed}");
+    let glob = format!("use crate::inputs::*;\nlet a = oracle({arg});\n");
+    assert_eq!(check::query_calls(&glob), expected(1), "{glob}");
+    let module = format!("use crate::inputs as data;\nlet a = data::oracle({arg});\n");
+    assert_eq!(check::query_calls(&module), expected(1), "{module}");
+    let other = format!("use other::oracle;\nlet a = oracle({arg});\n");
+    assert!(check::query_calls(&other).is_empty(), "{other}");
+}
+
+/// The check cannot follow a query function re-exported from the inputs module, so it says so.
+#[test]
+fn the_self_check_refuses_a_reexport_of_the_queries() {
+    let root = std::env::temp_dir().join(format!("primase-testdata-reexport-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(root.join("tests/common")).unwrap();
+    std::fs::write(
+        root.join("tests/common/mod.rs"),
+        "pub use crate::inputs::{Game, oracle};\npub use crate::inputs::*;\npub use crate::inputs::{OracleSet, Game as G};\n",
+    )
+    .unwrap();
+    let problems = problems(&REGISTRY, &root);
+    let reexports: Vec<_> = problems
+        .iter()
+        .filter(|p| p.starts_with("tests/common/mod.rs: re-exports"))
+        .collect();
+    assert_eq!(reexports.len(), 2, "{}", problems.join("\n"));
+    std::fs::remove_dir_all(&root).unwrap();
+}
+
+/// The configuration is read and parsed once for the process, not once per query.
+#[test]
+fn the_configuration_is_read_once() {
+    let cell = std::sync::OnceLock::new();
+    let reads = std::cell::Cell::new(0);
+    let read = || {
+        reads.set(reads.get() + 1);
+        Ok(Config::default())
+    };
+    let first = cached(&cell, read) as *const Config;
+    let second = cached(&cell, read) as *const Config;
+    assert_eq!(reads.get(), 1);
+    assert_eq!(first, second);
+}
+
+/// A failed read is remembered too, and says the same each time.
+#[test]
+fn a_configuration_that_failed_to_load_fails_every_query_the_same_way() {
+    let cell = std::sync::OnceLock::new();
+    let bad = || {
+        Err(config::ConfigError::Invalid {
+            path: "data.toml".into(),
+            detail: "unknown section [x]".to_owned(),
+        })
+    };
+    let message = |cell: &std::sync::OnceLock<_>| {
+        let r = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| cached(cell, bad).file.clone()));
+        *r.unwrap_err().downcast::<String>().unwrap()
+    };
+    let (a, b) = (message(&cell), message(&cell));
+    assert!(a.contains("unknown section [x]"), "{a}");
+    assert_eq!(a, b);
+}
+
+/// A counter at its limit stays there: a report never wraps or panics while it records.
+#[test]
+fn gate_counters_saturate() {
+    let mut r = gate::GateReport::new("t", gate::Tolerance::Exact);
+    r.checked = u64::MAX;
+    r.exact = u64::MAX;
+    r.record("a", 0.0);
+    r.fail("b", "x");
+    assert_eq!((r.checked, r.exact), (u64::MAX, u64::MAX));
+}
+
+/// A refusal says what was expected, not only what was found.
+#[test]
+fn refusals_list_what_was_expected() {
+    let message = |text: &str| config(&[], Some(text)).unwrap_err().to_string();
+    let section = message("[instal]\nsekiro = 'x'\n");
+    assert!(section.contains("unknown section [instal]"), "{section}");
+    assert!(
+        section.contains("expected installs, keys, tools, oracles, scratch or run"),
+        "{section}"
+    );
+    let key = message("[run]\nsed = '1'\n");
+    assert!(key.contains("unknown key sed in [run]"), "{key}");
+    assert!(key.contains("expected require, gate, seed or threads"), "{key}");
+    let key = message("[oracles]\nroots = 'x'\n");
+    assert!(key.contains("expected root"), "{key}");
+}

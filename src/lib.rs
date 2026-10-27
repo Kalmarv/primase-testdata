@@ -14,6 +14,10 @@
 //!   the table of inputs for its README.
 //! - What a test compares against reference output it counts in a [`gate::GateReport`].
 //!
+//! - "gate" names three things, each its own: `gate: true` on a declaration says a complete run must have that input
+//!   (`[run] require = 'gate'` enforces it); `[run] gate = 'smoke'|'full'` is how much a heavy test covers ([`Depth`]);
+//!   and a [`gate::GateReport`] is a comparison against reference output.
+//!
 //! Add this crate only under `[dev-dependencies]`.
 //!
 //! ```
@@ -90,10 +94,25 @@ fn environment(name: &str) -> Option<OsString> {
     std::env::var_os(name)
 }
 
-/// The configuration, read afresh: a named but unreadable or invalid file fails the test.
+/// The configuration, read and parsed on the first query and kept for the process: `GAME_DATA` is read once, so every
+/// query of a run sees the same file. A named but unreadable or invalid file fails each query with the same message.
 #[track_caller]
-fn load() -> Config {
-    Config::load(&environment, |path| std::fs::read_to_string(path)).unwrap_or_else(|e| panic!("{e}"))
+fn load() -> &'static Config {
+    static CONFIG: std::sync::OnceLock<Result<Config, String>> = std::sync::OnceLock::new();
+    cached(&CONFIG, || {
+        Config::load(&environment, |path| std::fs::read_to_string(path))
+    })
+}
+
+/// What `cell` holds, filled by `load` on the first call: a failure is kept as its message and fails every call.
+#[track_caller]
+fn cached(
+    cell: &std::sync::OnceLock<Result<Config, String>>,
+    load: impl FnOnce() -> Result<Config, config::ConfigError>,
+) -> &Config {
+    cell.get_or_init(|| load().map_err(|e| e.to_string()))
+        .as_ref()
+        .unwrap_or_else(|e| panic!("{e}"))
 }
 
 /// Whether a complete run must have what `query` names: a declared file's own flag ([`Registry::declared`]), else
@@ -223,7 +242,7 @@ fn decide(registry: &Registry, config: &Config, query: Query, gate: bool) -> Dec
 #[track_caller]
 pub fn resolve(registry: &Registry, query: Query) -> Option<PathBuf> {
     let gate = gate_of(registry, query);
-    match decide(registry, &load(), query, gate) {
+    match decide(registry, load(), query, gate) {
         Decision::Found(path) => Some(path),
         Decision::Fail(why) => panic!("{why}"),
         Decision::Skip(why) => {
@@ -261,8 +280,7 @@ pub fn oodle(registry: &Registry, version: &'static str) -> Option<OodleLibrary>
 /// Where a real-data test writes what it keeps: the configured scratch root, else the OS temporary folder.
 #[track_caller]
 pub fn scratch() -> PathBuf {
-    let config = load();
-    configured(&config, Query::Scratch(None)).unwrap_or_else(std::env::temp_dir)
+    configured(load(), Query::Scratch(None)).unwrap_or_else(std::env::temp_dir)
 }
 
 /// A folder `name` of [`scratch`] that only this process uses ([`own_scratch`]), removed when it is dropped unless the test

@@ -56,13 +56,13 @@ impl GateReport {
 
     /// Record an item whose largest element difference is `max_diff` (0 for exact).
     pub fn record(&mut self, item: impl Into<String>, max_diff: f64) {
-        self.checked += 1;
+        self.checked = self.checked.saturating_add(1);
         if max_diff == 0.0 {
-            self.exact += 1;
+            self.exact = self.exact.saturating_add(1);
             return;
         }
         match self.tolerance {
-            Tolerance::Abs(t) if max_diff <= t => self.within += 1,
+            Tolerance::Abs(t) if max_diff <= t => self.within = self.within.saturating_add(1),
             _ => self.failures.push(GateFailure {
                 item: item.into(),
                 detail: format!("max difference {max_diff}"),
@@ -72,7 +72,7 @@ impl GateReport {
 
     /// Record an item that failed outright (could not be decoded, sizes differ, ...).
     pub fn fail(&mut self, item: impl Into<String>, detail: impl Into<String>) {
-        self.checked += 1;
+        self.checked = self.checked.saturating_add(1);
         self.failures.push(GateFailure {
             item: item.into(),
             detail: detail.into(),
@@ -188,7 +188,7 @@ fn compare_value(a: &serde_json::Value, b: &serde_json::Value, path: &str, ulps:
     }
     match (a, b) {
         (Value::Number(x), Value::Number(y)) => {
-            c.numbers += 1;
+            c.numbers = c.numbers.saturating_add(1);
             if !x.is_f64() && !y.is_f64() {
                 if x != y {
                     differ(c, path, format!("{x} vs {y}"));
@@ -217,18 +217,18 @@ fn compare_value(a: &serde_json::Value, b: &serde_json::Value, path: &str, ulps:
             );
             if fx.to_bits() == fy.to_bits() {
                 if x.is_f64() != y.is_f64() {
-                    c.integer_and_float += 1;
+                    c.integer_and_float = c.integer_and_float.saturating_add(1);
                 }
                 return;
             }
             let (gx, gy) = (fx as f32, fy as f32);
             if gx.to_bits() == gy.to_bits() {
-                c.f32_equal += 1;
+                c.f32_equal = c.f32_equal.saturating_add(1);
                 return;
             }
             let d = f32_ulps(gx, gy);
             if ulps > 0 && gx.is_finite() && gy.is_finite() && d <= ulps {
-                c.within_ulps += 1;
+                c.within_ulps = c.within_ulps.saturating_add(1);
                 c.max_ulps = c.max_ulps.max(d);
             } else {
                 differ(c, path, format!("{x} vs {y}"));
