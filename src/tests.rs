@@ -1,6 +1,6 @@
 use super::*;
 use crate::manifest::{self, Verify};
-use crate::sums::{self, Entry, FileSum, Severity, Sums};
+use crate::sums::{self, FileSum, Severity, Sums};
 use crate::{digest, measure};
 use std::collections::BTreeMap;
 
@@ -707,7 +707,7 @@ fn the_digests_are_the_documented_hashes_of_the_listing() {
 #[test]
 fn a_manifest_renders_and_parses_back_and_refuses_what_is_wrong() {
     let entries = vec![
-        Entry {
+        sums::Entry {
             key: "tools.warp".into(),
             sums: Sums::File {
                 size: 7,
@@ -715,7 +715,7 @@ fn a_manifest_renders_and_parses_back_and_refuses_what_is_wrong() {
             },
             severity: Severity::Warn,
         },
-        Entry {
+        sums::Entry {
             key: "installs.sekiro".into(),
             sums: Sums::Files(vec![
                 FileSum {
@@ -731,7 +731,7 @@ fn a_manifest_renders_and_parses_back_and_refuses_what_is_wrong() {
             ]),
             severity: Severity::Fail,
         },
-        Entry {
+        sums::Entry {
             key: "oracles.corpus.sekiro/dcx".into(),
             sums: Sums::Tree {
                 count: 2,
