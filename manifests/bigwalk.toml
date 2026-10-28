@@ -1,0 +1,23 @@
+# primase-testdata manifest `bigwalk`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.bigwalk"
+kind = "files"
+files = [
+  { path = "Big Walk.exe", size = 667136, blake3 = "31c904fa0575c17ae60fb7514d2d3fe2415e18a87c7045d27769c348941462c9" },
+  { path = "GameAssembly.dll", size = 71250432, blake3 = "f268e356c7a99379c0f6746274ec0fa18735a2ac2f60614b3b323c370ce636e3" },
+  { path = "UnityPlayer.dll", size = 36527024, blake3 = "1484b5452c068cad59a393903af7ce76ccc8b43d748a6f8f1dceabf1793da87f" },
+  { path = "Big Walk_Data/data.unity3d", size = 2451391952 },
+  { path = "Big Walk_Data/boot.config", size = 156, blake3 = "1bad07a9cd9170c6b7b58547b7a07ca9a549ac67ffc80acde9c9947787d66bb2" },
+  { path = "Big Walk_Data/app.info", size = 20, blake3 = "a552304ad1b6bee48105197e80e0e4019460dd2d89bb7caf8d0590740057f428" },
+  { path = "Big Walk_Data/ScriptingAssemblies.json", size = 6089, blake3 = "b40fe0e2f37ea8696bf74a508c25243cbc18f1aca9be5b29ba5c1574f901568c" },
+  { path = "Big Walk_Data/il2cpp_data/Metadata/global-metadata.dat", size = 20269204, blake3 = "3ac1d5ccaa9510a6e685dba00f31b3faa4501680f21372323f79f99c9c68cc12" },
+]
+
+[[entry]]
+key = "oracles.unitypy.bigwalk/bundles.jsonl"
+kind = "file"
+size = 217235
+blake3 = "b409b79b8380f59745049bef8301a1b0d56dd05ef2e038100b3313ace8688fbe"

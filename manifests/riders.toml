@@ -1,0 +1,41 @@
+# primase-testdata manifest `riders`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.riders"
+kind = "files"
+files = [
+  { path = "RidersRepublic.exe", size = 41742840, blake3 = "0bc3e1de5389e0ef95233812460b06571f962e544e000aad303a43726523f122" },
+  { path = "DataPC.forge", size = 7123931172 },
+  { path = "DataPC_MAD_USNAT.forge", size = 15650919308 },
+  { path = "DataPC_MAD_USNAT_patch_01.forge", size = 1331014794 },
+  { path = "DataPC_MAD_WhiteRoom.forge", size = 8951822, blake3 = "fabaebbd165ffba995c6d2add4f6d53a11b23cb94b1379e7df9534ea3b7ae2a4" },
+  { path = "DataPC_MAD_WhiteRoom_patch_01.forge", size = 1021872, blake3 = "e0d22978b0a428c7d87b489de4ba7b837c2c2b1b46f9bdb7b790d0cfd8a37282" },
+  { path = "DataPC_patch_01.forge", size = 937196599 },
+  { path = "ShaderDataDX11.bin", size = 18413272, blake3 = "29fa400f97e0c91c4107768ab891f77f4b4bebcb320429fcb06888fedd8437d0" },
+]
+
+[[entry]]
+key = "oracles.corpus.riders/shaders"
+kind = "tree"
+count = 2443
+bytes = 18413256
+shape = "bd6c4d52c10accdaf41265b598a0672070cf3299dc37323efd07d1011a3358e1"
+blake3 = "dcf76c3611d66e7321dc29ac5107e69f93e7a4dc000f1c78a9678dc8bb042716"
+
+[[entry]]
+key = "oracles.d3d-disassembler.riders/shader-pack"
+kind = "tree"
+count = 4888
+bytes = 44321119
+shape = "359175c1da4a8d6ecbaa219e1c2c1192d381c9afa3b09fe45960b5392625c119"
+blake3 = "8b6e062996f10339ed5878381fc6ae253506afadb170447d604cf35561508153"
+
+[[entry]]
+key = "oracles.rrassetstudio.riders/meshes"
+kind = "tree"
+count = 309
+bytes = 115364772
+shape = "90c89886a05b9934cf6c433ba14b9bbb12fc2d6dab7852dc0c67449340dbbb5d"
+blake3 = "02e9ea1974b7c4f67f187a0c763fbc8786440eaf814ec73633a841831bc1fce9"

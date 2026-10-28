@@ -1,0 +1,28 @@
+# primase-testdata manifest `skatebird`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.skatebird"
+kind = "files"
+files = [
+  { path = "SkateBIRD.exe", size = 650752, blake3 = "a96e2465f770687e036978bd8ad181aa26e19d2762ad5038a11ed2bf0b3236ae" },
+  { path = "UnityPlayer.dll", size = 25960824, blake3 = "478796f56d15984e0efc1cb5630862fbc0bbee4e6d53f6c702cd383b49496c59" },
+  { path = "SkateBIRD_Data/globalgamemanagers", size = 198156, blake3 = "08d04807378ba7b3aa84db9e954516c260a29255d0efca771f924733ed52fd12" },
+  { path = "SkateBIRD_Data/globalgamemanagers.assets", size = 369972, blake3 = "8b93b9b50d76e37827d211a6e0095e84d187136a80eb5f39fb912f8d38eb7dc4" },
+  { path = "SkateBIRD_Data/level0", size = 2394356, blake3 = "6cf7dd5897a86cdc117cfc421cb7375a48e63a7a46b761f3dfddec98eba83416" },
+  { path = "SkateBIRD_Data/level1", size = 9758532, blake3 = "4c305955aef27a31e427ffdfa472b48339093b7b01099924a1ce08086256e400" },
+  { path = "SkateBIRD_Data/Managed/Assembly-CSharp.dll", size = 1245696, blake3 = "69ac701dd478cdcb909ea081f0089136cf457e5542b9dbaf9be813bd8d6a1164" },
+]
+
+[[entry]]
+key = "oracles.unitypy.skatebird/census.json"
+kind = "file"
+size = 30911153
+blake3 = "cb433f6e5bd481fac6a83d4dd4fcf7b6f3cf11aab27b2debed75e742496537d9"
+
+[[entry]]
+key = "oracles.unitypy.skatebird/listing.json"
+kind = "file"
+size = 41466689
+blake3 = "043d71a3d20d8cf5aaee39d3a4e64d22777314f9d5eccb5f205ce8cb0ae7cc81"

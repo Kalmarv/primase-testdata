@@ -10,6 +10,8 @@
 //!   unless `[run] require` says a complete run must have it.
 //! - A path the file sets that does not exist fails the test.
 //! - A file the crate has not declared fails the test: a mistyped path never skips quietly.
+//! - A path a query finds is compared with the BLAKE3 sums of a good copy in this crate's manifests ([`manifest`]) before a
+//!   test trusts it; `[run] verify = 'off'` skips the comparison.
 //! - [`check_declared`] runs as one test in each consumer and checks its sources against its declarations; [`doc`] makes
 //!   the table of inputs for its README.
 //! - What a test compares against reference output it counts in a [`gate::GateReport`].
@@ -81,11 +83,15 @@ use std::path::{Path, PathBuf};
 
 mod check;
 pub mod config;
+pub mod digest;
 pub mod doc;
 pub mod gate;
 mod inputs;
+pub mod manifest;
+pub mod measure;
 mod query;
 mod registry;
+pub mod sums;
 pub use check::{check_declared, problems};
 pub use query::Query;
 pub use registry::{Declared, Entry, Names, Registry, SCRATCH, Set, Status};
@@ -245,7 +251,10 @@ fn decide(registry: &Registry, config: &Config, query: Query, gate: bool) -> Dec
 pub fn resolve(registry: &Registry, query: Query) -> Option<PathBuf> {
     let gate = gate_of(registry, query);
     match decide(registry, load(), query, gate) {
-        Decision::Found(path) => Some(path),
+        Decision::Found(path) => {
+            manifest::enforce(query, &path, verify_mode(), threads().get());
+            Some(path)
+        }
         Decision::Fail(why) => panic!("{why}"),
         Decision::Skip(why) => {
             let test = std::thread::current().name().unwrap_or("?").to_owned();
@@ -365,6 +374,28 @@ pub fn debug(registry: &Registry, key: &str) -> Option<String> {
         "debug key {key} is not declared in this crate's tests/inputs/mod.rs"
     );
     config::debug(&environment, key)
+}
+
+/// How much of a copy is compared with its manifest entry (`[run] verify`): [`manifest::Verify::Quick`] when unset.
+pub fn verify_mode() -> manifest::Verify {
+    load()
+        .verify
+        .as_deref()
+        .and_then(manifest::Verify::parse)
+        .unwrap_or(manifest::Verify::Quick)
+}
+
+/// Where the configuration puts the input a manifest key names (`installs.sekiro`, `installs.sekiro/sekiro.exe`,
+/// `tools.oodle6`, `oracles.corpus.sekiro/havok`), whether or not it exists; `None` when the configuration does not set
+/// it or the key is not one a manifest holds. The manifest example reads and writes entries through it.
+pub fn locate(key: &str) -> Option<PathBuf> {
+    let (root, rel) = manifest::root_of(key)?;
+    let base = load().roots.get(&root)?;
+    Some(if rel.as_os_str().is_empty() {
+        base.clone()
+    } else {
+        base.join(rel)
+    })
 }
 
 /// How much a heavy real-data test covers (`[run] gate`): a sample, or everything.

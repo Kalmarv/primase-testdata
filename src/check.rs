@@ -5,8 +5,10 @@ use std::path::{Path, PathBuf};
 use crate::doc;
 use crate::registry::Registry;
 
-/// Fails, listing every problem, unless `registry` is whole ([`Registry::problems`]) and covers the real-data queries
-/// of the crate whose folder is `crate_dir` ([`problems`]). A consumer runs it as one test:
+/// Fails, listing every problem, unless `registry` is whole ([`Registry::problems`]), covers the real-data queries
+/// of the crate whose folder is `crate_dir` ([`problems`]) and has a manifest entry ([`crate::manifest`]) for each live
+/// install, tool and declared file a complete run must have (`gate: true`); the others without one are named on
+/// standard error. A consumer runs it as one test:
 ///
 /// ```text
 /// mod inputs;
@@ -18,7 +20,13 @@ use crate::registry::Registry;
 /// ```
 #[track_caller]
 pub fn check_declared(registry: &Registry, crate_dir: impl AsRef<Path>) {
-    let problems = problems(registry, crate_dir.as_ref());
+    let mut problems = problems(registry, crate_dir.as_ref());
+    // a live input a complete run must have is one a manifest can check; one it need not have is only named
+    let (required, optional) = crate::manifest::unlisted(registry);
+    problems.extend(required);
+    for line in optional {
+        eprintln!("primase-testdata: manifest: {line}");
+    }
     assert!(
         problems.is_empty(),
         "real-data inputs (declared in tests/inputs/mod.rs):\n{}",

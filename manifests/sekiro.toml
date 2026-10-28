@@ -1,0 +1,341 @@
+# primase-testdata manifest `sekiro`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.sekiro"
+kind = "files"
+files = [
+  { path = "sekiro.exe", size = 68005144, blake3 = "cf1639e0029688c42b4037502f94c9a91b21cffda92f0e7d50a30f4278680884" },
+  { path = "Data1.bhd", size = 137728, blake3 = "a4f0800d8d062d0355beaeec55f1be6558c57626938014f7562a4467d6f908da" },
+  { path = "Data2.bhd", size = 32256, blake3 = "d26c07d8aad3373514e8086efefe768af27c5151489990953f1c84fe6b7288d6" },
+  { path = "Data3.bhd", size = 86272, blake3 = "34be01be9fdef195b7ce514e274adead66c1906ac2b9aa48e6cda34cf7802915" },
+  { path = "Data4.bhd", size = 270848, blake3 = "6d80ffa8026e511be0cb2ba1f10e6f9c6d34840a04854c2dbb8bc37af468989d" },
+  { path = "Data5.bhd", size = 1035520, blake3 = "a2dd9e248cc4b9626654c8d14e1ff2847809c1aac8ab4a942f607aa0baec87e7" },
+  { path = "Data1.bdt", size = 2755237627 },
+  { path = "Data2.bdt", size = 465298672 },
+  { path = "Data3.bdt", size = 1643835952 },
+  { path = "Data4.bdt", size = 541402628 },
+  { path = "Data5.bdt", size = 6830280950 },
+  { path = "oo2core_6_win64.dll", size = 1085952, blake3 = "28557f66b732ac185e70da3dbd8f6474a103bbd25ad84ce02336c2c837e19931" },
+]
+
+[[entry]]
+key = "oracles.baseline.sekiro/ktx2-tiles"
+kind = "tree"
+count = 3887
+bytes = 2159937746
+shape = "369eb5c4b4f9b2131cbe8df6fd25c21082db51de6b9b1269975bd8a07ff6bb0a"
+blake3 = "c3c48dec7e9b481c410801a74b9cc7dbb404a8cef76d085b7a58e1acfaf66afc"
+
+[[entry]]
+key = "oracles.baseline.sekiro/layer-pilot"
+kind = "tree"
+count = 553
+bytes = 563479348
+shape = "e84944631c5df2ea4d5cc8d54ccd8ed4c0566dac7481c1cc718f047fb2a2e34f"
+blake3 = "86883ebd8e133e7f097a4854b9e96d14a91ef1d2e76c880b95db69e6a3209af0"
+
+[[entry]]
+key = "oracles.baseline.sekiro/outfits"
+kind = "tree"
+count = 3
+bytes = 38662
+shape = "60f0600cf025d11fbcb74ceb5a3adf4f09206341676d0cbe8d826e912371bd01"
+blake3 = "e4de09cfb1d309c6a7013588707574e211a37b3b5eb5d6e45cbcbe50c88671d8"
+
+[[entry]]
+key = "oracles.baseline.sekiro/scene"
+kind = "tree"
+count = 2227
+bytes = 1144594223
+shape = "485c4a21f0c46dc43bf2d4ad3e189a6d380507a0fde850f04491016d8a57821b"
+blake3 = "1bd0dae482c7938a2e8b05014b4959d51b79282f14d59e327398db907f047802"
+
+[[entry]]
+key = "oracles.capture.sekiro/havok-cloth"
+kind = "tree"
+count = 3
+bytes = 10010825
+shape = "565abf55521700b3f4f0987dc196d79bb8bb4ebda1cdaca83dd175dd874e6266"
+blake3 = "4c70b692a961b3f3e4b4079c78b93a78e0da6f6c6bba5c21881ee0860ce41dff"
+
+[[entry]]
+key = "oracles.corpus.sekiro/dcx"
+kind = "tree"
+count = 256
+bytes = 99847391
+shape = "8ce517fd34061333afb1f71b7ef3997aff5a53367fbbd03cf9fca315f5cfad92"
+blake3 = "5269fdf807f3949ccf8eae0ec139944326d47420028d35c285dada93f818834b"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok"
+kind = "tree"
+count = 174
+bytes = 228777184
+shape = "57c075124f456d3338797ff2d95be663b06b9253d843f4bb083fea554c914404"
+blake3 = "90a8ca86529e7ca38f9751cda50fb7d09ed0cf51280f980c3752deca75c15b29"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-2015"
+kind = "tree"
+count = 1
+bytes = 22492
+shape = "83e94e0bcd3b30a2c5c992e99f226dcaa77bb911ef1f32c8f268d12cf278ddbb"
+blake3 = "da63626c3dcc3c8b8e2166d674e3cdfcb75e56f57590281de313f9bc52d5f2a3"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-behavior"
+kind = "tree"
+count = 306
+bytes = 29834085
+shape = "d5022e9c8899d8c9a9c64d1614fa12510d0272b4d242dc36320d48b4ca19b077"
+blake3 = "7a9b41b08189d9e1fde2a446678459044e41fcb9477cf495d36e43a2a371e8f2"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-cloth"
+kind = "tree"
+count = 150
+bytes = 68393808
+shape = "43e22307995c3578921c33de7b79f934563f2cd5510173490ee149ded768742d"
+blake3 = "6a0a3a2079fa3503c77ce3343d6ea649b089184827b7d02be6aecb858712cb8e"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-float"
+kind = "tree"
+count = 2
+bytes = 155144
+shape = "955506869cdadee3811d72d2d98ba3ec5194784611e73e49a3ad62f240df3c50"
+blake3 = "2f06bb55ce10a5db8ddb88e23e82967a23abafe147dbc5878c6485ba8bc4d23e"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-l"
+kind = "tree"
+count = 2
+bytes = 21805800
+shape = "e51afc672fb8075ab1f78b4446f084936d7c18c5ad1b21084e445c6e717b4d38"
+blake3 = "2bdcf6dc74a79297dca5334daee037ff86d8f97d649a22e9178eb892cf7f228f"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-nav"
+kind = "tree"
+count = 6
+bytes = 2559221
+shape = "1c04c460fe9b765d087b02d73e9989f3f45d9d283bed3d568f3731599e840a1a"
+blake3 = "28eb41b600e0dd3ba07528e3172543c5f5bedbc4dd5c2a418eeea1e55403367b"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-packfiles"
+kind = "tree"
+count = 29
+bytes = 2856640
+shape = "1db1795bad49647238edc8955e35af7de42e3d1e8287602ceb19dcf08582cd25"
+blake3 = "706fd90b95fc4ead997f9af2632266aece177537f781aa6c26a696b777156a19"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-soup"
+kind = "tree"
+count = 173
+bytes = 103137492
+shape = "f2ae5d75f2bae23a91dcfa8fc1ee7d32741c2cecc6fbcae7243d2f3627958492"
+blake3 = "dbfa5ffe4a042e94aae3a1ae0d7318331c95d75efb1acba5b224f6e36f99107c"
+
+[[entry]]
+key = "oracles.corpus.sekiro/lznib"
+kind = "tree"
+count = 100
+bytes = 72941
+shape = "98eb73053e5b3a8ffb1d656e679bab3499b17da7c01cc8a39094beda5db8e1f8"
+blake3 = "b80b28f5eb4434cdc1b31a9cdb92c158599ee892b3983ae348009fb3403e61da"
+
+[[entry]]
+key = "oracles.corpus.sekiro/object-hkx"
+kind = "tree"
+count = 179
+bytes = 3794508
+shape = "7224d785171b1987cb9ad06e304f39f0b25240dfcc16b1e81bf8fa712de34418"
+blake3 = "546ba7a79bf23311a59d27a41934e6931f6bfb6c73a25f1d30e69faa732e3842"
+
+[[entry]]
+key = "oracles.corpus.sekiro/shaders"
+kind = "tree"
+count = 432
+bytes = 5852496
+shape = "efde44a98468ee583394758f083b5b67ca8c3e643133cfda38f6e43816d63737"
+blake3 = "4e287483cb8a038ff4864868d8c1a6d7d5c9123f235c892c85bcd5089d553879"
+
+[[entry]]
+key = "oracles.fxr.sekiro/curves.jsonl"
+kind = "file"
+size = 1615381
+blake3 = "7aa5cbd23279091275df837f19c00cfb875c3b546380b3f2e9531238e02b0a34"
+
+[[entry]]
+key = "oracles.fxr.sekiro/lights.jsonl"
+kind = "file"
+size = 1994791
+blake3 = "ea5154005fd8caa854ad9f1c33d89bb4b15e85e6c25e32fff8a3b9a01d9d376a"
+
+[[entry]]
+key = "oracles.fxr.sekiro/params.jsonl"
+kind = "file"
+size = 6611059
+blake3 = "948149ee1e5e490c8359c94ac9b8a649303548b0a74e268b04c0571d99c4bd00"
+
+[[entry]]
+key = "oracles.pillow.sekiro/skate-mask"
+kind = "tree"
+count = 6
+bytes = 1501202
+shape = "721724bc1e1696acc397244a8db5b5dfc7188de227b04ffc4e640d11c956636a"
+blake3 = "881827415b0638fc249ded012c15264ae5deab09c3c8751b19064b31ad82dcf2"
+
+[[entry]]
+key = "oracles.scripts.sekiro/dds"
+kind = "tree"
+count = 10
+bytes = 576895
+shape = "a6ea614118bdf1c4d1733cb9da735136866d8f585acd4ebe0ef3ae8ad9a78614"
+blake3 = "8012f9331315b7797b78d39d9df16dcf345a396aa9529a2f4824c47b42e1e6bc"
+
+[[entry]]
+key = "oracles.scripts.sekiro/normal-curl.json"
+kind = "file"
+size = 91158
+blake3 = "2998a5132e83bb4b74052004fd986e1230902d26be6a9b56ac5384f04ae59aad"
+
+[[entry]]
+key = "oracles.scripts.sekiro/pbr"
+kind = "tree"
+count = 1411
+bytes = 596611890
+shape = "107b158304690743c3501a350e4e59f6c443eac789b26183254e9276bdedb637"
+blake3 = "a89861287968874c84392b5451bcff42e08897fd5b59ef4c666628d693a94140"
+
+[[entry]]
+key = "oracles.scripts.sekiro/reflectance"
+kind = "tree"
+count = 7
+bytes = 897370
+shape = "77a8ba17369c778caae08a9ec0ec928a3272a9d9bd8305a29fbb2d4f226eb088"
+blake3 = "71ea2caccc321fbf169c513b5626af104e7fc54514af08e7e6f7e226710e8be9"
+
+[[entry]]
+key = "oracles.scripts.sekiro/shadow"
+kind = "tree"
+count = 2
+bytes = 6342651
+shape = "39784fb55abd0cccbe349c70b6954ba172686c4073403fa9bcecaee545eac846"
+blake3 = "2ee3694deb74273849339a5c5cb71f31765a77298a8b7dac3f44d2edfd9444d9"
+
+[[entry]]
+key = "oracles.scripts.sekiro/state"
+kind = "tree"
+count = 2
+bytes = 7582382
+shape = "90b3b307e145a4d7283e271ee034d750b467bda8d18bee08ffdd6f5c3470e4fb"
+blake3 = "8f16b52614766c23709566c6547c3e780ff7778f19dd2f5edea8e26ae5b69e71"
+
+[[entry]]
+key = "oracles.smithbox.sekiro/defs"
+kind = "tree"
+count = 161
+bytes = 2181562
+shape = "292197a25fa2f5b9f77aba7aca3c10ba156422af9020ece77cc867ba58e1eff8"
+blake3 = "87e06f43a4915eb2951a785b178f390dabc50c7566319cf1317fbd2a1aeba928"
+
+[[entry]]
+key = "oracles.smithbox.sekiro/file-dictionary.json"
+kind = "file"
+size = 1979518
+blake3 = "46d320c22d6c6814eb0f70bc966265505c35f694366b4b5c490c89453bdb8905"
+
+[[entry]]
+key = "oracles.smithbox.sekiro/hit-material-names.json"
+kind = "file"
+size = 4174
+blake3 = "3ebf28727a619bac206c16c0335d4b488ecdde4fd6b4a74bd6fc8fe8a615a777"
+
+[[entry]]
+key = "oracles.smithbox.sekiro/tae-template.xml"
+kind = "file"
+size = 68749
+blake3 = "0c02e7dddfaab93a44dfba9f9b547094cc4d63053c51a878aae42df1c6c17bfa"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/census"
+kind = "tree"
+count = 22
+bytes = 58238204
+shape = "83702bf02d6581c49aea28c41002e7263b89743234712f478f7b60df5cef2f40"
+blake3 = "be2c040322d364df8ffc1d22a632e70684e121fbe9399d39c209702b84b225ae"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/frames"
+kind = "tree"
+count = 2
+bytes = 8459211
+shape = "141e54735c57c13ed3e0523a01112f93fb2f28e017c278fe23764e644aa3e075"
+blake3 = "3c2a7fe66d35e4b3205c71beb14237604d404f443a30e4e78f592b50a3fa15dc"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/m11_01"
+kind = "tree"
+count = 795
+bytes = 227802333
+shape = "ac72d1a4e9a852e89db511f45a062dfd8bf4874f585984a9e3147dfaa39080ec"
+blake3 = "9a10718fe193b8923752c6dee74219c9aaecdd993cbeeadbd5076bbd64bed01d"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/materials"
+kind = "tree"
+count = 2
+bytes = 19422906
+shape = "858fb52d5da0b9a547382894420493c121b6b1319acbf30d6f959b946052b1f1"
+blake3 = "8dcb123a89e0a886775e6dd27ced16c61b79649cb9e6f49f45bbde14ce0565b2"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/npc"
+kind = "tree"
+count = 7
+bytes = 11422889
+shape = "01cea2a7883147d6e0a48c449f34a2e88ef5b8acd7697f8fa09fd71ad33e98c7"
+blake3 = "19ee9a167f2c1f5e78bbfcd148ed0955af676f589735d44346dccbcff2673c2e"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/objects"
+kind = "tree"
+count = 358
+bytes = 13717039
+shape = "05828baa98864410f1069b2180f53b23ac68d4449de9ca812938ef2e3974fede"
+blake3 = "17a9f7654178f56fc39c8c1c554a8bb183e106a8e2d7bf50cae6e42588e427d6"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/parts"
+kind = "tree"
+count = 52
+bytes = 7992441
+shape = "5edb260e070c38dfde053ce2c3ed8706c0521bae9dac382f7f3924c7888b4854"
+blake3 = "14c380963c5f0cc21c52e6379fc1b165dc853c1d9596d4a4bb347874afddee46"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/skin"
+kind = "tree"
+count = 87
+bytes = 8872004
+shape = "f36f2adb612ceb8a37f5ae91aff69ee33ad37379e0af8026343ea86dba116dd9"
+blake3 = "ab10c86ab96c5333ed3a3c534add5b95e0f383e21a90b8c9b3922b23abfba621"
+
+[[entry]]
+key = "oracles.soulsformats.sekiro/tpf"
+kind = "tree"
+count = 9328
+bytes = 3262863395
+shape = "8d41e4f6f45254bf681ce3e8d5c50e582b086dd2a0b593b8cb6c614da6661f7e"
+blake3 = "563bf254e0c2f50aa7538f93015363216c0cd04882ca7275c8fba7c537e59711"
+
+[[entry]]
+key = "oracles.uxm.sekiro/dictionary.txt"
+kind = "file"
+size = 357670
+blake3 = "5b56fbcc1294a77477e4fb2f73ddcc06720bf6c85443587a97646fb62dbb1853"

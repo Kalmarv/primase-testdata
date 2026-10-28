@@ -1,0 +1,76 @@
+# primase-testdata manifest `skate`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.skate"
+kind = "files"
+files = [
+  { path = "Skate.exe", size = 144567168, blake3 = "2209a25ee0212c6c2a76a46c241f7cb1a2235b638259238a95e07f4c2611cb58" },
+  { path = "ReSkate.dll", size = 41408000, blake3 = "f4162c5d4cde203bdea30e9e8b18f8395ac4bd47234bd8668f8854c5af60b4af" },
+  { path = "oo2core_9_win64.dll", size = 639872, blake3 = "4df02dafefa712a4223c275e2fc289c25e169691e3dd21898a2edce0ae7ea954" },
+  { path = "oo2ext_9_win64.dll", size = 830336, blake3 = "e223eacce4192dd23b169fe2f66424e7bd17c71e0adca910eda0bfa99ee6acf9" },
+  { path = "Runtime_Win64_retail.BuildSettings", size = 640, blake3 = "76ed465f8e42f5f66a8f49940fafb4d4785b810417e456a28f2f70245df9ddf7" },
+]
+
+[[entry]]
+key = "oracles.baseline.skate/fbmod"
+kind = "tree"
+count = 3
+bytes = 7271849
+shape = "deec6b25f7da6331ae1f8187a39ac7e5a001c7c663dc559fe8e345f8eb9015ad"
+blake3 = "f573a6f8e97e2e061f13056fa5036304228c7f09867632876982dec6558ecd77"
+
+[[entry]]
+key = "oracles.corpus.skate/cas"
+kind = "tree"
+count = 208
+bytes = 616302
+shape = "e41b423b76cef1cbaa3c0ea7d053a115b9d25407ca1afa728977a62a98fc06cd"
+blake3 = "0bf8ee2171172cc6aa45d7c235bc3a8650621c27abe2a93bde792dd2535d9382"
+
+[[entry]]
+key = "oracles.corpus.skate/ebx"
+kind = "tree"
+count = 3
+bytes = 12776
+shape = "f90646574be64615c2f27e4ee09515747e06b56ede374ca6434caf4d999880a2"
+blake3 = "0543dfbd0fffad1b475260ae09c6d7171aa34ea74cb9c3d68f3c6c48220eda59"
+
+[[entry]]
+key = "oracles.corpus.skate/shaders"
+kind = "tree"
+count = 19446
+bytes = 187185614
+shape = "e894d79034d0fc7b4e86df7b761c7d52580038daf2e957a73fb3c24cd2aee087"
+blake3 = "638e29a88f3722862f92cc6ccfeee7841b61897fd39735b193699d724380c067"
+
+[[entry]]
+key = "oracles.reskate.skate/renderskeleton.json"
+kind = "file"
+size = 363059
+blake3 = "d27d9c56bc72546d24a7065970b357a5b30f33ef5c51affc85ddc4605a65c762"
+
+[[entry]]
+key = "oracles.scripts.skate/eclipse"
+kind = "tree"
+count = 7
+bytes = 1851206
+shape = "287fc503ed90442ede5369c80d215935e22e14c1773b035ad3664095a789ce29"
+blake3 = "540408749fa9df643a8311694ad45ad3e88529a524935f5d43fcecf7adffb415"
+
+[[entry]]
+key = "oracles.studio.skate/layers/patch"
+kind = "tree"
+count = 10
+bytes = 23851494
+shape = "c81f62ce220b7a28166833df95304eea166d428bf4416998768e9a735e1f9f4c"
+blake3 = "e1a59c98807ef863412346201e6193a349c23dc86d1f6ddf1b76d018cca6ca51"
+
+[[entry]]
+key = "oracles.studio.skate/physics"
+kind = "tree"
+count = 9
+bytes = 858729
+shape = "7261da56a46dced9b74342ce2ebaaaef0c0600d6e834a92616828d445b209b9c"
+blake3 = "96072bcacf7a298f4404635142f8eee1e79bb5bfcb3e69e26fb5f0f777e5687a"

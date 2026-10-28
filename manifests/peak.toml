@@ -1,0 +1,24 @@
+# primase-testdata manifest `peak`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.peak"
+kind = "files"
+files = [
+  { path = "PEAK.exe", size = 667648, blake3 = "525941adff6a68b20f8a3ff3cc9140efdea560c8f1c950158de9a6ca5069206a" },
+  { path = "UnityPlayer.dll", size = 36349360, blake3 = "840984ec391c4bfb74dcb624b98f51826aed1b4afac724e9fb55f913eaf618d7" },
+  { path = "version.txt", size = 27, blake3 = "41fb9cb2d8e8787a1e704fb49708801d7d585da49e055ef98a5fcf3aed4ce49e" },
+  { path = "PEAK_Data/globalgamemanagers", size = 1966612, blake3 = "8346fad6c98a2ba642585e160d04e6949424c7e16d114f8424a1dd3fa472a736" },
+  { path = "PEAK_Data/globalgamemanagers.assets", size = 49194456, blake3 = "f2d7e16b2105837cccff278ff27b42e4b440b0b20dfd58ad2da625eaf8ed3547" },
+  { path = "PEAK_Data/resources.assets", size = 41000620, blake3 = "618a00b482d3d6694885a1a28e67cd6350b96787ad1e6fd6c0315955d89af4c4" },
+  { path = "PEAK_Data/level0", size = 41492, blake3 = "ebf5ac0891e6863ee4331755f51ca5189626b19c6743259f1f9775175a812e47" },
+  { path = "PEAK_Data/level1", size = 9348276, blake3 = "61678d35218b7d76237c9344d54f52bd97084e73dfd16aec72919dc8f36c5719" },
+  { path = "PEAK_Data/Managed/Assembly-CSharp.dll", size = 1648128, blake3 = "0a6aa6d0d16c32c34accc7a26269516eb1b69eac3cad88f95f38ca1b30e0c9c9" },
+]
+
+[[entry]]
+key = "oracles.unitypy.peak/bundles.jsonl"
+kind = "file"
+size = 24923643
+blake3 = "4cce188b3819176146a23834604ba317f94f915972f9a5c8859d009d54782367"

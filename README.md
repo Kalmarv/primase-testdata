@@ -98,6 +98,7 @@ require = 'gate'                  # or 'all': an unset input fails instead of sk
 gate = 'smoke'                    # or 'full': how much the heavy tests cover
 seed = '20384'                    # the smoke sample's seed (the day's by default)
 threads = '1'                     # the threads a heavy test's work may use
+verify = 'quick'                  # or 'content' or 'off': how much of a copy is compared with its manifest
 ```
 
 Every section and key is optional, and every value is a string. `GAME_DATA_DEBUG='key=value;key=value'` sets the debug switches a crate declares.
@@ -108,8 +109,26 @@ Every section and key is optional, and every value is a string. `GAME_DATA_DEBUG
 - A configured path that does not exist fails the test. An oracle set whose folder the machine does not hold (`<oracles.root>/<set>`) counts as not configured instead.
 - A query for something the crate has not declared fails, and so does a declaration that does not say what the input is and where it comes from (`Registry::problems`).
 - Unset inputs skip with one stderr line, `primase-testdata: SKIP <test> (<key> not configured ...)`. With `[run] require = 'gate'`, inputs declared `gate: true` (and every `Blocked` file) fail instead of skipping; `'all'` fails on every unset input. An input declared `Unheld` skips whatever `require` says.
-- `check_declared` fails on a query in the crate's sources whose game, set, path or debug key is not declared or not a literal, on a source that reads `GAME_DATA` itself, and on a README whose generated inputs table (`primase_testdata::doc::tables`, between its markers) differs from the registry.
+- A copy is compared with what a good one holds before a test trusts it: every path a query finds is checked against the BLAKE3 sums in this crate's `manifests/` (see below), and a copy that differs fails the test that asked, naming the input and what differs. `[run] verify = 'off'` runs on whatever is there.
+- `check_declared` fails on a query in the crate's sources whose game, set, path or debug key is not declared or not a literal, on a source that reads `GAME_DATA` itself, on a README whose generated inputs table (`primase_testdata::doc::tables`, between its markers) differs from the registry, and on a live `gate: true` install, tool or file with no manifest entry.
 - `gate::GateReport` counts items that match a reference exactly, within a tolerance, or not at all; a gate that checked nothing has not passed. `gate::compare_json` compares two JSON documents number by number.
+
+## Manifests
+
+`manifests/<game>.toml` (and `tools.toml`) hold, for each input a query can name, what a good copy of it is: a file by its size and BLAKE3 hash, the identifying files of an install by the same, a folder by the digests of its listing (`src/sums.rs` shows the format, `src/digest.rs` how the sums are made). They are embedded in the library, so every consumer that pins this crate checks against the same sums. Archive keys are never in a manifest.
+
+`[run] verify` says how much a run reads. `quick` (the default) compares sizes everywhere, hashes every file up to 256 MiB that an entry lists, and compares a folder's file names and sizes; `content` also hashes every file up to 256 MiB in a folder; `off` compares nothing. A file larger than 256 MiB is identified by its size alone. Each key is checked once per process. An entry marked `check = "warn"` (a tool installed with the system) prints one warning line instead of failing.
+
+On a machine that holds the inputs, `cargo run --example manifest` writes and checks entries:
+
+```text
+cargo run --example manifest -- add oracles.corpus.sekiro/havok          # a file or a folder
+cargo run --example manifest -- add installs.sekiro sekiro.exe Data1.bhd # the files that identify an install
+cargo run --example manifest -- add tools.dxc --warn                     # a mismatch only warns
+cargo run --example manifest -- verify                                   # every shipped entry against this machine
+```
+
+A new input needs an entry before its crate's `check_declared` passes (if it is a `gate: true` input); commit the changed `manifests/*.toml` here and move the consumers' pins.
 
 ## What it does not do
 

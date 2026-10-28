@@ -1,0 +1,20 @@
+# primase-testdata manifest `stuntboost`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.stuntboost"
+kind = "files"
+files = [
+  { path = "STUNTBOOST.dll", size = 2870272, blake3 = "d0cda365a18c3fc878f982ae910317f3de5871436eb35836d8c755f21f34ddc9" },
+  { path = "STUNTBOOST.exe", size = 155648, blake3 = "b31eb3fba437dab8d76cfb64bf31db8f0fe1ed2de5fd554663b0d348658085d2" },
+  { path = "STUNTBOOST.runtimeconfig.json", size = 466, blake3 = "601fcd6bb0d03af874b1d5ab6039c9a8c50574fdcb64c42ae3d952f6f18d27d3" },
+]
+
+[[entry]]
+key = "oracles.game-code.stuntboost/levels"
+kind = "tree"
+count = 318
+bytes = 365298824
+shape = "2fe9f9a4793dd35427ae8d4359ce3be03ed212fc6e96371b983ebfe0d9149bac"
+blake3 = "16c39b2ba9ceede59cded129c10f798992f4908744b55f995e8ff029cd54711b"

@@ -1,0 +1,115 @@
+# primase-testdata manifest `sledding`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.sledding"
+kind = "files"
+files = [
+  { path = "Sledding Game.exe", size = 667648, blake3 = "fa0cf15a13512c7cab7cdd1184c3111f0d5487a0f954e5e4a33ea07adf82548b" },
+  { path = "GameAssembly.dll", size = 113922048, blake3 = "b4fba605ac302a6131b2706ab7a6e36edccd3f8e3a33782aad22e9af829ca214" },
+  { path = "UnityPlayer.dll", size = 36195240, blake3 = "49d44db7464df3a123b9c7c3e1fdbba7ba66f74646ee4ebfde3469b1487342e3" },
+  { path = "Sledding Game_Data/globalgamemanagers", size = 616148, blake3 = "2549303f5f1eb02a62efc7520796e73c69fefd77493ff5bf5fe57b4815d04967" },
+  { path = "Sledding Game_Data/globalgamemanagers.assets", size = 2424984, blake3 = "77c68b65f48b5c86c0b954b91a63cb25a96111d134c8df668502d8fd127c46ab" },
+  { path = "Sledding Game_Data/level0", size = 88692, blake3 = "2372b2dadebacd43ba0533ead6137f080147ff07c6a0a1e2015a0e1f924153e3" },
+  { path = "Sledding Game_Data/level1", size = 20206840, blake3 = "db13050c9f396cb1ff34a057d3d09ccb4eda79d998cf79b1de07a99e45269324" },
+  { path = "Sledding Game_Data/il2cpp_data/Metadata/global-metadata.dat", size = 26973544, blake3 = "d35ca961ee31cd1accb4773ac6e327a1fdf4d9c00a39399f33413dac28fdc49c" },
+]
+
+[[entry]]
+key = "oracles.corpus.sledding/shaders"
+kind = "tree"
+count = 4854
+bytes = 93706792
+shape = "fa1db6d4300ab008ccf9fba2773f8ec9a4290bb305eb43c98eae8d25ceefc7e0"
+blake3 = "420f8bd00f9cf7f1ad51b5ed5080b9aac73dd674fc0d7a7698e023eb34ea2c6d"
+
+[[entry]]
+key = "oracles.port.sledding/level1"
+kind = "tree"
+count = 2658
+bytes = 270647301
+shape = "72774b56d8cbd732d2c834a0871892aa85b2f272c550e247c0dffe6538265e17"
+blake3 = "98f9cd2548ed4cd6d0ff38b2bba544e890f014202af3567f2da965b5f3107412"
+
+[[entry]]
+key = "oracles.port.sledding/materials.json"
+kind = "file"
+size = 58634
+blake3 = "70a284c4407510b88d30c768dbf5dd33c1ff755c2e5203596fb854c7565be647"
+
+[[entry]]
+key = "oracles.port.sledding/terrain"
+kind = "tree"
+count = 1602
+bytes = 370368020
+shape = "11813cd39f5da4370a57383079db33a1a1be1dc9aaca09fc6c8b5c21e5b27acf"
+blake3 = "a404fe8e1228c632d093621df600ec6876e6a780c2d6bc8e11a23db29799bc4a"
+
+[[entry]]
+key = "oracles.unitypy.sledding/bundles.jsonl"
+kind = "file"
+size = 110109
+blake3 = "78fc90eec0c6d11f4eb2d498f21f2c9ded14660ee63203778cd0fe55f24a53f7"
+
+[[entry]]
+key = "oracles.unitypy.sledding/frames.json"
+kind = "file"
+size = 126021
+blake3 = "237dda71c45e41a5e955ba0c6090e1cb6f88b6309b6949d58a0f2be793dd0202"
+
+[[entry]]
+key = "oracles.unitypy.sledding/listing.json"
+kind = "file"
+size = 18243506
+blake3 = "1e2370a27374f25020ec4f059ab1435a01813fdef5daf9c73e191188a413c4bd"
+
+[[entry]]
+key = "oracles.unitypy.sledding/materials.json"
+kind = "file"
+size = 356308
+blake3 = "6689c349f5caa14b05aa585dfce7d69159850981f6229b79d80ca1770d06d3ba"
+
+[[entry]]
+key = "oracles.unitypy.sledding/meshes.json"
+kind = "file"
+size = 11485260
+blake3 = "42e84592697ef40062590203cdb9010b14c844eb06579a7ce8a7b8d10732be98"
+
+[[entry]]
+key = "oracles.unitypy.sledding/samples.json"
+kind = "file"
+size = 225813329
+blake3 = "cda622fd2c2af0500d124668cd29647ffaaad3a92d984e214e20aa6f354ebf36"
+
+[[entry]]
+key = "oracles.unitypy.sledding/scan.json"
+kind = "file"
+size = 21962266
+blake3 = "b3290c9105813f9baf30e737acf045bbab9bd8dd0a2041dbbcf050ac0a33bc31"
+
+[[entry]]
+key = "oracles.unitypy.sledding/shader-programs.json"
+kind = "file"
+size = 2475960
+blake3 = "258f58262123a96d9f7663715e284e1207d3e0e4ef4383c61c1b3e418a7179fe"
+
+[[entry]]
+key = "oracles.unitypy.sledding/shader-state.json"
+kind = "file"
+size = 624145
+blake3 = "388bd4ba86b4dfd63afd81bf6a0456a6fdc289da1dac208bcc046f44f37ae298"
+
+[[entry]]
+key = "oracles.unitypy.sledding/sun.json"
+kind = "file"
+size = 977
+blake3 = "5eb10a9452f967392782e3276c32318d632d8c39b9d4ff6b9adb7e156a88b759"
+
+[[entry]]
+key = "oracles.unitypy.sledding/textures"
+kind = "tree"
+count = 1317
+bytes = 179631688
+shape = "686ca91e51b390e961aea2eb252a5c871388db32ceb572b365e35d5cacd8ec40"
+blake3 = "2f0c2bc58c8108bad668a1ca5d7b8c7bdb7fe9ce9b3994249c515153c6025c46"

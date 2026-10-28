@@ -1,0 +1,33 @@
+# primase-testdata manifest `general`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "oracles.corpus.general/codecs.tsv"
+kind = "file"
+size = 9840
+blake3 = "b494cbcb929df79b680e322e6a1372c62e22cb6be1c822dfa51aae64c49b2156"
+
+[[entry]]
+key = "oracles.corpus.general/dxbc"
+kind = "tree"
+count = 1170
+bytes = 16382471
+shape = "33b9d453a86b86246d732496c2763f4864f206b9ab44eac7dd303912ae08d949"
+blake3 = "f230c4ccc9e178ad54e41ffeb360fb9d407fff3db51171fb1ec5f5ac33af3a6c"
+
+[[entry]]
+key = "oracles.d3d-disassembler.general/sm3"
+kind = "tree"
+count = 6
+bytes = 12351
+shape = "dcda6f24748cdc9de09d411878f6f63b86c734dd171740eed0b08f72f5658975"
+blake3 = "8bba646425453b5c10b14da4501d0f5d4cf6294a4ffbc911413fa18eb3954bdd"
+
+[[entry]]
+key = "oracles.khronos.general/sample-assets"
+kind = "tree"
+count = 71
+bytes = 8265099
+shape = "79a812b74e030a6c502548c4cdd7a736c76a8a964b024cb50d3c8d00c702e536"
+blake3 = "d25b265cd1c857daa1bdc3b68b2c0073a017283cf27fe51adbc55c61e1fff1b8"

@@ -1,0 +1,190 @@
+# primase-testdata manifest `elden`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.elden"
+kind = "files"
+files = [
+  { path = "eldenring.exe", size = 86973008, blake3 = "815b04b5eb57937c922ccc0cbf4417a50a989d71f3673262296e4795d13bf870" },
+  { path = "Data0.bhd", size = 1107200, blake3 = "7c657d044991cc878cdbd08aa48d70ddffc1b4113466b0e37bfb8d08ff2c97c0" },
+  { path = "Data1.bhd", size = 6157568, blake3 = "0fadb47ed85c1d41dc500dfff2ec4e5ff144e0f26c50d35eaec55a49b66caf8e" },
+  { path = "Data2.bhd", size = 7225088, blake3 = "b633898868882fa214a8a9606ee0647dcfd0075f57d6f211ab734b578a234ef7" },
+  { path = "Data3.bhd", size = 378112, blake3 = "6b87d4e13e807a1b3f1605da21d6e5bce3835d9e1a94b319295f7fc8674a5c2e" },
+  { path = "Data0.bdt", size = 11829420163 },
+  { path = "Data1.bdt", size = 13922502080 },
+  { path = "Data2.bdt", size = 20656373062 },
+  { path = "Data3.bdt", size = 2857866608 },
+  { path = "regulation.bin", size = 2045728, blake3 = "27ad062976f5b146973aa952428a3f608ae1007dd12ec30e3fd76e5f74d51929" },
+  { path = "oo2core_6_win64.dll", size = 1085952, blake3 = "28557f66b732ac185e70da3dbd8f6474a103bbd25ad84ce02336c2c837e19931" },
+]
+
+[[entry]]
+key = "oracles.baseline.elden/malenia-binding-report.json"
+kind = "file"
+size = 349042
+blake3 = "72d119be6401831210f4245b3d9f443a4851a02bf623285f2e4820bb1a93e1b6"
+
+[[entry]]
+key = "oracles.capture.elden/havok-cloth"
+kind = "tree"
+count = 2
+bytes = 3063117
+shape = "a97cc6095f697cc1dec1f412a367677dc14dc730955e5ad584fc474ed1af416e"
+blake3 = "93ac6abf1f3639e89097c152c12cc5fcae21aae633ddf6061b5a9e835dd83adf"
+
+[[entry]]
+key = "oracles.corpus.elden/havok-behavior"
+kind = "tree"
+count = 1022
+bytes = 181096352
+shape = "dafbe1740ba492f45c947f64cab193d60789ac62fe289a6a48550d7b17da3c10"
+blake3 = "6151c86ef59dd0dfda8bc208dbaf933c5b71756b9902c7fe6f56b65271db76ed"
+
+[[entry]]
+key = "oracles.corpus.elden/havok-behavior-xml"
+kind = "tree"
+count = 12
+bytes = 96047839
+shape = "8d6129c2dcdd6205a911f7a77fdb96152e7558193fa057c22509cd78581002db"
+blake3 = "329217422128f91aa7f0b5be85157c19f8d64a5de3c59d4db81e3b06f14fd55c"
+
+[[entry]]
+key = "oracles.corpus.elden/havok-cloth"
+kind = "tree"
+count = 815
+bytes = 283161386
+shape = "fbc8d5c93fb2c0bae7796a076bb28fc5fa5d20931386d3fcaa578e9c1b34eddb"
+blake3 = "ab06412215bbf0bf582a127e7d277762a691773022285cbd64a11d9f57902bb8"
+
+[[entry]]
+key = "oracles.corpus.elden/havok-float"
+kind = "tree"
+count = 3
+bytes = 4009656
+shape = "fac7baad206df882011ef96f5de5eb612789cbdd428dc4c90810a3cf778f0ca0"
+blake3 = "9e8d75e081c31242364d8f6a6f7536ea8f81301ada2ce4e79a8544754cebcfd2"
+
+[[entry]]
+key = "oracles.corpus.elden/havok-l"
+kind = "tree"
+count = 2
+bytes = 65250356
+shape = "cc2083dedd34552c90764f3f8925f080a79ea200388e6f72ea29905b9105bf0f"
+blake3 = "aa391a8b4d942dabb3c021b8866adbb56559c342d669a03bef3fdcdb9e605cce"
+
+[[entry]]
+key = "oracles.corpus.elden/havok-nav"
+kind = "tree"
+count = 8
+bytes = 10225061
+shape = "b7cb57d7761c4f304f55b6f0f9293e44939bf5252c263b02ad243f2d9c2f2632"
+blake3 = "a3f89b9f54c809a659761ce7f035b2a6f61a1c0ad773c28724fdd13a3a5b0490"
+
+[[entry]]
+key = "oracles.corpus.elden/havok-packfiles"
+kind = "tree"
+count = 6
+bytes = 19520
+shape = "19a87c65e53ddc77fa50267f80ab7ab85ba2190ff8123cfb4b672376575e6eac"
+blake3 = "e89e92d7e53bc81aef49b264bfce21a89f5ee54eee18b451a539b74b42f0233e"
+
+[[entry]]
+key = "oracles.corpus.elden/shaders"
+kind = "tree"
+count = 50283
+bytes = 1141969523
+shape = "3a5c0f3424d21888351dc093359d806691a2ee8e65b606f1d34bd32192f18a0d"
+blake3 = "9a29c6594cf4d3fe11fe7af620d049bcf66f5cca8a7313731ddc7ecba4e6e5ed"
+
+[[entry]]
+key = "oracles.fxr.elden/curves.jsonl"
+kind = "file"
+size = 3383410
+blake3 = "6706a2cc9602d725f76c176106b93c936136e6a8a72868b40b8129c5a39247ff"
+
+[[entry]]
+key = "oracles.fxr.elden/lights.jsonl"
+kind = "file"
+size = 10339207
+blake3 = "311768b7ec5e595a75f87fbab89363addf10fe8a74d89955f3aa3c054227fe81"
+
+[[entry]]
+key = "oracles.fxr.elden/params.jsonl"
+kind = "file"
+size = 27838819
+blake3 = "5e17ffd75a29fd995f64920fc169160a32977c25ea2871a25173fa13933f4484"
+
+[[entry]]
+key = "oracles.smithbox.elden/defs"
+kind = "tree"
+count = 179
+bytes = 2123882
+shape = "c9184ffec33115478d98756edb53730447e04740c0f7009f537ef432d8a568f7"
+blake3 = "ae3db79ced22b80af99f346b6229fca13f80739165d9787b85f36a6e5e5cfef9"
+
+[[entry]]
+key = "oracles.smithbox.elden/file-dictionary.json"
+kind = "file"
+size = 30840743
+blake3 = "7a8f83dc8cd4b946d7508fa8abfa720b5378f6a9264e9e6a47ada35ce7a6593e"
+
+[[entry]]
+key = "oracles.smithbox.elden/gx-item-descriptors.json"
+kind = "file"
+size = 55749
+blake3 = "ad4e49808de5c35ee0d4814932f9a42975952d53e7e713d156588d353501ca38"
+
+[[entry]]
+key = "oracles.smithbox.elden/hit-material-names.json"
+kind = "file"
+size = 3908
+blake3 = "d09e15cba5e9fc654748452b4510171d8dc04a872456dc9190856da29565089b"
+
+[[entry]]
+key = "oracles.smithbox.elden/regulations"
+kind = "tree"
+count = 28
+bytes = 53606464
+shape = "69da84d0cc6cdec6a22348e1417df3badbcbd493353819d52172acf18d1d709f"
+blake3 = "0ab28fea050d56153628fa7e8d15785481107de311800bc9615b15ba8dd299ae"
+
+[[entry]]
+key = "oracles.smithbox.elden/tae-template.xml"
+kind = "file"
+size = 65835
+blake3 = "a2565afb8d5f962c77b795faca0b598b949bcd35d7fb59311ee7ceda82975be1"
+
+[[entry]]
+key = "oracles.soulsformats.elden/census"
+kind = "tree"
+count = 23
+bytes = 623740952
+shape = "7a727807c0c3655a5b476e9b1306f7dd7eb66ad69645137d7e752772868afae2"
+blake3 = "75a5b894e0239c19ca25c4f65ece35c04359ae2f840f75bab74228b018837b2d"
+
+[[entry]]
+key = "oracles.soulsformats.elden/format"
+kind = "tree"
+count = 8
+bytes = 543869493
+shape = "c93bb8a2d5b19269637cf2f30bba1feb18e0ed41c5e2855ef68d9ac1c8e103df"
+blake3 = "6e333c618a10a6842993f41504e3edcf14dda95c24ed4d242442d60d3a7a341e"
+
+[[entry]]
+key = "oracles.soulsformats.elden/npc.jsonl"
+kind = "file"
+size = 3503236
+blake3 = "68847be6290751ef84b64ed3aaa8863db82cd7755b7c8e59eed27d651b69cf31"
+
+[[entry]]
+key = "oracles.soulstruct.elden/shader-uv-slots.json"
+kind = "file"
+size = 32193
+blake3 = "ff0e78267907f74b40f3bdb113222822772ef29859ffb313206416691abe83cf"
+
+[[entry]]
+key = "oracles.uxm.elden/dictionary.txt"
+kind = "file"
+size = 9261806
+blake3 = "021677b08b2b07ddf7b786aba4dbb8ec44a121aaed7417658da4a7dc117f8301"

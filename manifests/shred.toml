@@ -1,0 +1,47 @@
+# primase-testdata manifest `shred`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.shred"
+kind = "files"
+files = [
+  { path = "PS3_DISC.SFB", size = 1536, blake3 = "d86818734924cd198d93f5be5058a297ee2032701287ac3003ea577eba4100c2" },
+  { path = "PS3_GAME/PARAM.SFO", size = 1092, blake3 = "cb2fca8aaac75ef21bc9ba905300d619b7b506475b05ad27dc59cd300cbe1d95" },
+]
+
+[[entry]]
+key = "oracles.corpus.shred/havok-packfiles"
+kind = "tree"
+count = 490
+bytes = 59692192
+shape = "8286d62a66cf86a7470319e984c237d66624ac46de386d86c403054cee462858"
+blake3 = "8c89eb59241f0e1fdcc6015a6fb2a263a1e89d5ed7be33872871ab59e5d2de8f"
+
+[[entry]]
+key = "oracles.corpus.shred/main-db.tsv"
+kind = "file"
+size = 2241839
+blake3 = "4fe9721e23566aadbc3f6c56fbe7214162d3ab61cfd033b3bee9df4ebe249503"
+
+[[entry]]
+key = "oracles.corpus.shred/scripts.pak"
+kind = "file"
+size = 1459346
+blake3 = "642202c7564f06dfb2b06b5834c5aee890e475690a1c689f2882982c87369eeb"
+
+[[entry]]
+key = "oracles.rpcs3.shred/fragment"
+kind = "tree"
+count = 6546
+bytes = 202557197
+shape = "153d256b0ac36bec8b0e0266a98e661c6544c7d14277a4c2b97ab984eacc3f89"
+blake3 = "8a613ed6e0b60a79d5f9bc4cf5a9c78d07a1bd4431d0ab9e35e6e0955faa4afa"
+
+[[entry]]
+key = "oracles.rpcs3.shred/vertex"
+kind = "tree"
+count = 340
+bytes = 2040507
+shape = "f780d7b9a7afdbba6851870616757769ce3d5e576f86d66a29344e927be83686"
+blake3 = "24515ee1475dd74bff2a4d4332807f1dc7b83451c012e1eb4b58520d8fdf837f"

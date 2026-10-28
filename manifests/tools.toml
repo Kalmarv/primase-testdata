@@ -1,0 +1,85 @@
+# primase-testdata manifest `tools`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "tools.dotnet"
+kind = "file"
+size = 157480
+blake3 = "6024ddd7f8fde9c73fd230bacd1ecf6d22c5ac3e69d3ee3cf284e0cbbeab19c6"
+check = "warn"
+
+[[entry]]
+key = "tools.dxc"
+kind = "file"
+size = 338264
+blake3 = "cd9127d6e6b9e6a6cfa38446390b401cbbe0d4d730c54c084886ba81796f3b39"
+check = "warn"
+
+[[entry]]
+key = "tools.fxc"
+kind = "file"
+size = 182640
+blake3 = "1fb17dcd41baddabff611e161126c54886808eb40567639697d310b7f6403b51"
+check = "warn"
+
+[[entry]]
+key = "tools.gltf_validator"
+kind = "file"
+size = 5520896
+blake3 = "d2042713fb4a6d6f09864ce9dd2abce669de519f6a8b6a16163ca6a7b4a105ea"
+
+[[entry]]
+key = "tools.oodle5"
+kind = "file"
+size = 945640
+blake3 = "31ae25506d19857c8bfa500f4466a7466cfe8404ef9c066fee950e12eb1cdac4"
+
+[[entry]]
+key = "tools.oodle6"
+kind = "file"
+size = 1085952
+blake3 = "28557f66b732ac185e70da3dbd8f6474a103bbd25ad84ce02336c2c837e19931"
+
+[[entry]]
+key = "tools.oodle9"
+kind = "file"
+size = 639872
+blake3 = "4df02dafefa712a4223c275e2fc289c25e169691e3dd21898a2edce0ae7ea954"
+
+[[entry]]
+key = "tools.python_pillow"
+kind = "file"
+size = 105816
+blake3 = "eb42fb6bf6242b9c7d21302b1c6674da566e97fb22c113ca6e359ca018c2bc48"
+check = "warn"
+
+[[entry]]
+key = "tools.ref_sm3"
+kind = "file"
+size = 187392
+blake3 = "c255a3b956f8dd7fd8e5ca2cef79ab4e40668074db86054b4c014d4cd8b71108"
+
+[[entry]]
+key = "tools.reskate_cli"
+kind = "file"
+size = 2404352
+blake3 = "1421adc4b20eadecb00716122d6602aa53f8d6a2a7b627f2dc5c7ad0fb854c21"
+
+[[entry]]
+key = "tools.scene_skate"
+kind = "file"
+size = 106496
+blake3 = "9d1c9d854185a607245836eb6751749ebdc7b5a22f868b1963b703bd4f148fab"
+
+[[entry]]
+key = "tools.unity_tpk"
+kind = "file"
+size = 1539009
+blake3 = "72430c9ac3dc2fa6a7777b86f8e99f93671975c37a8ff86a9a8294c8d0a8cec1"
+
+[[entry]]
+key = "tools.warp"
+kind = "file"
+size = 446464
+blake3 = "31c9f67f7c238878fe170db0eaf1635041202c3166dfef15cd428c8207988659"

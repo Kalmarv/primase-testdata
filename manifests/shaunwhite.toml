@@ -1,0 +1,48 @@
+# primase-testdata manifest `shaunwhite`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.shaunwhite"
+kind = "files"
+files = [
+  { path = "DataPC.forge", size = 20545833, blake3 = "0ee2d1c1ad06377b10f883e477f9b935dd31f60c07b94c26337211bc95220ce4" },
+  { path = "DataPC_01.forge", size = 658210816 },
+  { path = "DataPC_01_A_FYM.forge", size = 46727168, blake3 = "beb03367b013d79710aea6c5aaf411772c9f3536558dcca5112359de3c1781aa" },
+  { path = "DataPC_01_B_FYM.forge", size = 37748736, blake3 = "1d1a63e4e46bfba590072c72650ac3897529bbc3081e8caec9c5d1b2bee16ba6" },
+  { path = "DataPC_02.forge", size = 713326592 },
+  { path = "DataPC_02_FYM.forge", size = 28311552, blake3 = "f6905976c923395433be23a409ff8ebb3b0c395e1e68ef8a32f7852548e44914" },
+  { path = "DataPC_02_Multi.forge", size = 65765376, blake3 = "4328faa051f9a67f9538d6d45ca083f947a4d7b52e8adfe420bf6cf5153ba334" },
+  { path = "DataPC_03.forge", size = 484114432 },
+  { path = "DataPC_03_FYM.forge", size = 34078720, blake3 = "ecd8d6d5857501390acf91da92c8bba4d2dd9e68f8db017a92a12d6e49a907b0" },
+  { path = "DataPC_03_Multi.forge", size = 148832256, blake3 = "a53c838814745ee30a00cb053f0891458b274ad05b7a24ac5297b59e5281486f" },
+  { path = "DataPC_03_Robot_01.forge", size = 22937600, blake3 = "330f1f689ac79c100c55ce30e1ff3d4c187ac3f0b560921547c11ba22d5576bc" },
+  { path = "DataPC_03_Robot_02.forge", size = 26411008, blake3 = "41a1f0fb07effa2b2051f0ad1ba45a97425bcb18b63f0079e4e69a39449e83ff" },
+  { path = "DataPC_04.forge", size = 564920320 },
+  { path = "DataPC_04_FYM.forge", size = 32964608, blake3 = "98defbffb2378b3d5e3d44a4bc4a39950cbb0d04da2a1844094ca279baede4c8" },
+  { path = "DataPC_04_Multi.forge", size = 115310592, blake3 = "5feeec5f4b79b63cd5e51e075aa9e8502ffa62aff67b3cd0ca324bb8e01c02f8" },
+  { path = "DataPC_04_Robot_01.forge", size = 23625728, blake3 = "c75cfb864e2c00cb301f492c05d46f497b89c4ae8b576f52ae7364ddad02740b" },
+  { path = "DataPC_04_Robot_02.forge", size = 22970368, blake3 = "10d9bd19c4a3d48a64f43d618c7ae9df7bd9de914a7882abdd15da1a2fc6f5aa" },
+  { path = "DataPC_04_Stronghold.forge", size = 78249984, blake3 = "548067ed6ac4d7d9d61c5265465b24fb66a9441381e9dd3467d63ca84c406060" },
+  { path = "DataPC_05.forge", size = 204537856, blake3 = "9e51a7b938f09a7c662bd3d40738e99e75f7ac6f80311937c5a1aa0c1cc750a7" },
+  { path = "DataPC_05_Multi.forge", size = 47054848, blake3 = "7887bc432828546427e5b9c0676206b4fef76d90d019d1d384e27d4d1f084321" },
+  { path = "DataPC_05_Robot_01.forge", size = 23527424, blake3 = "9a1bad64e49f1da63ce3b54237cfb2755eff2c21d7a810dddebc5f6c6609910d" },
+  { path = "DataPC_06.forge", size = 347865088 },
+  { path = "DataPC_Customization.forge", size = 23330816, blake3 = "0eda73b1d62bb096c70e605f0297d5f5c2b0c4eb622ad291bd73e3ef16ae13e0" },
+  { path = "DataPC_DefaultSetCustomizationData.forge", size = 327614464 },
+  { path = "DataPC_GypsyCustomizationData.forge", size = 4653056, blake3 = "4ef71faebc26eb03480d5870ef507f10af3c242b02472b3496ada559cb69db4d" },
+  { path = "DataPC_MadClownCustomizationData.forge", size = 4259840, blake3 = "b5e15002cded995dbb68af06fb49e1843a25bec5e4d8b670571bdd0d58dcf9af" },
+  { path = "DataPC_Main_Menu.forge", size = 18677760, blake3 = "1f38c639e9d8ee90011ee11b1d69b2c6f6f01981bff62771549b11fbae9300ca" },
+  { path = "DataPC_MinistryCustomizationData.forge", size = 2850816, blake3 = "4b28c73ee9dd50d426d36456bfe35b64e4f99b3b9cd4c0adff94a29082daeffb" },
+  { path = "DataPC_SW.forge", size = 52953088, blake3 = "65789aa641ec9c08a6a88c30f0d1ea6c4ba07839ef5352e46fda05bb9687bddc" },
+  { path = "DataPC_ShaunCustomizationData.forge", size = 5931008, blake3 = "c7261e13feb4d4b6cd05420d25533e67e04b5fa53aaa475daea8d0095affb476" },
+  { path = "DataPC_TattooFreakCustomizationData.forge", size = 3768320, blake3 = "565949d157ebb6d56d0780d74a5ff9b5be272d0570d7ea2234e88caeb3a85780" },
+  { path = "DataPC_YetiCustomizationData.forge", size = 4128768, blake3 = "519b239ee546b8de562a78412a1d23db4fea2176bcd78525f5c5fa7c928d0445" },
+  { path = "DataPC_extra.forge", size = 43057152, blake3 = "4e86a711751681b868dc79bc2861244f7c70ede3ac7424e9faec2fd55e9eb965" },
+]
+
+[[entry]]
+key = "oracles.game-code.shaunwhite/uv-rotation.tsv"
+kind = "file"
+size = 1636
+blake3 = "e1913ebf28adb763604647484c8ae683114c9a5f4f4aae858e9aee805646edea"

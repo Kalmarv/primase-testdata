@@ -18,6 +18,7 @@
 //! gate = 'smoke'                    # or 'full': how much the heavy real-data tests cover (smoke by default)
 //! seed = '20384'                    # the smoke sample's seed (the day's by default), to rerun one exactly
 //! threads = '1'                     # the threads a heavy real-data test's work may use (one by default)
+//! verify = 'quick'                  # or 'content' or 'off': how much of a copy is compared with its manifest
 //! ```
 //!
 //! Every section and key is optional. An unknown section is an error (a typo must not skip quietly), and so is an
@@ -42,6 +43,8 @@ pub(crate) struct Config {
     pub seed: Option<u64>,
     /// `[run] threads`: the threads a heavy real-data test's work may use.
     pub threads: Option<std::num::NonZeroUsize>,
+    /// `[run] verify`: `off`, `quick` or `content`.
+    pub verify: Option<String>,
 }
 
 /// Why the configuration file could not be used.
@@ -71,7 +74,7 @@ fn section_keys(section: &str) -> Option<Option<&'static [&'static str]>> {
     match section {
         "installs" | "keys" | "tools" => Some(None),
         "oracles" | "scratch" => Some(Some(&["root"])),
-        "run" => Some(Some(&["require", "gate", "seed", "threads"])),
+        "run" => Some(Some(&["require", "gate", "seed", "threads", "verify"])),
         _ => None,
     }
 }
@@ -143,6 +146,14 @@ impl Config {
                         }
                         "gate" if matches!(value, "smoke" | "full") => self.gate = Some(value.to_owned()),
                         "gate" => return Err(invalid(format!("run.gate = '{value}': 'smoke' or 'full'"))),
+                        "verify" if matches!(value, "off" | "quick" | "content") => {
+                            self.verify = Some(value.to_owned())
+                        }
+                        "verify" => {
+                            return Err(invalid(format!(
+                                "run.verify = '{value}': 'off', 'quick' or 'content'"
+                            )));
+                        }
                         "seed" => {
                             self.seed = Some(
                                 value

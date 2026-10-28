@@ -1,0 +1,127 @@
+# primase-testdata manifest `gta`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.gta"
+kind = "files"
+files = [
+  { path = "GTA5_Enhanced.exe", size = 55819384, blake3 = "000d87f6cfa48594f8ef59813cc6f12f1b3851128d32dcf129934768f67666e1" },
+  { path = "common.rpf", size = 19351552, blake3 = "9328699d354c9f0fd1dc37d7f152e9cb189e0cab337adf68ea116e024e7a7c37" },
+  { path = "x64a.rpf", size = 101433344, blake3 = "26ec93a023bdf6131b5acdbb641dbff962b1a8b3caadc0cc9db798ad90be0a0e" },
+  { path = "x64b.rpf", size = 205651968, blake3 = "a225b101816c1b4d3ca99905cea45b6231e5bba8df38e2472d387dcd3cf59cfa" },
+  { path = "x64c.rpf", size = 1845954560 },
+  { path = "x64d.rpf", size = 1794203648 },
+  { path = "x64e.rpf", size = 2067353600 },
+  { path = "x64f.rpf", size = 834557952 },
+  { path = "x64g.rpf", size = 2276556800 },
+  { path = "x64h.rpf", size = 1214193664 },
+  { path = "x64i.rpf", size = 1384208384 },
+  { path = "x64j.rpf", size = 1678678016 },
+  { path = "x64k.rpf", size = 1899888640 },
+  { path = "x64l.rpf", size = 2050156544 },
+  { path = "x64m.rpf", size = 1461764096 },
+  { path = "x64n.rpf", size = 1444841472 },
+  { path = "x64o.rpf", size = 1533937664 },
+  { path = "x64p.rpf", size = 1301690368 },
+  { path = "x64q.rpf", size = 2482229248 },
+  { path = "x64r.rpf", size = 1534547968 },
+  { path = "x64s.rpf", size = 1471709184 },
+  { path = "x64t.rpf", size = 1644965888 },
+  { path = "x64u.rpf", size = 1173688320 },
+  { path = "x64v.rpf", size = 1940961280 },
+  { path = "x64w.rpf", size = 863301632 },
+  { path = "update/update.rpf", size = 3122239488 },
+  { path = "update/update2.rpf", size = 656195584 },
+  { path = "oo2core_5_win64.dll", size = 945640, blake3 = "31ae25506d19857c8bfa500f4466a7466cfe8404ef9c066fee950e12eb1cdac4" },
+]
+
+[[entry]]
+key = "oracles.baseline.gta/legion/blend-spec.json"
+kind = "file"
+size = 955331
+blake3 = "23d20d9657704f6d7cd9bdb8786d5066147e3b07012bf7e477198d3a2958f845"
+
+[[entry]]
+key = "oracles.baseline.gta/legion/map"
+kind = "tree"
+count = 557
+bytes = 42911772
+shape = "9c47ba53a8aa6c8d38b81974596469f573f76178d2d3462967474c4dadb6a4f2"
+blake3 = "3f8d63eb7c2cc581e31524014a6d54c35764d32ea38e7a6c758e3cc90ea87594"
+
+[[entry]]
+key = "oracles.codewalker.gta/ShadersGen9Conversion.xml"
+kind = "file"
+size = 522466
+blake3 = "8e217d92cacebdac6f6589114e425ad5f59fe6dfef5f11624f11983504699603"
+
+[[entry]]
+key = "oracles.codewalker.gta/active.json"
+kind = "file"
+size = 22272827
+blake3 = "07375108adeaec43f18cca0e026b01497f05e18c8b7ba695c76bf47c0beb9c3b"
+
+[[entry]]
+key = "oracles.codewalker.gta/bounds"
+kind = "tree"
+count = 5
+bytes = 44496
+shape = "41346b43d7729401025bca2504fae2ef05eb8df9bcf10562cff053c3f3fe9d3b"
+blake3 = "79ad8cc5cc3c8ace317730e53b7a96c7d99d6a148b181519a16d06b75e314ce2"
+
+[[entry]]
+key = "oracles.codewalker.gta/frames.json"
+kind = "file"
+size = 1325521
+blake3 = "6dd3dad55522ea77240f88c07b4a9b3d797a0b9a4d581f2efffea758554411cb"
+
+[[entry]]
+key = "oracles.codewalker.gta/gtxd.json"
+kind = "file"
+size = 222029
+blake3 = "942f0e97cc0cbdc1bb32bd83e2afabf1a352472c87eef773d168bc075a17e690"
+
+[[entry]]
+key = "oracles.codewalker.gta/listing.jsonl"
+kind = "file"
+size = 57590374
+blake3 = "061f1f32c337012453845c6e3708e2f9936366ef5b03101178e03266fe823989"
+
+[[entry]]
+key = "oracles.codewalker.gta/parity"
+kind = "tree"
+count = 1
+bytes = 288088585
+shape = "7ce8dfe0d5a3c4cd7d8e7fd75afb048d3a0b955df744f2bcbfc1fca14383ac4b"
+blake3 = "301ba11c21230276c1ac7ff20f9d64fd41395a2baf495eda43ca1da768565649"
+
+[[entry]]
+key = "oracles.codewalker.gta/resources"
+kind = "tree"
+count = 2
+bytes = 140577
+shape = "75fbc9ca44dec3c0eb72d7ad1c18d552fd1ef0e1258f0eb6561828b43148b0f5"
+blake3 = "b0d8bfce458c3aaed6f38e645820c64b8fc9b3abcea5043da6cf5e12570a76d1"
+
+[[entry]]
+key = "oracles.codewalker.gta/ycd"
+kind = "tree"
+count = 8
+bytes = 739358849
+shape = "84f345b2eff45761f93e94098fd714e30a70f4d40dcc46be537e06e8a0d31329"
+blake3 = "d3a50642573a2cccee72023932d9660e4a4c7df5199efc9506f4c41d49eeb265"
+
+[[entry]]
+key = "oracles.corpus.gta/shader-database.awc"
+kind = "file"
+size = 158862395
+blake3 = "569edae0b273a9334fc668069d598617d60616bc8f37d68fd8f6c856632e9d62"
+
+[[entry]]
+key = "oracles.studio.gta/legion/patch"
+kind = "tree"
+count = 10
+bytes = 54399683
+shape = "3d571805efa1e08539c6b912228c5f4e9723b6667df99aea3d9f8b5166909b00"
+blake3 = "728d3b1689c22b2f78e8005788bd2edc8ee883998a8952aa9ecc555570f08ce8"

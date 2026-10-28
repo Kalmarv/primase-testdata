@@ -1,4 +1,7 @@
 use super::*;
+use crate::manifest::{self, Verify};
+use crate::sums::{self, Entry, FileSum, Severity, Sums};
+use crate::{digest, measure};
 use std::collections::BTreeMap;
 
 /// A consumer's declaration, as `tests/inputs/mod.rs` makes one.
@@ -218,6 +221,7 @@ fn unknown_sections_keys_and_values_are_errors() {
         "[run]\ngate = 'quick'",
         "[run]\nseed = 'today'",
         "[run]\nthreads = '0'",
+        "[run]\nverify = 'always'",
         "[run]\nrequired = 'gate'",
         "[oracles]\nsoulsformats = 'x'",
         "[scratch]\ndir = 'x'",
@@ -253,13 +257,25 @@ fn keys_another_consumer_declares_are_accepted() {
 /// `[run] gate` and `[run] seed` are read as given; unset, a run is a smoke run drawn with the day's seed.
 #[test]
 fn the_gate_depth_and_seed_are_read() {
-    let c = config(&[], Some("[run]\ngate = 'full'\nseed = '20384'\nthreads = '6'\n")).unwrap();
+    let c = config(
+        &[],
+        Some("[run]\ngate = 'full'\nseed = '20384'\nthreads = '6'\nverify = 'content'\n"),
+    )
+    .unwrap();
     assert_eq!(
-        (c.gate.as_deref(), c.seed, c.threads.map(|t| t.get())),
-        (Some("full"), Some(20384), Some(6))
+        (
+            c.gate.as_deref(),
+            c.seed,
+            c.threads.map(|t| t.get()),
+            c.verify.as_deref()
+        ),
+        (Some("full"), Some(20384), Some(6), Some("content"))
     );
     let unset = config(&[], Some("[run]\nrequire = 'gate'\n")).unwrap();
-    assert_eq!((unset.gate, unset.seed, unset.threads), (None, None, None));
+    assert_eq!(
+        (unset.gate, unset.seed, unset.threads, unset.verify),
+        (None, None, None, None)
+    );
 }
 
 /// A flat file is refused, naming the sections to write, when loaded and when validated; a variable other than
@@ -629,7 +645,284 @@ fn refusals_list_what_was_expected() {
     );
     let key = message("[run]\nsed = '1'\n");
     assert!(key.contains("unknown key sed in [run]"), "{key}");
-    assert!(key.contains("expected require, gate, seed or threads"), "{key}");
+    assert!(
+        key.contains("expected require, gate, seed, threads or verify"),
+        "{key}"
+    );
     let key = message("[oracles]\nroots = 'x'\n");
     assert!(key.contains("expected root"), "{key}");
+}
+
+/// A fresh folder for one test of the manifest code, under the OS temporary folder.
+fn temp_tree(name: &str) -> std::path::PathBuf {
+    let dir = std::env::temp_dir().join(format!("primase-testdata-{name}-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    std::fs::create_dir_all(dir.join("dir/deep")).unwrap();
+    std::fs::write(dir.join("a.txt"), b"hello\n").unwrap();
+    std::fs::write(dir.join("dir/b.bin"), [0u8, 1, 2]).unwrap();
+    std::fs::write(dir.join("dir/deep/c"), b"").unwrap();
+    dir
+}
+
+/// The BLAKE3 hash of no bytes, a published test vector.
+const EMPTY_HASH: &str = "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262";
+
+/// A file's hash and a folder's two digests are made as `digest.rs` says: lines of names and sizes (and hashes),
+/// sorted by path, hashed.
+#[test]
+fn the_digests_are_the_documented_hashes_of_the_listing() {
+    let dir = temp_tree("digests");
+    assert_eq!(digest::file_hash(&dir.join("dir/deep/c")).unwrap(), EMPTY_HASH);
+    let listing = digest::list(&dir).unwrap();
+    let names: Vec<&str> = listing.iter().map(|f| f.path.as_str()).collect();
+    assert_eq!(names, ["a.txt", "dir/b.bin", "dir/deep/c"]);
+    let shape = blake3::hash(b"a.txt\x006\ndir/b.bin\x003\ndir/deep/c\x000\n")
+        .to_hex()
+        .to_string();
+    assert_eq!(digest::shape_digest(&listing), shape);
+    let hello = blake3::hash(b"hello\n").to_hex().to_string();
+    let bin = blake3::hash(&[0u8, 1, 2]).to_hex().to_string();
+    let content = blake3::hash(
+        format!("a.txt\x006\x00{hello}\ndir/b.bin\x003\x00{bin}\ndir/deep/c\x000\x00{EMPTY_HASH}\n")
+            .as_bytes(),
+    )
+    .to_hex()
+    .to_string();
+    let sums = digest::tree_sums(&listing, 2, true).unwrap();
+    assert_eq!((sums.files, sums.bytes), (3, 9));
+    assert_eq!(sums.shape, shape);
+    assert_eq!(sums.content.as_deref(), Some(content.as_str()));
+    assert_eq!(digest::tree_sums(&listing, 1, false).unwrap().content, None);
+    // a file larger than the hash limit is listed by `-`: its hash is not made
+    let mut big = listing.clone();
+    big[1].size = digest::HASH_LIMIT + 1;
+    let hashes = digest::hash_files(&big, 2).unwrap();
+    assert_eq!(hashes[1], None);
+    assert_eq!(hashes[0].as_deref(), Some(hello.as_str()));
+    assert!(digest::content_digest(&big, &hashes) != content);
+    std::fs::remove_dir_all(&dir).unwrap();
+}
+
+/// A manifest's text reads back as the entries it was made from, and what is wrong in one is named.
+#[test]
+fn a_manifest_renders_and_parses_back_and_refuses_what_is_wrong() {
+    let entries = vec![
+        Entry {
+            key: "tools.warp".into(),
+            sums: Sums::File {
+                size: 7,
+                blake3: Some(EMPTY_HASH.into()),
+            },
+            severity: Severity::Warn,
+        },
+        Entry {
+            key: "installs.sekiro".into(),
+            sums: Sums::Files(vec![
+                FileSum {
+                    path: "sekiro.exe".into(),
+                    size: 3,
+                    blake3: Some(EMPTY_HASH.into()),
+                },
+                FileSum {
+                    path: "Data \"1\".bdt".into(),
+                    size: u64::MAX >> 2,
+                    blake3: None,
+                },
+            ]),
+            severity: Severity::Fail,
+        },
+        Entry {
+            key: "oracles.corpus.sekiro/dcx".into(),
+            sums: Sums::Tree {
+                count: 2,
+                bytes: 9,
+                shape: EMPTY_HASH.into(),
+                content: EMPTY_HASH.into(),
+            },
+            severity: Severity::Fail,
+        },
+    ];
+    let text = sums::render(&["a note"], &entries);
+    assert!(text.starts_with("# a note\nformat = 1\n"), "{text}");
+    let mut sorted = entries.clone();
+    sorted.sort_by(|a, b| a.key.cmp(&b.key));
+    assert_eq!(sums::parse("m.toml", &text).unwrap(), sorted);
+    let refused = |text: &str, what: &str| {
+        let error = sums::parse("m.toml", text).unwrap_err();
+        assert!(
+            error.contains("m.toml") && error.contains(what),
+            "{what}: {error}"
+        );
+    };
+    refused("[[entry]]\nkey = \"tools.x\"\n", "format = 1");
+    refused(
+        "format = 1\n[[entry]]\nkey = \"tools.x\"\nkind = \"file\"\nsize = 1\nsise = 2\n",
+        "unknown key `sise`",
+    );
+    refused(
+        "format = 1\n[[entry]]\nkey = \"tools.x\"\nkind = \"blob\"\n",
+        "unknown kind",
+    );
+    refused(
+        "format = 1\n[[entry]]\nkey = \"tools.x\"\nkind = \"file\"\nsize = 1\nblake3 = \"ABC\"\n",
+        "64 lowercase hex",
+    );
+    refused(
+        "format = 1\n[[entry]]\nkey = \"tools.x\"\nkind = \"file\"\n",
+        "`size`",
+    );
+    refused(
+        "format = 1\n[[entry]]\nkey = \"tools.x\"\nkind = \"file\"\nsize = 1\ncheck = \"maybe\"\n",
+        "`check`",
+    );
+    let twice = manifest::Manifest::from_texts(&[("a.toml", &text), ("b.toml", &text)]).unwrap_err();
+    assert!(twice.contains("listed twice"), "{twice}");
+}
+
+/// A copy is compared with its entry: sizes and hashes of a file and of named files, the names, sizes and (with
+/// `Content`) bytes of a folder; `Off` compares nothing.
+#[test]
+fn a_copy_is_compared_with_its_entry() {
+    let dir = temp_tree("verify");
+    let measured = |key: &str, path: &std::path::Path, files: &[&str]| {
+        let files: Vec<String> = files.iter().map(|f| (*f).to_owned()).collect();
+        measure::entry_for(key, path, &files, Severity::Fail, 2).unwrap()
+    };
+    // a file, named files below an install, a folder
+    let file = measured("tools.x", &dir.join("a.txt"), &[]);
+    assert_eq!(
+        manifest::verify(&file, &dir.join("a.txt"), Verify::Quick, 1),
+        Ok(())
+    );
+    let install = measured("installs.g", &dir, &["a.txt", "dir/b.bin"]);
+    let tree = measured("oracles.set.g/dir", &dir.join("dir"), &[]);
+    assert!(
+        matches!(
+            tree.sums,
+            Sums::Tree {
+                count: 2,
+                bytes: 3,
+                ..
+            }
+        ),
+        "{:?}",
+        tree.sums
+    );
+    for mode in [Verify::Quick, Verify::Content] {
+        assert_eq!(manifest::verify(&install, &dir, mode, 2), Ok(()));
+        assert_eq!(manifest::verify(&tree, &dir.join("dir"), mode, 2), Ok(()));
+    }
+    // same size, other bytes: a file and an install file fail by hash; a folder passes by shape and fails by content
+    std::fs::write(dir.join("a.txt"), b"HELLO\n").unwrap();
+    let why = manifest::verify(&file, &dir.join("a.txt"), Verify::Quick, 1).unwrap_err();
+    assert!(why.contains("BLAKE3 hash"), "{why}");
+    let why = manifest::verify(&install, &dir, Verify::Quick, 2).unwrap_err();
+    assert!(why.starts_with("a.txt: ") && why.contains("BLAKE3 hash"), "{why}");
+    std::fs::write(dir.join("dir/b.bin"), [0u8, 1, 3]).unwrap();
+    assert_eq!(
+        manifest::verify(&tree, &dir.join("dir"), Verify::Quick, 2),
+        Ok(())
+    );
+    let why = manifest::verify(&tree, &dir.join("dir"), Verify::Content, 2).unwrap_err();
+    assert!(why.contains("content differs"), "{why}");
+    // `Off` compares nothing
+    assert_eq!(
+        manifest::verify(&file, &dir.join("a.txt"), Verify::Off, 1),
+        Ok(())
+    );
+    // another size, another name, a missing file
+    std::fs::write(dir.join("dir/b.bin"), [0u8, 1, 2, 3]).unwrap();
+    let why = manifest::verify(&tree, &dir.join("dir"), Verify::Quick, 2).unwrap_err();
+    assert!(
+        why.contains("2 files of 4 bytes, where the good copy has 2 of 3"),
+        "{why}"
+    );
+    std::fs::rename(dir.join("dir/b.bin"), dir.join("dir/b2.bin")).unwrap();
+    std::fs::write(dir.join("dir/b2.bin"), [0u8, 1, 2]).unwrap();
+    let why = manifest::verify(&tree, &dir.join("dir"), Verify::Quick, 2).unwrap_err();
+    assert!(why.contains("shape digest differs"), "{why}");
+    std::fs::remove_file(dir.join("a.txt")).unwrap();
+    let why = manifest::verify(&install, &dir, Verify::Quick, 2).unwrap_err();
+    assert!(why.starts_with("a.txt: "), "{why}");
+    std::fs::remove_dir_all(&dir).unwrap();
+}
+
+/// A manifest key names where its input is, and which file of `manifests/` holds its entry.
+#[test]
+fn a_key_names_its_configuration_root_and_its_manifest_file() {
+    let root =
+        |key: &str| manifest::root_of(key).map(|(k, rel)| (k, rel.to_string_lossy().replace('\\', "/")));
+    assert_eq!(
+        root("installs.sekiro"),
+        Some(("installs.sekiro".into(), String::new()))
+    );
+    assert_eq!(
+        root("installs.sekiro/Data1.bhd"),
+        Some(("installs.sekiro".into(), "Data1.bhd".into()))
+    );
+    assert_eq!(root("tools.oodle6"), Some(("tools.oodle6".into(), String::new())));
+    assert_eq!(
+        root("oracles.corpus.sekiro/havok/a.hkx"),
+        Some(("oracles.root".into(), "corpus/sekiro/havok/a.hkx".into()))
+    );
+    assert_eq!(root("keys.gta"), None);
+    let file = |key: &str| manifest::file_of(key);
+    assert_eq!(file("installs.sekiro/Data1.bhd").as_deref(), Some("sekiro"));
+    assert_eq!(file("tools.warp").as_deref(), Some("tools"));
+    assert_eq!(
+        file("oracles.d3d-disassembler.riders/shader-pack").as_deref(),
+        Some("riders")
+    );
+    assert_eq!(file("keys.gta"), None);
+    assert_eq!(file("scratch.root"), None);
+}
+
+/// The manifests this crate ships parse, are all embedded, hold each entry in the file its key names, and hold no
+/// archive key.
+#[test]
+fn the_shipped_manifests_are_whole() {
+    let shipped = manifest::shipped();
+    assert!(shipped.entries().count() > 100);
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("manifests");
+    let mut on_disk: Vec<String> = std::fs::read_dir(&dir)
+        .unwrap()
+        .map(|e| e.unwrap().file_name().into_string().unwrap())
+        .collect();
+    on_disk.sort();
+    let mut embedded: Vec<String> = manifest::EMBEDDED
+        .iter()
+        .map(|(name, _)| format!("{name}.toml"))
+        .collect();
+    embedded.sort();
+    assert_eq!(
+        on_disk, embedded,
+        "a file of manifests/ is not listed in manifest::EMBEDDED, or the reverse"
+    );
+    for (name, text) in manifest::EMBEDDED {
+        for entry in sums::parse(name, text).unwrap() {
+            assert_eq!(
+                manifest::file_of(&entry.key).as_deref(),
+                Some(*name),
+                "{}",
+                entry.key
+            );
+            assert!(manifest::root_of(&entry.key).is_some(), "{}", entry.key);
+            assert!(!entry.key.starts_with("keys."), "{}", entry.key);
+        }
+    }
+}
+
+/// The inputs a registry should have entries for and does not: a live gate input is required, a live input a run need not
+/// have is only named, blocked and unheld ones are never listed. (The registry is the test's own; the entries are the
+/// shipped ones.)
+#[test]
+fn unlisted_inputs_are_required_only_where_a_complete_run_needs_them() {
+    let (required, optional) = manifest::unlisted(&REGISTRY);
+    assert_eq!(required, Vec::<String>::new());
+    // the one declared file with no entry: a Riders forge no manifest lists
+    assert_eq!(optional.len(), 1, "{optional:?}");
+    assert!(
+        optional[0].starts_with("installs.riders/DataPC_MAD_USNAT.forge: no manifest entry"),
+        "{optional:?}"
+    );
 }
