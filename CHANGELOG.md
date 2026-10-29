@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3 (2026-10-29)
+
+- Manifests: `oracles.unitypy.<game>/player-settings.json` for SkateBIRD, Sledding Game, PEAK and Big Walk, the colour space (`m_ActiveColorSpace`) each player's PlayerSettings states, read by UnityPy; unity-formats' player settings test compares its own read with it.
+
 ## 0.1.2 (2026-10-29)
 
 - Manifests: the havok-cloth captures (`oracles.capture.sekiro/havok-cloth`, `oracles.capture.elden/havok-cloth`) are CLF5 frames files, which also hold the cloth instances' volume and transition states; the Sekiro set's sleeve capture is extracted again with its action calls. Only these sums change; the file counts (7 and 2) are the same.
