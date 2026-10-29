@@ -12,6 +12,14 @@ files = [
 ]
 
 [[entry]]
+key = "installs.stuntboost/Content"
+kind = "tree"
+count = 1892
+bytes = 5005234552
+shape = "a9de86ffd66a30d039fb9c9c68c5d28a40541c17211eac636da13b07e46b03f7"
+blake3 = "6139efd8d0789a7ca6522699b0317d15895070129656f60c1955e65ac1295dee"
+
+[[entry]]
 key = "oracles.game-code.stuntboost/levels"
 kind = "tree"
 count = 318
