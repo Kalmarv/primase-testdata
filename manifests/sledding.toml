@@ -93,6 +93,12 @@ size = 11485260
 blake3 = "42e84592697ef40062590203cdb9010b14c844eb06579a7ce8a7b8d10732be98"
 
 [[entry]]
+key = "oracles.unitypy.sledding/player-settings.json"
+kind = "file"
+size = 184
+blake3 = "5d2b99f7cf29948dafec8870c9bf2b251aaf01e4eebefae9b572a779e2f9f58e"
+
+[[entry]]
 key = "oracles.unitypy.sledding/samples.json"
 kind = "file"
 size = 225813329

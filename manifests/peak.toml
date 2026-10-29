@@ -38,3 +38,9 @@ key = "oracles.unitypy.peak/bundles.jsonl"
 kind = "file"
 size = 24923643
 blake3 = "4cce188b3819176146a23834604ba317f94f915972f9a5c8859d009d54782367"
+
+[[entry]]
+key = "oracles.unitypy.peak/player-settings.json"
+kind = "file"
+size = 184
+blake3 = "c71f47f6bcd16449bc9355b74c318a0a0befd524e6f987b6e90957000de05f7a"

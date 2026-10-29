@@ -29,3 +29,9 @@ key = "oracles.unitypy.bigwalk/bundles.jsonl"
 kind = "file"
 size = 217235
 blake3 = "b409b79b8380f59745049bef8301a1b0d56dd05ef2e038100b3313ace8688fbe"
+
+[[entry]]
+key = "oracles.unitypy.bigwalk/player-settings.json"
+kind = "file"
+size = 178
+blake3 = "5468d31001d3b68f4d88023030b86af031f1a2b5d56996d65250ed9c3b708400"

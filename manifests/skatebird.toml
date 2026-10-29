@@ -34,3 +34,9 @@ key = "oracles.unitypy.skatebird/listing.json"
 kind = "file"
 size = 41466689
 blake3 = "043d71a3d20d8cf5aaee39d3a4e64d22777314f9d5eccb5f205ce8cb0ae7cc81"
+
+[[entry]]
+key = "oracles.unitypy.skatebird/player-settings.json"
+kind = "file"
+size = 135
+blake3 = "6f85ac54e523f7e754002e226df3036c362054c8f501259022a16d89b03aed69"
