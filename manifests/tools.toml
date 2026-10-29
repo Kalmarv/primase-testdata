@@ -57,8 +57,8 @@ check = "warn"
 [[entry]]
 key = "tools.ref_sm3"
 kind = "file"
-size = 187392
-blake3 = "c255a3b956f8dd7fd8e5ca2cef79ab4e40668074db86054b4c014d4cd8b71108"
+size = 196608
+blake3 = "b1f1c381651ce5a0293d20ee012d34873e9c89f74d881d6724c1644f2bcd778f"
 
 [[entry]]
 key = "tools.reskate_cli"
