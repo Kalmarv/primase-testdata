@@ -56,9 +56,9 @@ blake3 = "1bd0dae482c7938a2e8b05014b4959d51b79282f14d59e327398db907f047802"
 key = "oracles.capture.sekiro/havok-cloth"
 kind = "tree"
 count = 7
-bytes = 20734029
-shape = "fd7abc01483afa4640e2f36cc1dc74a7dbd77b5465024660076a00ac38b0e7ba"
-blake3 = "2854aeb7ba08ab9cb47e0dc5b9378926f7600a471849651746b1b4bee54e4e6b"
+bytes = 21404081
+shape = "84a8a1accc9736fa168b1dd64e0d4e8d8387000c96d896346c0a84387f29f89a"
+blake3 = "ee0de43edd44a702dca4001ccdc43ea09cec1a7956e689378c9862e1710535fe"
 
 [[entry]]
 key = "oracles.corpus.sekiro/dcx"

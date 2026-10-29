@@ -29,9 +29,9 @@ blake3 = "72d119be6401831210f4245b3d9f443a4851a02bf623285f2e4820bb1a93e1b6"
 key = "oracles.capture.elden/havok-cloth"
 kind = "tree"
 count = 2
-bytes = 3063117
-shape = "a97cc6095f697cc1dec1f412a367677dc14dc730955e5ad584fc474ed1af416e"
-blake3 = "93ac6abf1f3639e89097c152c12cc5fcae21aae633ddf6061b5a9e835dd83adf"
+bytes = 3094221
+shape = "5c54c6fefaa805528a6f963643a46725f16c6efbea7829e21d0e7c93390eb147"
+blake3 = "373f41593346dd6f6ab2e9c425972bca5c4b791675792ee0c879fcad1e08401b"
 
 [[entry]]
 key = "oracles.corpus.elden/havok-behavior"
