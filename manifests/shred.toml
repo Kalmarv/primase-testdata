@@ -11,6 +11,12 @@ files = [
 ]
 
 [[entry]]
+key = "installs.shred/PS3_GAME/USRDIR/database/main.db"
+kind = "file"
+size = 1307648
+blake3 = "64e35cae1d40b6bcdf172643f90acd5fea86a3152c3d69303265b9f854b3704c"
+
+[[entry]]
 key = "oracles.corpus.shred/havok-packfiles"
 kind = "tree"
 count = 490

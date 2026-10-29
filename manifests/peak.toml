@@ -18,6 +18,22 @@ files = [
 ]
 
 [[entry]]
+key = "installs.peak/PEAK_Data"
+kind = "tree"
+count = 282
+bytes = 16388423219
+shape = "5a51e82e128c71597bb6fd0266d0816953726bd4af86e84bd2f53d8db1ac8e10"
+blake3 = "bc37362e4780b57e07aa3acf82fa1a6934de8ae2062b8b7dc0400325b6d14d1e"
+
+[[entry]]
+key = "installs.peak/PEAK_Data/StreamingAssets/maps"
+kind = "tree"
+count = 16
+bytes = 14513042907
+shape = "66d6fdce558104f69b7165d3f2467d4444c33baba0e513685dd8678574bc7644"
+blake3 = "1d5d0dd32ccf6d96f62a0540e561ee6db3aed9c287c6a57152b1dc5d0d131746"
+
+[[entry]]
 key = "oracles.unitypy.peak/bundles.jsonl"
 kind = "file"
 size = 24923643

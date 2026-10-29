@@ -16,6 +16,14 @@ files = [
 ]
 
 [[entry]]
+key = "installs.skatebird/SkateBIRD_Data"
+kind = "tree"
+count = 168
+bytes = 3361965998
+shape = "60a97cfb68cf0f3edfa24ec15ca0f596cbb9c0f2ddad0b398d43a16f6fe1d6c3"
+blake3 = "c6e0f8526004391898d6d3755555a774504d49a40dd1b9496c11b3fc7cd905e1"
+
+[[entry]]
 key = "oracles.unitypy.skatebird/census.json"
 kind = "file"
 size = 30911153

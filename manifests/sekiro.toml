@@ -55,10 +55,10 @@ blake3 = "1bd0dae482c7938a2e8b05014b4959d51b79282f14d59e327398db907f047802"
 [[entry]]
 key = "oracles.capture.sekiro/havok-cloth"
 kind = "tree"
-count = 3
-bytes = 10010825
-shape = "565abf55521700b3f4f0987dc196d79bb8bb4ebda1cdaca83dd175dd874e6266"
-blake3 = "4c70b692a961b3f3e4b4079c78b93a78e0da6f6c6bba5c21881ee0860ce41dff"
+count = 7
+bytes = 20734029
+shape = "fd7abc01483afa4640e2f36cc1dc74a7dbd77b5465024660076a00ac38b0e7ba"
+blake3 = "2854aeb7ba08ab9cb47e0dc5b9378926f7600a471849651746b1b4bee54e4e6b"
 
 [[entry]]
 key = "oracles.corpus.sekiro/dcx"
@@ -99,6 +99,14 @@ count = 150
 bytes = 68393808
 shape = "43e22307995c3578921c33de7b79f934563f2cd5510173490ee149ded768742d"
 blake3 = "6a0a3a2079fa3503c77ce3343d6ea649b089184827b7d02be6aecb858712cb8e"
+
+[[entry]]
+key = "oracles.corpus.sekiro/havok-enums"
+kind = "tree"
+count = 30
+bytes = 1170075
+shape = "762de4aa2b54617f026b637b65659ddc4b3660cd0877f00847c771712683396b"
+blake3 = "af09b9d9b94382bfb924580da5e7f336032931e7b96e5ed7d089e43345ce364d"
 
 [[entry]]
 key = "oracles.corpus.sekiro/havok-float"

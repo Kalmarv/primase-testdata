@@ -6,40 +6,95 @@ format = 1
 key = "installs.shaunwhite"
 kind = "files"
 files = [
-  { path = "DataPC.forge", size = 20545833, blake3 = "0ee2d1c1ad06377b10f883e477f9b935dd31f60c07b94c26337211bc95220ce4" },
+  { path = "DataPC.forge", size = 19661097, blake3 = "696ef999d28b4b38ce8604d9f5a680a707fe77410b25df17654d6acd418d3b73" },
   { path = "DataPC_01.forge", size = 658210816 },
-  { path = "DataPC_01_A_FYM.forge", size = 46727168, blake3 = "beb03367b013d79710aea6c5aaf411772c9f3536558dcca5112359de3c1781aa" },
-  { path = "DataPC_01_B_FYM.forge", size = 37748736, blake3 = "1d1a63e4e46bfba590072c72650ac3897529bbc3081e8caec9c5d1b2bee16ba6" },
+  { path = "DataPC_01_A_FYM.forge", size = 46727168, blake3 = "9d3b2078afae5d61bbcaba256848e7fad2da999a6799bccf0ad3d83d2153f932" },
+  { path = "DataPC_01_B_FYM.forge", size = 37748736, blake3 = "565b596be1c4a0002bf9a1df0712bac65c5a85aedd9758640abe5b3240a45867" },
   { path = "DataPC_02.forge", size = 713326592 },
-  { path = "DataPC_02_FYM.forge", size = 28311552, blake3 = "f6905976c923395433be23a409ff8ebb3b0c395e1e68ef8a32f7852548e44914" },
-  { path = "DataPC_02_Multi.forge", size = 65765376, blake3 = "4328faa051f9a67f9538d6d45ca083f947a4d7b52e8adfe420bf6cf5153ba334" },
+  { path = "DataPC_02_FYM.forge", size = 28311552, blake3 = "d986f78adebf4a788d6c523f6244a4020e99d7004a1adc11cf3bd619127aab0a" },
+  { path = "DataPC_02_Multi.forge", size = 65765376, blake3 = "d2a84a2fe11f26fe603d360c39f7f8d9aaef3823e2783b45df4b50e08146ccfa" },
   { path = "DataPC_03.forge", size = 484114432 },
-  { path = "DataPC_03_FYM.forge", size = 34078720, blake3 = "ecd8d6d5857501390acf91da92c8bba4d2dd9e68f8db017a92a12d6e49a907b0" },
+  { path = "DataPC_03_FYM.forge", size = 34078720, blake3 = "a8a1dd718d1e2f7aeeb514ca2e405bdcca11b6650c2b7c3386180a0d28443c03" },
   { path = "DataPC_03_Multi.forge", size = 148832256, blake3 = "a53c838814745ee30a00cb053f0891458b274ad05b7a24ac5297b59e5281486f" },
-  { path = "DataPC_03_Robot_01.forge", size = 22937600, blake3 = "330f1f689ac79c100c55ce30e1ff3d4c187ac3f0b560921547c11ba22d5576bc" },
-  { path = "DataPC_03_Robot_02.forge", size = 26411008, blake3 = "41a1f0fb07effa2b2051f0ad1ba45a97425bcb18b63f0079e4e69a39449e83ff" },
+  { path = "DataPC_03_Robot_01.forge", size = 22937600, blake3 = "d82745cf6ddf6a1d2f9be0666b04274652c584199ceffdc6f5b9cccf25b580a1" },
+  { path = "DataPC_03_Robot_02.forge", size = 26411008, blake3 = "46f72a295bdd7606f25b9d8f088116f4be9028d7fb9dc6689bd7f83482353eca" },
   { path = "DataPC_04.forge", size = 564920320 },
-  { path = "DataPC_04_FYM.forge", size = 32964608, blake3 = "98defbffb2378b3d5e3d44a4bc4a39950cbb0d04da2a1844094ca279baede4c8" },
+  { path = "DataPC_04_FYM.forge", size = 32964608, blake3 = "af030cf6bde07bb6f66b5047d5a6214a21b4f343a7f636c72ac61308b9f770b2" },
   { path = "DataPC_04_Multi.forge", size = 115310592, blake3 = "5feeec5f4b79b63cd5e51e075aa9e8502ffa62aff67b3cd0ca324bb8e01c02f8" },
-  { path = "DataPC_04_Robot_01.forge", size = 23625728, blake3 = "c75cfb864e2c00cb301f492c05d46f497b89c4ae8b576f52ae7364ddad02740b" },
-  { path = "DataPC_04_Robot_02.forge", size = 22970368, blake3 = "10d9bd19c4a3d48a64f43d618c7ae9df7bd9de914a7882abdd15da1a2fc6f5aa" },
+  { path = "DataPC_04_Robot_01.forge", size = 23625728, blake3 = "6b4bd81a4418b582dab5cb55bb81332f39ce400bd6d1f3d7619bb5e991b2e25c" },
+  { path = "DataPC_04_Robot_02.forge", size = 22970368, blake3 = "a896ce184c8d4a48cfb14007ad3457d2216e734675cb2b12f1ad9216a2335c65" },
   { path = "DataPC_04_Stronghold.forge", size = 78249984, blake3 = "548067ed6ac4d7d9d61c5265465b24fb66a9441381e9dd3467d63ca84c406060" },
   { path = "DataPC_05.forge", size = 204537856, blake3 = "9e51a7b938f09a7c662bd3d40738e99e75f7ac6f80311937c5a1aa0c1cc750a7" },
-  { path = "DataPC_05_Multi.forge", size = 47054848, blake3 = "7887bc432828546427e5b9c0676206b4fef76d90d019d1d384e27d4d1f084321" },
-  { path = "DataPC_05_Robot_01.forge", size = 23527424, blake3 = "9a1bad64e49f1da63ce3b54237cfb2755eff2c21d7a810dddebc5f6c6609910d" },
+  { path = "DataPC_05_Multi.forge", size = 47054848, blake3 = "4022f2ec222c127b67e0b2e041a14f85590db14a6e9f8b197048c41c5fbf0345" },
+  { path = "DataPC_05_Robot_01.forge", size = 23527424, blake3 = "e1fb4e3a0d0e87611e9f8483af659cf7855416b3fe97c2d67e3cec54a3c48440" },
   { path = "DataPC_06.forge", size = 347865088 },
-  { path = "DataPC_Customization.forge", size = 23330816, blake3 = "0eda73b1d62bb096c70e605f0297d5f5c2b0c4eb622ad291bd73e3ef16ae13e0" },
+  { path = "DataPC_Customization.forge", size = 23330816, blake3 = "ffae423d2a10a7ea535bfce50643609348762e10ffcf64bf8aa7475b7dbf57f1" },
   { path = "DataPC_DefaultSetCustomizationData.forge", size = 327614464 },
-  { path = "DataPC_GypsyCustomizationData.forge", size = 4653056, blake3 = "4ef71faebc26eb03480d5870ef507f10af3c242b02472b3496ada559cb69db4d" },
-  { path = "DataPC_MadClownCustomizationData.forge", size = 4259840, blake3 = "b5e15002cded995dbb68af06fb49e1843a25bec5e4d8b670571bdd0d58dcf9af" },
-  { path = "DataPC_Main_Menu.forge", size = 18677760, blake3 = "1f38c639e9d8ee90011ee11b1d69b2c6f6f01981bff62771549b11fbae9300ca" },
-  { path = "DataPC_MinistryCustomizationData.forge", size = 2850816, blake3 = "4b28c73ee9dd50d426d36456bfe35b64e4f99b3b9cd4c0adff94a29082daeffb" },
-  { path = "DataPC_SW.forge", size = 52953088, blake3 = "65789aa641ec9c08a6a88c30f0d1ea6c4ba07839ef5352e46fda05bb9687bddc" },
-  { path = "DataPC_ShaunCustomizationData.forge", size = 5931008, blake3 = "c7261e13feb4d4b6cd05420d25533e67e04b5fa53aaa475daea8d0095affb476" },
-  { path = "DataPC_TattooFreakCustomizationData.forge", size = 3768320, blake3 = "565949d157ebb6d56d0780d74a5ff9b5be272d0570d7ea2234e88caeb3a85780" },
-  { path = "DataPC_YetiCustomizationData.forge", size = 4128768, blake3 = "519b239ee546b8de562a78412a1d23db4fea2176bcd78525f5c5fa7c928d0445" },
-  { path = "DataPC_extra.forge", size = 43057152, blake3 = "4e86a711751681b868dc79bc2861244f7c70ede3ac7424e9faec2fd55e9eb965" },
+  { path = "DataPC_GypsyCustomizationData.forge", size = 4653056, blake3 = "1869367b3fbda115f9505217af0fc8c102a49ce829e6ab1e0d7e5322fdb207b6" },
+  { path = "DataPC_MadClownCustomizationData.forge", size = 4259840, blake3 = "7f28f040d69eb92c0305ad4d12836a7f47ffcb2d66a8e11a695a8471b21fce7d" },
+  { path = "DataPC_Main_Menu.forge", size = 18677760, blake3 = "aba061b9b3596d8a43fbb0989c7dde97566d80cc2454e01fe46f32ea41b28d99" },
+  { path = "DataPC_MinistryCustomizationData.forge", size = 2850816, blake3 = "a32fa14fece25b0a9a144edab1af4b046ec0a02616110afc4a82a79e153918ea" },
+  { path = "DataPC_SW.forge", size = 52953088, blake3 = "959eccf19254dc97e6eea00c171174a3b9718c15c779469aeca203cdf66fce39" },
+  { path = "DataPC_ShaunCustomizationData.forge", size = 5931008, blake3 = "c4caf087669bdeb38684565bb084ebe0474e594691f6e8ee316ebbd63a1a65e3" },
+  { path = "DataPC_TattooFreakCustomizationData.forge", size = 3768320, blake3 = "3217b1a8928b618d63afcc35366052c28f6cea61bc2d29e68e45c608df445cad" },
+  { path = "DataPC_YetiCustomizationData.forge", size = 4128768, blake3 = "7e360d375f48691fa78da529d6b5094d478bf697a0c0ee1bf5539bf78eff07a9" },
+  { path = "DataPC_extra.forge", size = 43057152, blake3 = "9a52a5a6b8256eabebf2d5986c502f91d53ab6c37a6af42e66f3889fad51de21" },
 ]
+
+[[entry]]
+key = "installs.shaunwhite/DataPC_01.forge"
+kind = "file"
+size = 658210816
+
+[[entry]]
+key = "installs.shaunwhite/DataPC_02.forge"
+kind = "file"
+size = 713326592
+
+[[entry]]
+key = "installs.shaunwhite/DataPC_03.forge"
+kind = "file"
+size = 484114432
+
+[[entry]]
+key = "installs.shaunwhite/DataPC_04.forge"
+kind = "file"
+size = 564920320
+
+[[entry]]
+key = "installs.shaunwhite/DataPC_05.forge"
+kind = "file"
+size = 204537856
+blake3 = "9e51a7b938f09a7c662bd3d40738e99e75f7ac6f80311937c5a1aa0c1cc750a7"
+
+[[entry]]
+key = "installs.shaunwhite/DataPC_06.forge"
+kind = "file"
+size = 347865088
+
+[[entry]]
+key = "installs.shaunwhite/DataPC_extra.forge"
+kind = "file"
+size = 43057152
+blake3 = "9a52a5a6b8256eabebf2d5986c502f91d53ab6c37a6af42e66f3889fad51de21"
+
+[[entry]]
+key = "installs.shaunwhite/ekshadersPChigh.bin"
+kind = "file"
+size = 35094609
+blake3 = "d177c3cb48b07ae15e6a1931eee5f2307d090fd69bd0587e40ee1ac189693653"
+
+[[entry]]
+key = "installs.shaunwhite/ekshadersPClow.bin"
+kind = "file"
+size = 16310862
+blake3 = "4d92ba1abb94dbfd332229a124441167e3171a76174a5be56dde23fc558d723e"
+
+[[entry]]
+key = "installs.shaunwhite/ekshadersPCmed.bin"
+kind = "file"
+size = 34181857
+blake3 = "96c667eb80870f73dc7f47be244666eeea4b00557b08fe749a7449c7a0a269ff"
 
 [[entry]]
 key = "oracles.game-code.shaunwhite/uv-rotation.tsv"

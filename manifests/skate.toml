@@ -14,6 +14,23 @@ files = [
 ]
 
 [[entry]]
+key = "installs.skate/Data"
+kind = "tree"
+count = 98
+bytes = 13512477194
+shape = "5374f1458878320b9bb81fc1ad66c7748c4a44377e5739c7ecdde6ffc7637a36"
+blake3 = "00d6fe49516999d91aa3f89ed4a86f051dafb1173ca39cdda48ff5a68b280cc4"
+
+[[entry]]
+key = "installs.skate/Mods"
+kind = "tree"
+count = 1467
+bytes = 36913737784
+shape = "82dfa325ec20097263fc376e5c19d428c2a3f9f01f72365aabe1c7b9305ee3df"
+blake3 = "9619b534db1acaae2c709d74088ec21b0d120b9b8e9420cc9eecd5147caf326d"
+check = "warn"
+
+[[entry]]
 key = "oracles.baseline.skate/fbmod"
 kind = "tree"
 count = 3

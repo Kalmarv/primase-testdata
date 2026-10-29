@@ -58,6 +58,14 @@ shape = "fbc8d5c93fb2c0bae7796a076bb28fc5fa5d20931386d3fcaa578e9c1b34eddb"
 blake3 = "ab06412215bbf0bf582a127e7d277762a691773022285cbd64a11d9f57902bb8"
 
 [[entry]]
+key = "oracles.corpus.elden/havok-enums"
+kind = "tree"
+count = 33
+bytes = 2392119
+shape = "e5204c76ed0307b98d1e4773b67e37129dc634d4337ad369123119de478555fe"
+blake3 = "64cbbcb0c8dcb90618b73dd3fe19237d0427b0b78f21f0081fb86e51ad9cf330"
+
+[[entry]]
 key = "oracles.corpus.elden/havok-float"
 kind = "tree"
 count = 3

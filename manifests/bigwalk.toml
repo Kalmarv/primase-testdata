@@ -17,6 +17,14 @@ files = [
 ]
 
 [[entry]]
+key = "installs.bigwalk/Big Walk_Data"
+kind = "tree"
+count = 40
+bytes = 3656482185
+shape = "1d2fb9e565b11b8b33d821a239c26c186cf365c4ca9db7e443e19f9193cc5d70"
+blake3 = "10e1316d90a0b451eef8e3cab472fefd0c9fdfdc36fadfd6096cbc451bc498d3"
+
+[[entry]]
 key = "oracles.unitypy.bigwalk/bundles.jsonl"
 kind = "file"
 size = 217235

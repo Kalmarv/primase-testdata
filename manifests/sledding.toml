@@ -17,6 +17,22 @@ files = [
 ]
 
 [[entry]]
+key = "installs.sledding/Sledding Game_Data"
+kind = "tree"
+count = 106
+bytes = 1477263489
+shape = "2400238af915dfa1d745ed0dd9897606dc6af20c23cdfb6dcb251652e977e5c4"
+blake3 = "6af095b0cdefff70faabe198cadca4d59ed136f130905a8998484cb3f9ec8c8b"
+
+[[entry]]
+key = "installs.sledding/Sledding Game_Data/StreamingAssets/aa/StandaloneWindows64"
+kind = "tree"
+count = 50
+bytes = 14095232
+shape = "f16f0b9745a665b0dc2c4e9a7bd18c75137a5e4c94cccde73544bcb4bb6d039d"
+blake3 = "64d4494d75307b537938a6c7a0a64873889f0c2632b3b9acecd0c4373340223b"
+
+[[entry]]
 key = "oracles.corpus.sledding/shaders"
 kind = "tree"
 count = 4854
