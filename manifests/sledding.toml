@@ -135,3 +135,9 @@ count = 1317
 bytes = 179631688
 shape = "686ca91e51b390e961aea2eb252a5c871388db32ceb572b365e35d5cacd8ec40"
 blake3 = "2f0c2bc58c8108bad668a1ca5d7b8c7bdb7fe9ce9b3994249c515153c6025c46"
+
+[[entry]]
+key = "oracles.unitypy.sledding/urp.json"
+kind = "file"
+size = 10802
+blake3 = "f35ef981c03466252aa8caa1d8dbbbd4f236bf44e59f55f8f4e888d161739f59"

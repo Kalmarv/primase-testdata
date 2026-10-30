@@ -52,3 +52,9 @@ key = "oracles.unitypy.peak/player-settings.json"
 kind = "file"
 size = 184
 blake3 = "c71f47f6bcd16449bc9355b74c318a0a0befd524e6f987b6e90957000de05f7a"
+
+[[entry]]
+key = "oracles.unitypy.peak/urp.json"
+kind = "file"
+size = 44095
+blake3 = "12ad65969c8ee3b5a540e91fed24e50f96b34753a07a430c708ec7ddb27aeb56"
