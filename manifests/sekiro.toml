@@ -202,9 +202,9 @@ blake3 = "881827415b0638fc249ded012c15264ae5deab09c3c8751b19064b31ad82dcf2"
 key = "oracles.scripts.sekiro/dds"
 kind = "tree"
 count = 10
-bytes = 576895
-shape = "a6ea614118bdf1c4d1733cb9da735136866d8f585acd4ebe0ef3ae8ad9a78614"
-blake3 = "8012f9331315b7797b78d39d9df16dcf345a396aa9529a2f4824c47b42e1e6bc"
+bytes = 577467
+shape = "59a2a6984a5e046572a0ea226379ff02d3cbae263e2b41f3e3a997566d63af64"
+blake3 = "7ff7184419068b0e7cf0c4de8768809634b6b6eb14132a46f64f32b687a5f437"
 
 [[entry]]
 key = "oracles.scripts.sekiro/normal-curl.json"
