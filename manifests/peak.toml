@@ -34,6 +34,14 @@ shape = "66d6fdce558104f69b7165d3f2467d4444c33baba0e513685dd8678574bc7644"
 blake3 = "1d5d0dd32ccf6d96f62a0540e561ee6db3aed9c287c6a57152b1dc5d0d131746"
 
 [[entry]]
+key = "oracles.unity-editor.peak/light-volume-level4"
+kind = "tree"
+count = 4
+bytes = 167878829
+shape = "04ea82b3c9f663a3b21caed0c7d7ede821c40aed1f40b9bad68ed345f07a156b"
+blake3 = "cb571dd5a79fdce610fae6b70b6f295d592cab283d390c6c8df9bc920a8891b7"
+
+[[entry]]
 key = "oracles.unitypy.peak/bundles.jsonl"
 kind = "file"
 size = 24923643
