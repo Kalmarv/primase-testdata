@@ -141,11 +141,21 @@ A new input needs an entry before its crate's `check_declared` passes (if it is 
 
 `cargo test` runs this crate's own tests and doc test; they need no game files. To run a consuming crate's real-data tests against your own install, copy `game-data.example.toml` outside the repository, replace the placeholder paths with your own, set `GAME_DATA` to its absolute path and run that crate's `cargo test`. The inputs a crate reads, and what each is, are listed in its own `tests/inputs/README.md` (a table made from the registry by `primase_testdata::doc::tables` between two marker lines, so it cannot drift from what the tests ask for). Without `GAME_DATA` those tests skip.
 
+The embedded manifests also cover UnityPy's player colour-space and URP object readings, the Unity editor's
+PEAK light-volume output, and the CLF5 cloth captures used by the Havok tests. The tool manifests identify the REF host with its vertex mode and the DDS worker that writes decoded levels in
+64 KiB pieces. Updating an oracle's copy requires
+updating its entry here before consumers move their pin; the manifests ship identifying sums, never those assets.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), which also says how to report a file a reader cannot read.
 
 The asset-conversion library [primase](https://github.com/Kalmarv/primase) uses this crate for its tests.
+
+## Check the examples
+
+From the repository root, `cargo test -p primase-testdata --doc` checks the crate documentation, and
+`cargo build -p primase-testdata --examples` builds its example programs. Examples that read paths need the caller's files; the repository ships no game assets.
 
 ## License
 
