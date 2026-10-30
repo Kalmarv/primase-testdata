@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6 (2026-10-30)
+
+- Manifests: `oracles.unitypy.<game>/urp.json` for PEAK, Sledding Game and Big Walk, what UnityPy reads of each player's Universal Render Pipeline objects (pipeline assets, renderers and their features, every camera's URP data); unity-formats' URP test compares its own readers with it.
+
 ## 0.1.5 (2026-10-30)
 
 - Manifests: `oracles.scripts.sekiro/dds` is the DDS worker that writes each decoded level to stdout in 64 KiB pieces (one write of a whole large level can fail with ERROR_NO_SYSTEM_RESOURCES when the machine is short of memory). Its output is unchanged for all 9326 Sekiro area textures; the folder's bytes, shape and content sums change because DdsWorker.dll and its .pdb do.
