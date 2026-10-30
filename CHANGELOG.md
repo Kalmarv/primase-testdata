@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 (2026-10-30)
+
+- Manifests: `oracles.scripts.sekiro/dds` is the DDS worker that writes each decoded level to stdout in 64 KiB pieces (one write of a whole large level can fail with ERROR_NO_SYSTEM_RESOURCES when the machine is short of memory). Its output is unchanged for all 9326 Sekiro area textures; the folder's bytes, shape and content sums change because DdsWorker.dll and its .pdb do.
+
 ## 0.1.4 (2026-10-29)
 
 - Manifests: `oracles.unity-editor.peak/light-volume-level4`, the Unity editor's read of PEAK level 4's light volume (4 files), which primase's PEAK light volume test compares its RGBAHalf slices with.
