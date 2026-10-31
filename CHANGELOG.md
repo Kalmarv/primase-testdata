@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Manifests: `installs.tmnf`, TrackMania Nations Forever (Steam) identified by TmForever.exe and its three packs and pack list; primase-trackmania's tests read its campaign maps and block models.
+
 ## 0.1.6 (2026-10-30)
 
 - Manifests: `oracles.unitypy.<game>/urp.json` for PEAK, Sledding Game and Big Walk, what UnityPy reads of each player's Universal Render Pipeline objects (pipeline assets, renderers and their features, every camera's URP data); unity-formats' URP test compares its own readers with it.

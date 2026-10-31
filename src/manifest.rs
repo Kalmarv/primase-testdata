@@ -69,6 +69,7 @@ pub(crate) const EMBEDDED: &[(&str, &str)] = &[
     ("skatebird", include_str!("../manifests/skatebird.toml")),
     ("sledding", include_str!("../manifests/sledding.toml")),
     ("stuntboost", include_str!("../manifests/stuntboost.toml")),
+    ("tmnf", include_str!("../manifests/tmnf.toml")),
     ("tools", include_str!("../manifests/tools.toml")),
 ];
 

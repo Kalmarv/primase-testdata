@@ -1,0 +1,14 @@
+# primase-testdata manifest `tmnf`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.tmnf"
+kind = "files"
+files = [
+  { path = "TmForever.exe", size = 11997184, blake3 = "f8d430f1d0fbf4798222ac2ad0f8a5acea5ff8f75fc8f26dc002e6724c02cfee" },
+  { path = "Packs/Stadium.pak", size = 90124296, blake3 = "8b46b34379e075dfba1f8e4aa003361386af9a2006571133d4dadb595d4a3fbe" },
+  { path = "Packs/Game.pak", size = 12370184, blake3 = "70d73853574ead16f393ffd6de493ca815913a939f5ac293bbe8467892de3d6e" },
+  { path = "Packs/Resource.pak", size = 418056, blake3 = "1554da242fee838b1018956715c69d4b81de34e3056066fc3e4150b1b78138d5" },
+  { path = "Packs/packlist.dat", size = 421, blake3 = "3d27042f9fcb48207605e38cf8d6a292b08dd0f3b6e6f875a4006f957ac028bc" },
+]
