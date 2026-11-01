@@ -26,12 +26,14 @@ size = 349042
 blake3 = "72d119be6401831210f4245b3d9f443a4851a02bf623285f2e4820bb1a93e1b6"
 
 [[entry]]
+# rearrope-cap1.clf5 retains its legacy 1360 label; that source identity is unverified
+# pending its own save -> ProtectorRecord -> model check. Its bytes are unchanged.
 key = "oracles.capture.elden/havok-cloth"
 kind = "tree"
 count = 6
-bytes = 19537767
-shape = "f02ea7e5cd97b72d7d778d0ff8593e82863d9238e83bdd2449a6731c0e3cbd91"
-blake3 = "ad548d6233d697ee17d29c7f19a8cd4dde85b12baa3bc095456142b3cc656efc"
+bytes = 19537771
+shape = "ba09061cad12603059e776ef26a2ad2464e1d7e0ba694980d78a9153973928ed"
+blake3 = "c3c311239338ceb9378ae6d33da6586037d79986fc6bccc78e86348e3899c128"
 
 [[entry]]
 key = "oracles.corpus.elden/havok-behavior"
