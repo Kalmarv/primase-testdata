@@ -229,6 +229,12 @@ shape = "77a8ba17369c778caae08a9ec0ec928a3272a9d9bd8305a29fbb2d4f226eb088"
 blake3 = "71ea2caccc321fbf169c513b5626af104e7fc54514af08e7e6f7e226710e8be9"
 
 [[entry]]
+key = "oracles.scripts.sekiro/sampler-pairs.json"
+kind = "file"
+size = 10243
+blake3 = "960e4f66480ff0906d35de88d499d84432c53f653a475f00cb1fb2bb0b08f898"
+
+[[entry]]
 key = "oracles.scripts.sekiro/shadow"
 kind = "tree"
 count = 2

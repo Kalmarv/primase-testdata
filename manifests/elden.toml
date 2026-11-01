@@ -106,6 +106,12 @@ shape = "3a5c0f3424d21888351dc093359d806691a2ee8e65b606f1d34bd32192f18a0d"
 blake3 = "9a29c6594cf4d3fe11fe7af620d049bcf66f5cca8a7313731ddc7ecba4e6e5ed"
 
 [[entry]]
+key = "oracles.dxc.elden/shader-uv-programs.json"
+kind = "file"
+size = 248203
+blake3 = "5faf2eaea3fcf3aed0fdedcf8ec80c56cbb7833bd09be16233c25c1cb3bfc528"
+
+[[entry]]
 key = "oracles.fxr.elden/curves.jsonl"
 kind = "file"
 size = 3383410
@@ -122,6 +128,24 @@ key = "oracles.fxr.elden/params.jsonl"
 kind = "file"
 size = 27838819
 blake3 = "5e17ffd75a29fd995f64920fc169160a32977c25ea2871a25173fa13933f4484"
+
+[[entry]]
+key = "oracles.saves.elden/ER0000.sl2"
+kind = "file"
+size = 28967888
+blake3 = "c774bc1e6a2065a60bbc28faabc9d58b661de12e189bf711670523cfe7fb0ad4"
+
+[[entry]]
+key = "oracles.saves.elden/ER0000.walk.json"
+kind = "file"
+size = 1046
+blake3 = "2bfa4f064155fe594149b2553a74feafbd03af26278717dd88f5bc5b416eb31b"
+
+[[entry]]
+key = "oracles.scripts.elden/sampler-pairs.json"
+kind = "file"
+size = 11775
+blake3 = "cdffbd337dfc11d896a15d9aec523b7cccc334e32043cc08f3cea246ddef2eaa"
 
 [[entry]]
 key = "oracles.smithbox.elden/defs"
@@ -190,6 +214,12 @@ key = "oracles.soulstruct.elden/shader-uv-slots.json"
 kind = "file"
 size = 32193
 blake3 = "ff0e78267907f74b40f3bdb113222822772ef29859ffb313206416691abe83cf"
+
+[[entry]]
+key = "oracles.soulstruct.elden/tae-event-classes.json"
+kind = "file"
+size = 21594
+blake3 = "a59d6f09452d0e3440821b254619cc13ba22fd61b8688b8653c1e342177dd6cf"
 
 [[entry]]
 key = "oracles.uxm.elden/dictionary.txt"

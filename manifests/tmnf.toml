@@ -12,3 +12,75 @@ files = [
   { path = "Packs/Resource.pak", size = 418056, blake3 = "1554da242fee838b1018956715c69d4b81de34e3056066fc3e4150b1b78138d5" },
   { path = "Packs/packlist.dat", size = 421, blake3 = "3d27042f9fcb48207605e38cf8d6a292b08dd0f3b6e6f875a4006f957ac028bc" },
 ]
+
+[[entry]]
+key = "oracles.corpus.tmnf/tmnf-stock"
+kind = "tree"
+count = 72
+bytes = 1444723
+shape = "97a63f07114942d8428d2b03b40961a9fc9b6be7e3f72f303b3f4d9e76caf83a"
+blake3 = "a1688e36bb550a344a8dada06b7fbfd25f81ab006f143274349cbf8fb3fe4eae"
+
+[[entry]]
+key = "oracles.corpus.tmnf/tmx-2026-top"
+kind = "tree"
+count = 100
+bytes = 32948294
+shape = "a44000870b5cb968d17d1455214467240aa9b8059891b9415d19815109f00a1b"
+blake3 = "4ca2d97b2564dc31db77110c26a4f0ed3bf968ec0b102d1f5512838766a8485c"
+
+[[entry]]
+key = "oracles.corpus.tmnf/tmx-alltime-top"
+kind = "tree"
+count = 100
+bytes = 11522673
+shape = "4f4eec9b5afdc92f0e6963943b810e85215927df683a3226737016e9d10125ae"
+blake3 = "47750a4e14fb6b5ef9e4f94dcd9511580dd66e07cae937c756e585edbad99ddb"
+
+[[entry]]
+key = "oracles.corpus.tmnf/tmx-newest"
+kind = "tree"
+count = 100
+bytes = 2299217
+shape = "f40ee05f2fca514f57ebb93ad1cb3c4d440d748ccfd02655c4fb68bdba48a836"
+blake3 = "a68bf084265ca8984533b6c1abb8862db2e62aaf905f4ec5d2e901e461db0f78"
+
+[[entry]]
+key = "oracles.gbxnet.tmnf/tmnf-packs"
+kind = "tree"
+count = 2575
+bytes = 237330639
+shape = "4a131f353a6f3fb58ed15ab43a5f8089c0cd5a564feca787d296188a292034f9"
+blake3 = "8a7643e9075edc23b9adb7bf6d072e9c536ef208bab35d26cfce169131a3719d"
+
+[[entry]]
+key = "oracles.gbxnet.tmnf/tmnf-stock"
+kind = "tree"
+count = 73
+bytes = 11125331
+shape = "ca8693f846f933d524f15a8974af2a40ccf0c6adf5d2aab8dbda702923c84a52"
+blake3 = "3d56fc260903d271dc1d311d8db7f44cf2af044e6cfa3773d396650eff9649a2"
+
+[[entry]]
+key = "oracles.gbxnet.tmnf/tmx-2026-top"
+kind = "tree"
+count = 102
+bytes = 127700447
+shape = "ed8fa60af5e189474cc809886713cc7e73de56c57a697483fcdeb843ae584e8b"
+blake3 = "1782f73d6c22aa82fd414aa5bcefc1c98d54b750f7bbf533aab66e9c24b75771"
+
+[[entry]]
+key = "oracles.gbxnet.tmnf/tmx-alltime-top"
+kind = "tree"
+count = 101
+bytes = 57769685
+shape = "3aded041e0a200e84de20cf01c96b4e65f1ab523a4c6c81373cbac153ea08714"
+blake3 = "fee039489f2a70dfefee6cf58ab5ce56f0d4e33ff08fe925b377b0a34066d01c"
+
+[[entry]]
+key = "oracles.gbxnet.tmnf/tmx-newest"
+kind = "tree"
+count = 101
+bytes = 14494365
+shape = "2e59deafab6178133041602b3bf31809d47d754d6cbf691e4b147ea08cc4bac3"
+blake3 = "7c549c0ec3dc546176d548d02d090d1b7a66a61d41571b7952e896f98654fedc"
