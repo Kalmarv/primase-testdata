@@ -207,6 +207,14 @@ shape = "59a2a6984a5e046572a0ea226379ff02d3cbae263e2b41f3e3a997566d63af64"
 blake3 = "7ff7184419068b0e7cf0c4de8768809634b6b6eb14132a46f64f32b687a5f437"
 
 [[entry]]
+key = "oracles.scripts.sekiro/dds-area"
+kind = "tree"
+count = 2
+bytes = 3095809
+shape = "e310000d88ae5f9f28412ec3eca9d4a05f0cc972f7823d30e8969e2851fe0aac"
+blake3 = "fc4cc50fb58a0cf90c8da651f3e0bd446b2519cb2604a596429e00b264c8bef2"
+
+[[entry]]
 key = "oracles.scripts.sekiro/frames"
 kind = "tree"
 count = 78031
