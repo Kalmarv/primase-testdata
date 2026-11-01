@@ -86,6 +86,14 @@ shape = "aa1c8442f7d340767db568748a0edaf85ae6108dbaaf024a407aab74e5c76ec2"
 blake3 = "9ea2c0e012a42c1059b3ad477961f8716fc2da2733e7efb322ae57946981f975"
 
 [[entry]]
+key = "oracles.doliman.fh6/modelbin"
+kind = "tree"
+count = 4
+bytes = 518669888
+shape = "30364708537fb0e8759bfd5d513ea8bb81c4fb70c9eb072f38ff917f9e82b7f5"
+blake3 = "17ac3588eb9e9404bf9c02356f496960c118dca84e8d882d3e0f067724f5b5ba"
+
+[[entry]]
 key = "oracles.forzatools.fh6/minizip"
 kind = "tree"
 count = 10
@@ -100,3 +108,11 @@ count = 4
 bytes = 78934264
 shape = "e03c776ef98685faf633d195b67e4a516f9e4308a57f1ac142782e1e31d0fdcd"
 blake3 = "1b49d1987f2b93c7bf158541eafde93a754a906895c93ac6ea473580b22f6499"
+
+[[entry]]
+key = "oracles.forzatools.fh6/modelbin"
+kind = "tree"
+count = 8
+bytes = 184616127
+shape = "6c1cc1992936c3d3f67cc3ac5e81b004eb90f375727360d718d901fd0c324d5b"
+blake3 = "9bf0e8ad6038deb480ccb91b8c8095612550364f2a0d23164aa139e50640f8aa"
