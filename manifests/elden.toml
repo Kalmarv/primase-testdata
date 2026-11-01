@@ -144,6 +144,14 @@ size = 1046
 blake3 = "2bfa4f064155fe594149b2553a74feafbd03af26278717dd88f5bc5b416eb31b"
 
 [[entry]]
+key = "oracles.scripts.elden/frames"
+kind = "tree"
+count = 628
+bytes = 3552917800
+shape = "7c44433f10ce78ec8867d0918942a9814ad670d67c69a479554ff0cf1cda1004"
+blake3 = "64506dbe93bf83ed20c6498077bcd19817f15a84741198de290effde3992b663"
+
+[[entry]]
 key = "oracles.scripts.elden/sampler-pairs.json"
 kind = "file"
 size = 11775
