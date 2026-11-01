@@ -64,10 +64,10 @@ blake3 = "3d56fc260903d271dc1d311d8db7f44cf2af044e6cfa3773d396650eff9649a2"
 [[entry]]
 key = "oracles.gbxnet.tmnf/tmx-2026-top"
 kind = "tree"
-count = 102
-bytes = 127700447
-shape = "ed8fa60af5e189474cc809886713cc7e73de56c57a697483fcdeb843ae584e8b"
-blake3 = "1782f73d6c22aa82fd414aa5bcefc1c98d54b750f7bbf533aab66e9c24b75771"
+count = 101
+bytes = 99136431
+shape = "7df6d5c9b0bc6b2bc8a593e8a351443787a6d271bea05422bc2f112a06edd65f"
+blake3 = "c5e4b2dcdca9857e0e3581ec971296d2fa96ef599179ab05ed6a7ea976089ad6"
 
 [[entry]]
 key = "oracles.gbxnet.tmnf/tmx-alltime-top"

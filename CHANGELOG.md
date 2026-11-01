@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Manifests: `oracles.gbxnet.tmnf/tmx-2026-top` re-recorded (101 files, 99,136,431 bytes): the old record also held `maps.jsonl.bak-before-tmunlimiter`, an earlier harness version's `maps.jsonl` kept aside beside the result; that file is not part of the oracle (no test reads it), and the GBX.NET dump makes the other 101 files byte for byte.
 - `manifest::file_of` (and so `cargo run --example manifest -- add`) names a game's manifest file by its key without hyphens: `oracles.<set>.shaun-white/…` belongs in `shaunwhite.toml` with `installs.shaunwhite`, the file the crate embeds, not in a `shaun-white.toml` it would never load.
 - Manifests: records for 16 oracles the tests declared without one: Elden Ring's UV-program listing (dxc), Soulstruct's TAE event classes, the walk save ER0000.sl2 and its walk, both games' sampler pairs, Shaun White's sdb2 disassembly, and TrackMania's stock, TMX and GBX.NET corpora (corpus.tmnf, gbxnet.tmnf). The frame recordings (scripts.sekiro/frames, scripts.elden/frames) and corpus.gta/legacy-effects still have none.
 - Manifests: `oracles.corpus.elden/havok-cloth` re-recorded (815 files, 283,161,466 bytes): the cut that made the old record named a tagfile its binders list under several names by whichever thread finished first, so it could not be made again; the cut now takes each tagfile's last member in a fixed walk order (archive entries by name, members as their binders store them), and two runs give the same tree. The files' contents are as before; only those names differ.
