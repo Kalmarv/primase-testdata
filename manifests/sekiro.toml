@@ -207,6 +207,14 @@ shape = "59a2a6984a5e046572a0ea226379ff02d3cbae263e2b41f3e3a997566d63af64"
 blake3 = "7ff7184419068b0e7cf0c4de8768809634b6b6eb14132a46f64f32b687a5f437"
 
 [[entry]]
+key = "oracles.scripts.sekiro/frames"
+kind = "tree"
+count = 78031
+bytes = 15534487776
+shape = "39db68fa18e1c35e776bd16c7d3571c63715f2de47028df5cc6f59782f7e64c8"
+blake3 = "204bb72db405b8b2d163526f04b9d4651f0bf70dd276cae35cd4f74aa042f203"
+
+[[entry]]
 key = "oracles.scripts.sekiro/normal-curl.json"
 kind = "file"
 size = 91158
