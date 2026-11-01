@@ -44,6 +44,14 @@ shape = "81ed91cc8cdd0af44db64dd51b6e7061eb5b1705ca538382c89dd13a449fffa0"
 blake3 = "440b8e5e242d0d485af85725117ddb35506344f41da30794098b216bad070373"
 
 [[entry]]
+key = "oracles.doliman.fh6/bundle"
+kind = "tree"
+count = 3
+bytes = 127876907
+shape = "b574c73163f5bf346d7f3498f2e902768d88fcea7103cfa2a1bd06872336e184"
+blake3 = "c8c3f24e1ab328a056d0fa35d42d9093488abf61f70b8a38e704e057295db1eb"
+
+[[entry]]
 key = "oracles.forzatools.fh6/minizip"
 kind = "tree"
 count = 10
