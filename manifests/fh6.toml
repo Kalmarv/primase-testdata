@@ -36,6 +36,14 @@ size = 16123860
 blake3 = "d878d08daab657e55c6d1e6dcf24ee3b736878b8f6b92be5fc40f74f837bc359"
 
 [[entry]]
+key = "installs.fh6/media/Stripped/gs/brio"
+kind = "tree"
+count = 287
+bytes = 241089815
+shape = "9f90e80ad01a3a2043b121c895b068b70649e1c02dd384fcb14b4099107d0f0d"
+blake3 = "cc623b9367a5f888e02a9e103b7ed4d429d10d14e9f7cd524f09665e37210d1c"
+
+[[entry]]
 key = "installs.fh6/media/Stripped/gs/generalsceneassets.pvs"
 kind = "file"
 size = 381229
@@ -48,6 +56,18 @@ count = 217
 bytes = 98209483113
 shape = "81ed91cc8cdd0af44db64dd51b6e7061eb5b1705ca538382c89dd13a449fffa0"
 blake3 = "440b8e5e242d0d485af85725117ddb35506344f41da30794098b216bad070373"
+
+[[entry]]
+key = "installs.fh6/media/Tracks/homespace02/Ribbon_00/GameObjs.xml"
+kind = "file"
+size = 104
+blake3 = "e1faec647ea502992c8b66f3b38d03bc4b06030a27d3cb98c14a509c79d81806"
+
+[[entry]]
+key = "installs.fh6/media/Tracks/homespace02/Ribbon_00/ParticleInstances.particlebin"
+kind = "file"
+size = 60
+blake3 = "85021e67e18f8904aac16206940b617e0d2202c4a5eccae68f03aacda1d00438"
 
 [[entry]]
 key = "oracles.doliman.fh6/bundle"
