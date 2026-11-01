@@ -24,6 +24,18 @@ files = [
 ]
 
 [[entry]]
+key = "installs.fh6/media/NerdData/NerdData.json"
+kind = "file"
+size = 564
+blake3 = "3c5712e2dd7c88008512fb8dd34bd394ce94a2f2d09f94474c8fab145cdeb088"
+
+[[entry]]
+key = "installs.fh6/media/Stripped/gamedbRC.slt"
+kind = "file"
+size = 16123860
+blake3 = "d878d08daab657e55c6d1e6dcf24ee3b736878b8f6b92be5fc40f74f837bc359"
+
+[[entry]]
 key = "installs.fh6/media/Tracks/Brio"
 kind = "tree"
 count = 217
