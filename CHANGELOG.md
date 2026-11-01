@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- `manifest::file_of` (and so `cargo run --example manifest -- add`) names a game's manifest file by its key without hyphens: `oracles.<set>.shaun-white/…` belongs in `shaunwhite.toml` with `installs.shaunwhite`, the file the crate embeds, not in a `shaun-white.toml` it would never load.
 - Manifests: `oracles.corpus.elden/havok-cloth` re-recorded (815 files, 283,161,466 bytes): the cut that made the old record named a tagfile its binders list under several names by whichever thread finished first, so it could not be made again; the cut now takes each tagfile's last member in a fixed walk order (archive entries by name, members as their binders store them), and two runs give the same tree. The files' contents are as before; only those names differ.
 
 ## 0.1.7 (2026-10-31)

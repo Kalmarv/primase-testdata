@@ -115,19 +115,22 @@ pub fn shipped() -> &'static Manifest {
 }
 
 /// The name of the manifest file a key's entry belongs in: its game for an install or an oracle, `tools` for a tool;
-/// `None` for a key no manifest holds (archive keys, the scratch folder, debug keys).
+/// `None` for a key no manifest holds (archive keys, the scratch folder, debug keys). A game's file is its key without
+/// hyphens, so the spellings consumers give one game (`installs.shaunwhite`, `oracles.<set>.shaun-white`) name the
+/// one file [`EMBEDDED`] holds.
 pub fn file_of(key: &str) -> Option<String> {
     if key.starts_with("tools.") {
         return Some("tools".to_owned());
     }
-    if let Some(rest) = key.strip_prefix("installs.") {
-        return Some(rest.split('/').next().unwrap_or(rest).to_owned());
-    }
-    // oracles.<set>.<game>/<path>
-    let rest = key.strip_prefix("oracles.")?;
-    let (head, _) = rest.split_once('/')?;
-    let (_, game) = head.rsplit_once('.')?;
-    Some(game.to_owned())
+    let game = if let Some(rest) = key.strip_prefix("installs.") {
+        rest.split('/').next().unwrap_or(rest)
+    } else {
+        // oracles.<set>.<game>/<path>
+        let rest = key.strip_prefix("oracles.")?;
+        let (head, _) = rest.split_once('/')?;
+        head.rsplit_once('.')?.1
+    };
+    Some(game.replace('-', ""))
 }
 
 /// The configuration key a query key is resolved from, and the path below it: `installs.sekiro/sekiro.exe` is

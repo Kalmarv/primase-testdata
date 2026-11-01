@@ -873,6 +873,12 @@ fn a_key_names_its_configuration_root_and_its_manifest_file() {
         file("oracles.d3d-disassembler.riders/shader-pack").as_deref(),
         Some("riders")
     );
+    // one game, two spellings, one file
+    assert_eq!(
+        file("oracles.d3d-disassembler.shaun-white/sdb2").as_deref(),
+        Some("shaunwhite")
+    );
+    assert_eq!(file("installs.shaunwhite").as_deref(), Some("shaunwhite"));
     assert_eq!(file("keys.gta"), None);
     assert_eq!(file("scratch.root"), None);
 }
