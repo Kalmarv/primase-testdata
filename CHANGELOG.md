@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Manifests: `installs.fh6`, Forza Horizon 6 (Steam build 25588841) identified by its executable, game database, `NerdData.json` and the Tokyo track's four GeoChunks with their chunk maps and contents lists; `installs.fh6/media/Tracks/Brio`, that track's folder (217 files); and `oracles.forzatools.fh6/minizip`, Nenkai ForzaTools' reading of its GeoChunks (10 files). forzatech-formats' minizip tests read them.
 - Manifests: `installs.tmnf`, TrackMania Nations Forever (Steam) identified by TmForever.exe and its three packs and pack list; primase-trackmania's tests read its campaign maps and block models.
 
 ## 0.1.6 (2026-10-30)

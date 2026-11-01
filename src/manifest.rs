@@ -58,6 +58,7 @@ impl Verify {
 pub(crate) const EMBEDDED: &[(&str, &str)] = &[
     ("bigwalk", include_str!("../manifests/bigwalk.toml")),
     ("elden", include_str!("../manifests/elden.toml")),
+    ("fh6", include_str!("../manifests/fh6.toml")),
     ("general", include_str!("../manifests/general.toml")),
     ("gta", include_str!("../manifests/gta.toml")),
     ("peak", include_str!("../manifests/peak.toml")),
