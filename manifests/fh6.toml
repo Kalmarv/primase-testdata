@@ -36,6 +36,12 @@ size = 16123860
 blake3 = "d878d08daab657e55c6d1e6dcf24ee3b736878b8f6b92be5fc40f74f837bc359"
 
 [[entry]]
+key = "installs.fh6/media/Stripped/gs/generalsceneassets.pvs"
+kind = "file"
+size = 381229
+blake3 = "1869ff9dadd3eaae2db3e866ddda1b8d0266e0fb7087030784369af8ea2c0e50"
+
+[[entry]]
 key = "installs.fh6/media/Tracks/Brio"
 kind = "tree"
 count = 217
