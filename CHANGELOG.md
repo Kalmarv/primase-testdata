@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Manifests: `oracles.smithbox.elden/param-meta`, Smithbox fdde3225's Elden Ring Param Meta (179 files, 615,530 bytes), the per-param XML whose field attributes name the fields that refer to effect files; fromsoft-formats' effect census is cross-checked against it.
 - Manifests: re-recorded `oracles.capture.elden/havok-cloth` (6 files, 19,537,771 bytes), with 1,499 wind/simulation steps and 1,500 paired skin calls. The saved chest item 871100 names protector model 1361, whose installed definition matches the recording bit for bit; the former 1360 label named a different asset. The original `rearrope-cap1.clf5` is unchanged, with its legacy 1360 source identity explicitly unverified pending its own save-to-protector-to-model check.
 - Manifests: `oracles.gbxnet.tmnf/tmx-2026-top` re-recorded (101 files, 99,136,431 bytes): the old record also held `maps.jsonl.bak-before-tmunlimiter`, an earlier harness version's `maps.jsonl` kept aside beside the result; that file is not part of the oracle (no test reads it), and the GBX.NET dump makes the other 101 files byte for byte.
 - `manifest::file_of` (and so `cargo run --example manifest -- add`) names a game's manifest file by its key without hyphens: `oracles.<set>.shaun-white/…` belongs in `shaunwhite.toml` with `installs.shaunwhite`, the file the crate embeds, not in a `shaun-white.toml` it would never load.

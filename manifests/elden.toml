@@ -184,6 +184,14 @@ size = 3908
 blake3 = "d09e15cba5e9fc654748452b4510171d8dc04a872456dc9190856da29565089b"
 
 [[entry]]
+key = "oracles.smithbox.elden/param-meta"
+kind = "tree"
+count = 179
+bytes = 615530
+shape = "62bb25dd7dc7fd1b7625c44e47304ae9dd7ce60c06e3083a3cd1b2dd376a6550"
+blake3 = "2772b927d99f719afc7cbc9020e1c0fe86416b482b9d4f096f36ec6cf332fa17"
+
+[[entry]]
 key = "oracles.smithbox.elden/regulations"
 kind = "tree"
 count = 28
