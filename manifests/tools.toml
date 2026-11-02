@@ -3,6 +3,12 @@
 format = 1
 
 [[entry]]
+key = "tools.blender"
+kind = "file"
+size = 113041880
+blake3 = "49d6566bd7c824b2093af1d28b79b0325528b048d53d8c822deda215d9b3d07b"
+
+[[entry]]
 key = "tools.dotnet"
 kind = "file"
 size = 157480
