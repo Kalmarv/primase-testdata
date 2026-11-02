@@ -50,6 +50,14 @@ size = 381229
 blake3 = "1869ff9dadd3eaae2db3e866ddda1b8d0266e0fb7087030784369af8ea2c0e50"
 
 [[entry]]
+key = "installs.fh6/media/TimeOfDay"
+kind = "tree"
+count = 6
+bytes = 3223435
+shape = "dcd86e9d26c763fda979d8807d8af463a3c8187e2076dca137025cf1e3312d60"
+blake3 = "9a79d36ffe58aced65f9efdaca4aeb49a11d01b063b68ca605cd806cf6142194"
+
+[[entry]]
 key = "installs.fh6/media/Tracks/Brio"
 kind = "tree"
 count = 217
@@ -78,20 +86,20 @@ shape = "b574c73163f5bf346d7f3498f2e902768d88fcea7103cfa2a1bd06872336e184"
 blake3 = "c8c3f24e1ab328a056d0fa35d42d9093488abf61f70b8a38e704e057295db1eb"
 
 [[entry]]
-key = "oracles.doliman.fh6/texmat"
-kind = "tree"
-count = 4
-bytes = 152009211
-shape = "aa1c8442f7d340767db568748a0edaf85ae6108dbaaf024a407aab74e5c76ec2"
-blake3 = "9ea2c0e012a42c1059b3ad477961f8716fc2da2733e7efb322ae57946981f975"
-
-[[entry]]
 key = "oracles.doliman.fh6/modelbin"
 kind = "tree"
 count = 4
 bytes = 518669888
 shape = "30364708537fb0e8759bfd5d513ea8bb81c4fb70c9eb072f38ff917f9e82b7f5"
 blake3 = "17ac3588eb9e9404bf9c02356f496960c118dca84e8d882d3e0f067724f5b5ba"
+
+[[entry]]
+key = "oracles.doliman.fh6/texmat"
+kind = "tree"
+count = 4
+bytes = 152009211
+shape = "aa1c8442f7d340767db568748a0edaf85ae6108dbaaf024a407aab74e5c76ec2"
+blake3 = "9ea2c0e012a42c1059b3ad477961f8716fc2da2733e7efb322ae57946981f975"
 
 [[entry]]
 key = "oracles.forzatools.fh6/minizip"
@@ -102,17 +110,17 @@ shape = "f2e237658d26e44003038399efe98afa158f98b0c0477c9d93f140ff32b04539"
 blake3 = "64bfd051732c777e27e37c2c15e7e635c1a84203c89e66158bf5148f61ec3110"
 
 [[entry]]
-key = "oracles.forzatools.fh6/texture"
-kind = "tree"
-count = 4
-bytes = 78934264
-shape = "e03c776ef98685faf633d195b67e4a516f9e4308a57f1ac142782e1e31d0fdcd"
-blake3 = "1b49d1987f2b93c7bf158541eafde93a754a906895c93ac6ea473580b22f6499"
-
-[[entry]]
 key = "oracles.forzatools.fh6/modelbin"
 kind = "tree"
 count = 8
 bytes = 184616127
 shape = "6c1cc1992936c3d3f67cc3ac5e81b004eb90f375727360d718d901fd0c324d5b"
 blake3 = "9bf0e8ad6038deb480ccb91b8c8095612550364f2a0d23164aa139e50640f8aa"
+
+[[entry]]
+key = "oracles.forzatools.fh6/texture"
+kind = "tree"
+count = 4
+bytes = 78934264
+shape = "e03c776ef98685faf633d195b67e4a516f9e4308a57f1ac142782e1e31d0fdcd"
+blake3 = "1b49d1987f2b93c7bf158541eafde93a754a906895c93ac6ea473580b22f6499"
