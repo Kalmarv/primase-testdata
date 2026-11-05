@@ -9,6 +9,12 @@ size = 113041880
 blake3 = "49d6566bd7c824b2093af1d28b79b0325528b048d53d8c822deda215d9b3d07b"
 
 [[entry]]
+key = "tools.directxtex_dump"
+kind = "file"
+size = 513536
+blake3 = "8e69194e1620a45609712ba2aab1dbb57c752b37a28ea92049d814837b305e60"
+
+[[entry]]
 key = "tools.dotnet"
 kind = "file"
 size = 157480
@@ -77,6 +83,12 @@ key = "tools.scene_skate"
 kind = "file"
 size = 106496
 blake3 = "9d1c9d854185a607245836eb6751749ebdc7b5a22f868b1963b703bd4f148fab"
+
+[[entry]]
+key = "tools.texconv"
+kind = "file"
+size = 966480
+blake3 = "8b088fc22ee94755e17a31b58431d10f197992cb6255e6c437cad35c85b71e73"
 
 [[entry]]
 key = "tools.unity_tpk"
