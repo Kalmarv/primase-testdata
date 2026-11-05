@@ -25,6 +25,8 @@ verify = 'quick'                  # or 'content' or 'off': how much of a copy is
 
 Every section and key is optional, and every value is a string. The keys of `[installs]`, `[keys]` and `[tools]` are not checked, because one file serves crates that declare different inputs. `GAME_DATA_DEBUG='key=value;key=value'` sets the debug switches a crate declares.
 
+Machines can share one oracle home: point each machine's `[oracles] root` at the same copy on a network share, and every machine checks the same bytes against the same manifests, while installs stay in each machine's own `[installs]`. A `[tools]` entry is checked as a file whatever runs it, so a Windows build (fxc, dxc) named on Linux, to run under Wine, passes its manifest check there too.
+
 "Gate" has three meanings in this crate: an input declared `gate: true` must be present in a complete run; `[run] gate = 'smoke'|'full'` says how much a heavy test covers; and `gate::GateReport` is a comparison against reference output.
 
 ## What it guarantees
