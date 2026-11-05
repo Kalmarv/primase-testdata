@@ -11,7 +11,7 @@ RUSTDOCFLAGS="-D warnings" cargo doc --no-deps
 
 The crate's own tests and doc test need no game files and no `GAME_DATA`. They use a fake environment and temporary folders. `cargo run --example declare_inputs` runs the example from the README.
 
-`game-data.example.toml` must stay a file the reader accepts (a test checks it with `config::validate`), and the example in the README must stay the same code as `examples/declare_inputs.rs` (a test checks that too). A change to what `src/config.rs` accepts changes both files and the README's configuration section.
+`game-data.example.toml` must stay a file the reader accepts (a test checks it with `config::validate`), and the example in the README must stay the same code as `examples/declare_inputs.rs` (a test checks that too). A change to what `src/config.rs` accepts changes both files and [docs/configuration.md](docs/configuration.md).
 
 ## Reporting a file or configuration it cannot read
 
