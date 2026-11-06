@@ -30,10 +30,19 @@ Keep the public items documented (`missing_docs` is on), keep refusals naming th
 
 ## Releasing
 
-Consumers depend on the crates.io release, and the manifests are compiled in, so a change nobody publishes reaches nobody. Every change to `src/`, `manifests/`, `examples/` or `Cargo.toml` is released in the same push:
+Consumers depend on the crates.io release, and the manifests are compiled in, so a change nobody publishes reaches
+nobody. Every change to `src/`, `manifests/`, `examples/` or `Cargo.toml` is released in the same push:
 
-1. Bump `version` in `[workspace.package]` (0.1.x for additions and fixes, 0.2.0 for a change a consumer must adapt to), then `cargo check` to update `Cargo.lock`.
-2. Move the change's CHANGELOG lines under a `## <version> (<date>)` heading.
-3. Commit as "Release <version>" and push to main. Once every CI job passes, CI's `release` job publishes the version to crates.io (trusted publishing), tags the commit `v<version>` and creates the GitHub Release with the CHANGELOG section as its notes (`.github/release.py`). Never publish by hand.
+1. Raise the version (a patch, 0.x.Y, for fixes and data or manifest additions; a minor, 0.X.0, for new API or any
+   breaking change before 1.0; then `cargo check`, so `Cargo.lock` follows) and put the change's CHANGELOG lines under a
+   `## <version> (<date>)` heading, in one commit.
+2. Push it to main. Once every check has passed, release-plz publishes each crate whose version crates.io does not have
+   yet (trusted publishing: no token is stored anywhere), tags the commit `v<version>` and creates the GitHub Release
+   with that CHANGELOG section as its notes.
 
-CI's `release-check` job (`scripts/release-check.sh`) fails when the crate differs from the crates.io release of the version `Cargo.toml` states, so a change without a version bump fails CI and nothing is released.
+A commit that raises no version only runs CI. Never release by hand. CI's `release-check` job
+(`scripts/release-check.sh`) fails when the crate differs from the crates.io release of the version `Cargo.toml`
+states, so a change without a version bump fails CI and nothing is released.
+
+A new crate's first version can't come from trusted publishing: the token holder publishes it by hand, then adds its
+trusted-publishing config (workflow `ci.yml`).
