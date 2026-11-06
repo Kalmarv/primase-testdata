@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Fail when the crate (src/, manifests/, examples/, Cargo.toml) differs from the crates.io release of the version
 # Cargo.toml states. Consumers depend on the published crate and the manifests are compiled in, so a change that is
-# not released is a change no consumer gets. A version newer than crates.io's passes with a reminder to publish it.
+# not released is a change no consumer gets. A version newer than crates.io's passes: CI's release job publishes it.
 set -euo pipefail
 
 crate=primase-testdata
@@ -14,7 +14,7 @@ published=$(jq -r 'select(.yanked | not) | .vers' <<<"$index" | sort -V | tail -
 
 if [[ "$local_version" != "$published" ]]; then
     if [[ $(printf '%s\n%s\n' "$published" "$local_version" | sort -V | tail -n 1) == "$local_version" ]]; then
-        echo "::warning::$crate $local_version is newer than crates.io's $published: publish it (cargo publish) and tag v$local_version"
+        echo "$crate $local_version is newer than crates.io's $published: the release job publishes it once CI passes on main"
         exit 0
     fi
     echo "::error::$crate $local_version is older than crates.io's $published"

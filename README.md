@@ -1,5 +1,7 @@
 # primase-testdata
 
+[![crates.io](https://img.shields.io/crates/v/primase-testdata)](https://crates.io/crates/primase-testdata) [![docs.rs](https://img.shields.io/docsrs/primase-testdata)](https://docs.rs/primase-testdata) [![CI](https://img.shields.io/github/actions/workflow/status/Kalmarv/primase-testdata/ci.yml?branch=main&label=CI)](https://github.com/Kalmarv/primase-testdata/actions/workflows/ci.yml)
+
 A Rust test-support crate that tells a crate's tests where to find files that cannot be shipped with it: game installs, archive keys, third-party tools and reference output made from them. Each machine lists those paths in one TOML file, and a test whose input is not listed skips.
 
 ## Features

@@ -34,6 +34,6 @@ Consumers depend on the crates.io release, and the manifests are compiled in, so
 
 1. Bump `version` in `[workspace.package]` (0.1.x for additions and fixes, 0.2.0 for a change a consumer must adapt to), then `cargo check` to update `Cargo.lock`.
 2. Move the change's CHANGELOG lines under a `## <version> (<date>)` heading.
-3. Commit as "Release <version>", `cargo publish`, `git tag v<version>`, push the commit and the tag.
+3. Commit as "Release <version>" and push to main. Once every CI job passes, CI's `release` job publishes the version to crates.io (trusted publishing), tags the commit `v<version>` and creates the GitHub Release with the CHANGELOG section as its notes (`.github/release.py`). Never publish by hand.
 
-CI's `release` job (`scripts/release-check.sh`) fails when the crate differs from the crates.io release of the version `Cargo.toml` states, and warns when that version is not published yet.
+CI's `release-check` job (`scripts/release-check.sh`) fails when the crate differs from the crates.io release of the version `Cargo.toml` states, so a change without a version bump fails CI and nothing is released.
