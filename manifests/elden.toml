@@ -230,12 +230,28 @@ shape = "7a727807c0c3655a5b476e9b1306f7dd7eb66ad69645137d7e752772868afae2"
 blake3 = "75a5b894e0239c19ca25c4f65ece35c04359ae2f840f75bab74228b018837b2d"
 
 [[entry]]
+key = "oracles.soulsformats.elden/census-sote"
+kind = "tree"
+count = 24
+bytes = 686382446
+shape = "0a53cfdefcf7f059e32966b694db6b1e85c4ea737cf6304858247cb45eb26eac"
+blake3 = "f2cccf53f420c9fff05887b8cdfdfb60a067987c214b743d237985d94118f3f2"
+
+[[entry]]
 key = "oracles.soulsformats.elden/format"
 kind = "tree"
 count = 8
 bytes = 543869493
 shape = "c93bb8a2d5b19269637cf2f30bba1feb18e0ed41c5e2855ef68d9ac1c8e103df"
 blake3 = "6e333c618a10a6842993f41504e3edcf14dda95c24ed4d242442d60d3a7a341e"
+
+[[entry]]
+key = "oracles.soulsformats.elden/format-sote"
+kind = "tree"
+count = 4
+bytes = 355204558
+shape = "9410d9a50e003943b133e2cc8741e5d24011713561351151565ec36f3be70b58"
+blake3 = "2a78be5bf331dc169c9693b648388c71c1bd91a54f000972be0f38d4ea910f30"
 
 [[entry]]
 key = "oracles.soulsformats.elden/npc.jsonl"

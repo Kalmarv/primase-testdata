@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.12 (2026-11-06)
+
+- Manifests: `oracles.soulsformats.elden/census-sote` (24 files, 686,382,446 bytes) and `oracles.soulsformats.elden/format-sote` (4 files, 355,204,558 bytes: msb, btl, matbin and metaparam), primase-oracles' Elden Ring harness (6b07350; SoulsFormatsNEXT ee1dd61, UXM 9501be8) on the install with Shadow of the Erdtree (Steam build 25827938). `census` and `format` were made before the DLC was installed: their FLVER, BTL and MSB records lack the DLC's, so tests that walk them leave its files untested. They stay as recorded, and `format` alone holds `havok.jsonl`.
+
 ## 0.1.11 (2026-11-06)
 
 - A folder of an install (`installs.<game>/<path>`) may be recorded as a `files` entry, like an install: each file with its size and hash, for a folder the game writes into, whose settings or run history would fail a `tree` entry after one play session. `cargo run --example manifest -- add <key> --except <path>` (repeatable) names every file of the folder but those under the paths; `measure::files_except` lists them, and `measure::entry_for` records an install's folder given files as `files`. Without files it is still a `tree`.
