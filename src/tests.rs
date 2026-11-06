@@ -353,6 +353,54 @@ fn a_windows_program_runs_through_the_launcher() {
     assert_eq!(args(&mut t), ["/nas/dxc/bin/dxc", "/tmp/a.dxil"]);
 }
 
+/// A tool run with a time limit: its standard input, output, error and status as without one; past the limit it is
+/// killed and the error names the tool; a tool that exits before reading its input is no error.
+#[cfg(unix)]
+#[test]
+fn a_tool_runs_within_a_limit_or_fails_naming_itself() {
+    use std::time::{Duration, Instant};
+    let sh = Program::new("tools.sh", "/bin/sh".into(), None);
+    let out = sh
+        .command()
+        .args(["-c", "cat; echo err >&2; exit 3"])
+        .stdin_bytes(b"in\n".to_vec())
+        .output_within(Duration::from_secs(30))
+        .unwrap();
+    assert_eq!(
+        (out.status.code(), &out.stdout[..], &out.stderr[..]),
+        (Some(3), &b"in\n"[..], &b"err\n"[..])
+    );
+    // no input given: it reads an empty one, not the test's
+    let out = sh
+        .command()
+        .args(["-c", "cat"])
+        .output_within(Duration::from_secs(30))
+        .unwrap();
+    assert!(out.status.success() && out.stdout.is_empty());
+    // more input than a pipe holds, to a tool that reads none
+    let out = sh
+        .command()
+        .args(["-c", "exit 0"])
+        .stdin_bytes(vec![0u8; 1 << 20])
+        .output_within(Duration::from_secs(30))
+        .unwrap();
+    assert!(out.status.success());
+    // a tool that hangs
+    let start = Instant::now();
+    let why = sh
+        .command()
+        .args(["-c", "sleep 30"])
+        .output_within(Duration::from_millis(200))
+        .unwrap_err();
+    assert!(start.elapsed() < Duration::from_secs(10), "{:?}", start.elapsed());
+    assert_eq!(why.kind(), std::io::ErrorKind::TimedOut);
+    assert!(
+        why.to_string()
+            .starts_with("tools.sh (/bin/sh) did not finish within 0.2 s"),
+        "{why}"
+    );
+}
+
 /// Without a launcher, a Windows program fails where this machine runs none itself, naming the setting.
 #[cfg(not(windows))]
 #[test]

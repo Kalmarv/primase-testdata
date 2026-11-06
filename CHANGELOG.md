@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.14 (2026-11-06)
+
+- `ToolCommand::output_within(limit)` runs a configured tool with a time limit: past it the tool is killed and the error (`TimedOut`) names its key and program, so a tool that hangs (a wrapper whose runtime is broken, a program waiting for input) fails the test instead of hanging it. `ToolCommand::stdin_bytes` gives it its standard input; a tool that exits before reading it all is no error.
+
 ## 0.1.13 (2026-11-06)
 
 - Manifests: `installs.terraria` (Terraria, Steam build 24893155), identified by Terraria.exe, its content pipeline and ReLogic.Native.dll, with `installs.terraria/Content` (15,997 files, 739,703,531 bytes: 15,994 `.xnb`, 15,108 LZX-compressed); and `oracles.xna.terraria/content.jsonl` (3,128,257 bytes), XNA 4.0's own decompressor (`DecompressStream`) over that folder: each `.xnb`'s header and the SHA-256 of its content (primase-oracles `xna/XnaContent.cs`). monogame-formats' LZX test reads them.

@@ -2,8 +2,10 @@
 //! launcher (Wine on Linux), a Windows program through that launcher, with its path arguments written as the
 //! launcher's programs see them.
 use std::ffi::{OsStr, OsString};
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
-use std::process::{Command, ExitStatus, Output};
+use std::process::{Child, Command, ExitStatus, Output, Stdio};
+use std::time::{Duration, Instant};
 
 /// A configured tool's program and how this machine starts it: [`Program::command`] gives a fresh [`ToolCommand`] for
 /// each run.
@@ -51,19 +53,19 @@ impl Program {
 
     /// A command that runs it, with no arguments yet.
     pub fn command(&self) -> ToolCommand {
-        match &self.launcher {
+        let command = match &self.launcher {
             Some(launcher) => {
                 let mut command = Command::new(launcher);
                 command.arg(wine_path(&self.path));
-                ToolCommand {
-                    command,
-                    launched: true,
-                }
+                command
             }
-            None => ToolCommand {
-                command: Command::new(&self.path),
-                launched: false,
-            },
+            None => Command::new(&self.path),
+        };
+        ToolCommand {
+            command,
+            launched: self.launcher.is_some(),
+            name: format!("{} ({})", self.key, self.path.display()),
+            stdin: None,
         }
     }
 }
@@ -77,10 +79,17 @@ impl Program {
 /// Unix paths; without one it is passed as it is. Everything else goes through [`ToolCommand::arg`] unchanged. A path
 /// inside a file the program reads may stay a Unix one: Wine opens `/tmp/a.dds` on the current drive, which for a
 /// program started from a Unix folder is `Z:`, the Unix root.
+///
+/// [`ToolCommand::output_within`] runs it with a time limit: a tool that hangs (a wrapper whose runtime is broken, a
+/// program waiting for input it never gets) fails the run naming the tool, instead of hanging the test.
 #[derive(Debug)]
 pub struct ToolCommand {
     command: Command,
     launched: bool,
+    /// The configuration key and the program, for messages.
+    name: String,
+    /// What [`ToolCommand::output_within`] writes to its standard input.
+    stdin: Option<Vec<u8>>,
 }
 
 impl ToolCommand {
@@ -126,6 +135,62 @@ impl ToolCommand {
         self.command.output()
     }
 
+    /// The bytes [`ToolCommand::output_within`] writes to its standard input (else it reads none).
+    pub fn stdin_bytes(&mut self, bytes: impl Into<Vec<u8>>) -> &mut ToolCommand {
+        self.stdin = Some(bytes.into());
+        self
+    }
+
+    /// Run it and collect its output, as [`ToolCommand::output`], but give it at most `limit`: past that it is killed
+    /// and the error (kind [`std::io::ErrorKind::TimedOut`]) names the tool and the limit. A tool that exits before it
+    /// reads all of [`ToolCommand::stdin_bytes`] is no error.
+    pub fn output_within(&mut self, limit: Duration) -> std::io::Result<Output> {
+        let input = self.stdin.take();
+        self.command
+            .stdin(if input.is_some() {
+                Stdio::piped()
+            } else {
+                Stdio::null()
+            })
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped());
+        let mut child = self.command.spawn()?;
+        let writer = child.stdin.take().zip(input).map(|(mut pipe, bytes)| {
+            // the tool may exit before it reads everything (it refuses the input): not an error here
+            std::thread::spawn(move || drop(pipe.write_all(&bytes)))
+        });
+        let drain = |pipe: Option<Box<dyn Read + Send>>| {
+            std::thread::spawn(move || {
+                let mut bytes = Vec::new();
+                if let Some(mut pipe) = pipe {
+                    let _ = pipe.read_to_end(&mut bytes);
+                }
+                bytes
+            })
+        };
+        let stdout = drain(child.stdout.take().map(|p| Box::new(p) as Box<dyn Read + Send>));
+        let stderr = drain(child.stderr.take().map(|p| Box::new(p) as Box<dyn Read + Send>));
+        let Some(status) = wait_within(&mut child, limit)? else {
+            // killed: the readers are not waited for, since a grandchild that holds its pipes could keep them open
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::TimedOut,
+                format!(
+                    "{} did not finish within {} s and was killed",
+                    self.name,
+                    limit.as_secs_f64()
+                ),
+            ));
+        };
+        if let Some(writer) = writer {
+            let _ = writer.join();
+        }
+        Ok(Output {
+            status,
+            stdout: stdout.join().unwrap_or_default(),
+            stderr: stderr.join().unwrap_or_default(),
+        })
+    }
+
     /// Run it and wait for it ([`Command::status`]).
     pub fn status(&mut self) -> std::io::Result<ExitStatus> {
         self.command.status()
@@ -143,5 +208,23 @@ pub fn wine_path(path: &Path) -> OsString {
     match path.to_str() {
         Some(text) if text.starts_with('/') => OsString::from(format!("Z:{}", text.replace('/', "\\"))),
         _ => path.as_os_str().to_owned(),
+    }
+}
+
+/// `child`'s exit status if it ends within `limit`; else it is killed and `None`.
+fn wait_within(child: &mut Child, limit: Duration) -> std::io::Result<Option<ExitStatus>> {
+    let deadline = Instant::now() + limit;
+    let mut pause = Duration::from_millis(1);
+    loop {
+        if let Some(status) = child.try_wait()? {
+            return Ok(Some(status));
+        }
+        if Instant::now() >= deadline {
+            let _ = child.kill();
+            let _ = child.wait();
+            return Ok(None);
+        }
+        std::thread::sleep(pause);
+        pause = (pause * 2).min(Duration::from_millis(50));
     }
 }
