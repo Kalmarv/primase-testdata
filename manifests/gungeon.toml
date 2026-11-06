@@ -1,0 +1,33 @@
+# primase-testdata manifest `gungeon`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.gungeon"
+kind = "files"
+files = [
+  { path = "EtG.exe", size = 650752, blake3 = "ee6b586b6bc658499d80a4362b6d89e1ef157d656d7ebefe26128a05cf597067" },
+  { path = "UnityPlayer.dll", size = 22357960, blake3 = "8dc8d17744fc4e6a86c94d421f10aa268cc719c0f32f1b165bb215575e3760ad" },
+  { path = "EtG_Data/globalgamemanagers", size = 228304, blake3 = "9015f279944122722d12ecf8ce0064cb37bf709943cfc52e7d809788dd629133" },
+  { path = "EtG_Data/globalgamemanagers.assets", size = 2645820, blake3 = "1261313107315051f4941ce09f54eade1b60cf4d19d4c8b42f9a9f7dd4dee4f5" },
+  { path = "EtG_Data/level0", size = 9472, blake3 = "6fea54b3a23b540a1c59ee0ab8cd8b741a5bf1aee2e1a22823627da68d1e9d3f" },
+  { path = "EtG_Data/resources.assets", size = 3761940, blake3 = "15a504a1210acf43cd941885ffea81c003b6b02d03f592f51e837c977b3c0739" },
+  { path = "EtG_Data/sharedassets0.assets", size = 2146568, blake3 = "6b9c65b0b1f2ea8aaf99e181ae9ef1e36e3bce5eb7e90d7fdf13a9d9f69b5a1f" },
+  { path = "EtG_Data/Managed/Assembly-CSharp.dll", size = 7888896, blake3 = "a27286eea5d5df8d02d45ab755aaac7faf0b08f91c537e0eb8ac11b64fedd49c" },
+]
+
+[[entry]]
+key = "installs.gungeon/EtG_Data"
+kind = "tree"
+count = 198
+bytes = 310466547
+shape = "75a037c437e9e87993bf7e4f41bd6ee3d6dd521ffc0ce5b0ccfeac56b550d5f7"
+blake3 = "472dcc00a4443ca35e13dfce663b98c0796b894f6c89416641e4cf4d6da95cc3"
+
+[[entry]]
+key = "installs.gungeon/EtG_Data/StreamingAssets/Assets"
+kind = "tree"
+count = 30
+bytes = 69839404
+shape = "db8e0b740fae0c108ff382179b9e84033e66299abab30b1adee558abf3403eb0"
+blake3 = "a245315ab61681d92750ad032b8d0e9c871ab42c45dbb438ac425dddd1aa702d"

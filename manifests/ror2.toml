@@ -3,6 +3,28 @@
 format = 1
 
 [[entry]]
+key = "installs.ror2"
+kind = "files"
+files = [
+  { path = "Risk of Rain 2.exe", size = 653824, blake3 = "3ced4ac5b11125f8df1bac0e61552aa7aabec0426bcb54fd9378a3f82c7b25e2" },
+  { path = "UnityPlayer.dll", size = 29438200, blake3 = "560d948449f0d5e840d20ba4a31a39fea6f825df7a63a447b558d3f0282809f4" },
+  { path = "Risk of Rain 2_Data/globalgamemanagers", size = 480764, blake3 = "f07282d7b0f0b977b645fc977d8ca1b7a25acdf0aa9c4c183225828b90260887" },
+  { path = "Risk of Rain 2_Data/globalgamemanagers.assets", size = 957520, blake3 = "11736596add041ff9a469225cd374a160c11fe47ecb700e969f8edd3dae0a2f0" },
+  { path = "Risk of Rain 2_Data/level0", size = 32896, blake3 = "a79ea43b1a6dde1596d97e1a2a0ab68078cfa74a54ae0ec768099497e9106930" },
+  { path = "Risk of Rain 2_Data/resources.assets", size = 789440, blake3 = "9581abe9e1e37d39247afdf0e8536da35a658408af24da209c7369792b63cb98" },
+  { path = "Risk of Rain 2_Data/sharedassets0.assets", size = 506080, blake3 = "1c49cb85f6934b06a7e8c0557b9872fe3fee447738f98c69d42716141e0ab9f0" },
+  { path = "Risk of Rain 2_Data/Managed/RoR2.dll", size = 7759872, blake3 = "870f490f3f809d2a9ba4bee9638a082ce283c33b483fecf0c69eb833e1051838" },
+]
+
+[[entry]]
+key = "installs.ror2/Risk of Rain 2_Data/StreamingAssets/aa"
+kind = "tree"
+count = 1725
+bytes = 2887437250
+shape = "a9a0886fe8c93aa5662f0dc43468600e5f3dacc9b56cc316abb882355602e04d"
+blake3 = "193081e13f95974fd023427752543fc1b85b5d3cb03bb87a93be0a0f93eacb32"
+
+[[entry]]
 key = "oracles.corpus.ror2/d3d11-shaders"
 kind = "tree"
 count = 325
