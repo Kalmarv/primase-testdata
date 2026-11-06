@@ -23,3 +23,15 @@ count = 104
 bytes = 6664718013
 shape = "6809d05fd3bf17d191e319dc7ffd40c3dd0c28909147c44e8a79a9942ccdfcac"
 blake3 = "fa022c7d9e70dd8f9816d618b7485f29fb11341b95f7be0d306875ab33bb3bc9"
+
+[[entry]]
+key = "oracles.unitypy.schedule1/clips.json"
+kind = "file"
+size = 212607
+blake3 = "1ad81c392824114f7c21904e3f3992d7cebbc99ff086b6f0adcdcd8cf676ce69"
+
+[[entry]]
+key = "oracles.unitypy.schedule1/textures.json"
+kind = "file"
+size = 481893
+blake3 = "3c19669d0825383e00479701958f563f7b480f59eade5cd43f29d0eab5fad503"

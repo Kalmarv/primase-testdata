@@ -31,3 +31,27 @@ count = 30
 bytes = 69839404
 shape = "db8e0b740fae0c108ff382179b9e84033e66299abab30b1adee558abf3403eb0"
 blake3 = "a245315ab61681d92750ad032b8d0e9c871ab42c45dbb438ac425dddd1aa702d"
+
+[[entry]]
+key = "oracles.unitypy.gungeon/bundles.jsonl"
+kind = "file"
+size = 696334
+blake3 = "1611adea71255bff7bf16b77bece1ec6642c6954ab7c8128bbbf0cfe3ce9a843"
+
+[[entry]]
+key = "oracles.unitypy.gungeon/census.json"
+kind = "file"
+size = 263279
+blake3 = "fa48055d3237ef7c349a41c8e311a8955d579451543bed3b66e978b6d1dee958"
+
+[[entry]]
+key = "oracles.unitypy.gungeon/clips.json"
+kind = "file"
+size = 42451
+blake3 = "8dfd593543877c2621d3f6f9ddbc0b624db354a71a1dabee83391097966f9912"
+
+[[entry]]
+key = "oracles.unitypy.gungeon/player-settings.json"
+kind = "file"
+size = 135
+blake3 = "83654c1c0473abfde1bfe5faa496d24c5541e82b934f70452c12d98a86082e65"
