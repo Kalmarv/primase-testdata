@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Manifests: `oracles.dxc.elden/shader-listings` (50,283 files, 3,996,701,341 bytes), dxc 1.9.2609's `-dumpbin` listing of each of Elden Ring's 50,283 DXIL programs (`<path>.txt`, mirroring `oracles.corpus.elden/shaders`); dx's DXIL listing tests compare with them.
 - Manifests: `oracles.d3d-disassembler.sekiro/programs` (10,368 files, 153,015,626 bytes), Sekiro's 432 shader programs (390 `.ppo`, 42 `.vpo`) with `D3DDisassemble`'s listing of each under 23 flag words (`NAME.ppo.asm`, `NAME.ppo.flagNN.asm`), and `oracles.d3d-disassembler.sledding/corpus-unity` (9,708 files, 210,878,281 bytes), the Sledding Game Unity player's 4,854 programs with their listings (`NNNNN.dxbc.asm`), both made by d3dcompiler_47 10.0.26100.4654; dx's listing tests compare with them.
 - Manifests: `oracles.smithbox.elden/param-meta`, Smithbox fdde3225's Elden Ring Param Meta (179 files, 615,530 bytes), the per-param XML whose field attributes name the fields that refer to effect files; fromsoft-formats' effect census is cross-checked against it.
 - Manifests: re-recorded `oracles.capture.elden/havok-cloth` (6 files, 19,537,771 bytes), with 1,499 wind/simulation steps and 1,500 paired skin calls. The saved chest item 871100 names protector model 1361, whose installed definition matches the recording bit for bit; the former 1360 label named a different asset. The original `rearrope-cap1.clf5` is unchanged, with its legacy 1360 source identity explicitly unverified pending its own save-to-protector-to-model check.

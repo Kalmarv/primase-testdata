@@ -108,6 +108,14 @@ shape = "3a5c0f3424d21888351dc093359d806691a2ee8e65b606f1d34bd32192f18a0d"
 blake3 = "9a29c6594cf4d3fe11fe7af620d049bcf66f5cca8a7313731ddc7ecba4e6e5ed"
 
 [[entry]]
+key = "oracles.dxc.elden/shader-listings"
+kind = "tree"
+count = 50283
+bytes = 3996701341
+shape = "6c12c90bdbee0dc5ccd14657ea4acbdd1657f3b7b14ac02feaa3c5489b126267"
+blake3 = "6a9f4babb6ae68834bdd9d9a14f211820d0e33aa913780fedcd851c0a2592cb6"
+
+[[entry]]
 key = "oracles.dxc.elden/shader-uv-programs.json"
 kind = "file"
 size = 248203
