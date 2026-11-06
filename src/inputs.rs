@@ -9,9 +9,9 @@
 /// - `Query`: a typed [`Query`](crate::Query) (`Query::Oracle(OracleSet::Corpus, Game::Gta, "shaders")`), with `raw()`
 ///   and `key()`;
 /// - `REGISTRY`: the [`Registry`](crate::Registry) of everything declared;
-/// - the queries over it: `resolve`, `install`, `install_file`, `keys`, `tool`, `oodle`, `oracle`, `debug` and
-///   `expect_found`, and this crate's own helpers re-exported (`scratch`, `own_scratch`, `warp_exclusive`, `depth`,
-///   `seed`, `threads`, `read_input`, `Depth`, `OodleLibrary`, `OwnScratch`, `WarpLock`).
+/// - the queries over it: `resolve`, `install`, `install_file`, `keys`, `tool`, `program`, `oodle`, `oracle`,
+///   `debug` and `expect_found`, and this crate's own helpers re-exported (`scratch`, `own_scratch`, `warp_exclusive`,
+///   `depth`, `seed`, `threads`, `read_input`, `Depth`, `OodleLibrary`, `OwnScratch`, `Program`, `ToolCommand`, `WarpLock`).
 ///
 /// An entry of `installs` or `keys` is named by a `Game` variant, so its game must be declared in `games` first; a name
 /// that is not fails to compile with "no variant named ... found for enum `Game`":
@@ -285,6 +285,14 @@ macro_rules! inputs {
             resolve(Query::Tool(tool))
         }
 
+        /// A tool's program and how this machine starts it (itself, or a Windows program through the `[run]
+        /// windows` launcher): `.command()` gives a command for one run (`primase_testdata::program`).
+        #[allow(dead_code)]
+        #[track_caller]
+        pub fn program(tool: Tool) -> ::std::option::Option<$crate::Program> {
+            $crate::program(&REGISTRY, tool.key())
+        }
+
         /// The Oodle codec for a game's data (`primase_testdata::oodle`).
         #[allow(dead_code)]
         #[track_caller]
@@ -316,8 +324,8 @@ macro_rules! inputs {
 
         #[allow(unused_imports)]
         pub use $crate::{
-            Depth, OodleLibrary, OwnScratch, WarpLock, depth, own_scratch, read_input, scratch, seed, threads,
-            warp_exclusive,
+            Depth, OodleLibrary, OwnScratch, Program, ToolCommand, WarpLock, depth, own_scratch, read_input, scratch,
+            seed, threads, warp_exclusive,
         };
     };
 }

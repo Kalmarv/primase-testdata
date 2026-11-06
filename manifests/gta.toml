@@ -113,6 +113,14 @@ shape = "84f345b2eff45761f93e94098fd714e30a70f4d40dcc46be537e06e8a0d31329"
 blake3 = "d3a50642573a2cccee72023932d9660e4a4c7df5199efc9506f4c41d49eeb265"
 
 [[entry]]
+key = "oracles.corpus.gta/shader-database-extracted"
+kind = "tree"
+count = 346
+bytes = 6219739
+shape = "e276c6eb10dbf36e892ce4f7eb91b6ea3d471364ffe46b45e400577c67ded981"
+blake3 = "156505dc8d3bfb0a2ab7305e369eca1fed1412628bf8d6e11654d45342e75ce0"
+
+[[entry]]
 key = "oracles.corpus.gta/shader-database.awc"
 kind = "file"
 size = 158862395

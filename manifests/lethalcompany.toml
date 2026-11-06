@@ -1,0 +1,11 @@
+# primase-testdata manifest `lethalcompany`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "oracles.corpus.lethalcompany/d3d11-shaders"
+kind = "tree"
+count = 97
+bytes = 1604680
+shape = "62f0218b0fa8a1827d1074d2f316068546f664e9fe5a76c18be99574db59ee7e"
+blake3 = "4521cb01e5616887ef59d58fb88786b7b72ccfd7d293b6035488a1c46c0f3ca7"

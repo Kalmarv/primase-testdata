@@ -1,0 +1,11 @@
+# primase-testdata manifest `celeste`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "oracles.corpus.celeste/d3d11-shaders"
+kind = "tree"
+count = 11
+bytes = 10616
+shape = "8ec46575f32029ae3fb5221c239279344d945ea6fd6734541dedc8614d66e4c2"
+blake3 = "4dd0c9ad414f39ef3deee1aa56929ee294bd0287760f043ba091134687b1e476"

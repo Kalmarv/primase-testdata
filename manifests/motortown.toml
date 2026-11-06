@@ -1,0 +1,19 @@
+# primase-testdata manifest `motortown`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "oracles.corpus.motortown/d3d11-shaders"
+kind = "tree"
+count = 418
+bytes = 2844032
+shape = "1e8d916366786bfcf05a6745ac9f416a6c2a00d8038f436aa1b4890a2735b277"
+blake3 = "c09d9682644e4e88c2894d71fb0e058eb9b14a547d379a1bd90141c6b983de2f"
+
+[[entry]]
+key = "oracles.corpus.motortown/d3d12-shaders-gfxr"
+kind = "tree"
+count = 3013
+bytes = 41531536
+shape = "431a210567a7b43c5c606ec9afe31e36a53be3a978d3e47a1ec3d10ce83d6dc8"
+blake3 = "e45e946512c2bed8a1495127e0488aa11fd182da05ca6fa525adeadd56526ef8"

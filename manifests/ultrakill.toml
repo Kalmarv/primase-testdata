@@ -1,0 +1,11 @@
+# primase-testdata manifest `ultrakill`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "oracles.corpus.ultrakill/d3d11-shaders"
+kind = "tree"
+count = 32
+bytes = 46952
+shape = "87d695cd9454f049410c2929083c059e9d358368bd398685017a6eda8e818171"
+blake3 = "b6134e8006e81937bff978aefaf70a1eaffdd34180a1e5f12be1f4a49744dc95"

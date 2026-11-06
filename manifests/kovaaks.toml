@@ -1,0 +1,11 @@
+# primase-testdata manifest `kovaaks`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "oracles.corpus.kovaaks/d3d11-shaders"
+kind = "tree"
+count = 100
+bytes = 370080
+shape = "5674a6abafee748313c467b96dce4f48f2249f579644be94464604f74f46f8c2"
+blake3 = "f777224173c49202e67a142d9ab1b71252e0d02acefaaf5e8127913a372f40ce"

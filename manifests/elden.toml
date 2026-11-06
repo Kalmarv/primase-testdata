@@ -100,6 +100,14 @@ shape = "19a87c65e53ddc77fa50267f80ab7ab85ba2190ff8123cfb4b672376575e6eac"
 blake3 = "e89e92d7e53bc81aef49b264bfce21a89f5ee54eee18b451a539b74b42f0233e"
 
 [[entry]]
+key = "oracles.corpus.elden/locum-extra"
+kind = "tree"
+count = 30
+bytes = 23204
+shape = "e1f708dbf3589dadd11b2d46498c5188c5f415ec358de9aa8936402626a23ae5"
+blake3 = "3fe531a5c96d50aa845a286c7fcce6a1a9b6c49dab7b11b2951092778ccb698c"
+
+[[entry]]
 key = "oracles.corpus.elden/shaders"
 kind = "tree"
 count = 50283

@@ -292,6 +292,80 @@ fn the_gate_depth_and_seed_are_read() {
     );
 }
 
+/// The launcher is `[tools] wine`; unset, there is none.
+#[test]
+fn the_launcher_is_tools_wine() {
+    let at = |text: &str| launcher(&config(&[], Some(text)).unwrap());
+    assert_eq!(
+        at("[tools]\nwine = '/w/wine'\n"),
+        Some(("tools.wine", PathBuf::from("/w/wine")))
+    );
+    assert_eq!(at("[tools]\nfxc = '/t/fxc.exe'\n"), None);
+}
+
+/// An absolute Unix path becomes a Wine path on `Z:` with `\` separators; a relative or a Windows path stays as it is.
+#[test]
+fn wine_paths_put_the_unix_root_on_z() {
+    assert_eq!(wine_path(Path::new("/tmp/a b/c.dds")), "Z:\\tmp\\a b\\c.dds");
+    assert_eq!(wine_path(Path::new("out/c.dds")), "out/c.dds");
+    assert_eq!(wine_path(Path::new("C:/x/c.dds")), "C:/x/c.dds");
+}
+
+/// A Windows program goes through the launcher, as a Wine path, and so do its path arguments; other arguments, and
+/// every argument of a program run without a launcher, pass as they are.
+#[test]
+fn a_windows_program_runs_through_the_launcher() {
+    let args = |t: &mut ToolCommand| {
+        let c = t.command();
+        let mut all = vec![c.get_program().to_owned()];
+        all.extend(c.get_args().map(OsString::from));
+        all
+    };
+    let texconv = Program::new(
+        "tools.texconv",
+        "/nas/tools/texconv.EXE".into(),
+        Some("/w/wine".into()),
+    );
+    assert!(texconv.launched());
+    let mut t = texconv.command();
+    t.args(["-f", "BC1_UNORM", "-o"])
+        .path_arg("/tmp/out")
+        .arg("/nologo");
+    assert!(t.launched());
+    assert_eq!(
+        args(&mut t),
+        [
+            "/w/wine",
+            "Z:\\nas\\tools\\texconv.EXE",
+            "-f",
+            "BC1_UNORM",
+            "-o",
+            "Z:\\tmp\\out",
+            "/nologo"
+        ]
+    );
+    // a program that is not a Windows one runs itself, launcher or not
+    let dxc = Program::new("tools.dxc", "/nas/dxc/bin/dxc".into(), Some("/w/wine".into()));
+    assert!(!dxc.launched());
+    let mut t = dxc.command();
+    t.path_arg("/tmp/a.dxil");
+    assert!(!t.launched());
+    assert_eq!(args(&mut t), ["/nas/dxc/bin/dxc", "/tmp/a.dxil"]);
+}
+
+/// Without a launcher, a Windows program fails where this machine runs none itself, naming the setting.
+#[cfg(not(windows))]
+#[test]
+fn a_windows_program_without_a_launcher_fails_naming_the_setting() {
+    let e = std::panic::catch_unwind(|| Program::new("tools.texconv", "/nas/texconv.exe".into(), None))
+        .unwrap_err();
+    let message = e.downcast_ref::<String>().unwrap();
+    assert!(
+        message.contains("tools.texconv") && message.contains("[tools] wine"),
+        "{message}"
+    );
+}
+
 /// A flat file is refused, naming the sections to write, when loaded and when validated; a variable other than
 /// `GAME_DATA` and `GAME_DATA_DEBUG` configures nothing.
 #[test]
@@ -791,6 +865,29 @@ fn a_manifest_renders_and_parses_back_and_refuses_what_is_wrong() {
     );
     let twice = manifest::Manifest::from_texts(&[("a.toml", &text), ("b.toml", &text)]).unwrap_err();
     assert!(twice.contains("listed twice"), "{twice}");
+}
+
+/// The notes written inside a manifest's entries survive a parse and a render: `manifest add` rewrites the file.
+#[test]
+fn notes_inside_entries_are_written_back() {
+    let text = "format = 1\n\n[[entry]]\n# kept: why this record\n#   and its second line\nkey = \"tools.b\"\nkind = \"file\"\nsize = 2\n\n[[entry]]\nkey = \"tools.a\"\nkind = \"file\"\nsize = 1\n";
+    let notes = sums::notes(text);
+    assert_eq!(notes.len(), 1);
+    assert_eq!(
+        notes["tools.b"],
+        ["# kept: why this record", "#   and its second line"]
+    );
+    let entries = sums::parse("m.toml", text).unwrap();
+    let again = sums::render_noted(&[], &entries, &notes);
+    assert!(
+        again.contains("[[entry]]\n# kept: why this record\n#   and its second line\nkey = \"tools.b\""),
+        "{again}"
+    );
+    assert_eq!(
+        sums::parse("m.toml", &again).unwrap(),
+        sums::parse("m.toml", &sums::render(&[], &entries)).unwrap()
+    );
+    assert_eq!(sums::notes(&again), notes);
 }
 
 /// A copy is compared with its entry: sizes and hashes of a file and of named files, the names, sizes and (with

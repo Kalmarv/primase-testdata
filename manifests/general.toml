@@ -3,10 +3,42 @@
 format = 1
 
 [[entry]]
+key = "oracles.corpus.general/assetripper-tpk"
+kind = "tree"
+count = 4
+bytes = 2299958
+shape = "a41a98b2b843c926cb0f6f0f0271076c551f3b9f90fc9598fbc76f3eb79f7b63"
+blake3 = "a426774341b4e61f00723d48d57b90543152a5c70217cc72e99ffc3493995e8b"
+
+[[entry]]
 key = "oracles.corpus.general/codecs.tsv"
 kind = "file"
 size = 9840
 blake3 = "b494cbcb929df79b680e322e6a1372c62e22cb6be1c822dfa51aae64c49b2156"
+
+[[entry]]
+key = "oracles.corpus.general/d3d11-shaders-unnamed/map"
+kind = "tree"
+count = 61
+bytes = 200448
+shape = "10637e079ce5f4937155ebde94f39f2dc715abe171dff5176a6ba7c5a0e31dbc"
+blake3 = "2f76b56dbbe5a8b1183e1a6108d727be8212e161734f9c62a0577e5aaf36d1ea"
+
+[[entry]]
+key = "oracles.corpus.general/d3d11-shaders-unnamed/menu"
+kind = "tree"
+count = 341
+bytes = 1648596
+shape = "34ecad26920b1bb165db8a95efe4bf34b19aa329e376075b0eab4a3f6b63551c"
+blake3 = "95637b0e8ca9eb261e795880e66b870e93f1ba6b52139ffb42792deed1392386"
+
+[[entry]]
+key = "oracles.corpus.general/d3d11-shaders-unnamed/title"
+kind = "tree"
+count = 156
+bytes = 547888
+shape = "2288d029f32f309ba8c6cfbcd380d8ea7c5e3383aecb3fbac3383a8f033dfeeb"
+blake3 = "1546dade96dec00abb7d963da1a8414a9537e26915d05c5b95b47fac0d840d72"
 
 [[entry]]
 key = "oracles.corpus.general/dxbc"
@@ -15,6 +47,14 @@ count = 1170
 bytes = 16382471
 shape = "33b9d453a86b86246d732496c2763f4864f206b9ab44eac7dd303912ae08d949"
 blake3 = "f230c4ccc9e178ad54e41ffeb360fb9d407fff3db51171fb1ec5f5ac33af3a6c"
+
+[[entry]]
+key = "oracles.corpus.general/unitypy-samples"
+kind = "tree"
+count = 4
+bytes = 1450688
+shape = "8345993c0f42e039df7d31436860caab1f135779cc2caeb003ac69b8383a7e8d"
+blake3 = "e43a86fc0bdc1f06226fa88aa388c0a2f3b2765014e08c29886829078b1770ea"
 
 [[entry]]
 key = "oracles.d3d-disassembler.general/sm3"
@@ -31,3 +71,9 @@ count = 71
 bytes = 8265099
 shape = "79a812b74e030a6c502548c4cdd7a736c76a8a964b024cb50d3c8d00c702e536"
 blake3 = "d25b265cd1c857daa1bdc3b68b2c0073a017283cf27fe51adbc55c61e1fff1b8"
+
+[[entry]]
+key = "oracles.unitypy.general/samples.json"
+kind = "file"
+size = 5349
+blake3 = "c0d22b771338f849463d3c5e3497392bc335a4c44683de42958b0f0b15b729de"

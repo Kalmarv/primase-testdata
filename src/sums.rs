@@ -34,6 +34,7 @@
 //!
 //! This file uses only the standard library and `toml`, so the manifest example and the tool that wrote the shipped
 //! manifests both read it as it is.
+use std::collections::BTreeMap;
 use std::fmt::Write as _;
 
 /// What a mismatch does.
@@ -213,9 +214,48 @@ fn quoted(s: &str) -> String {
     out
 }
 
+/// The comment lines written inside each entry of a manifest's text (`# ...` lines between an `[[entry]]` and the next),
+/// by the entry's key, each as written: notes a person added to a record, which [`parse`] does not keep (TOML drops
+/// comments) and [`render_noted`] writes back.
+pub fn notes(text_of_file: &str) -> BTreeMap<String, Vec<String>> {
+    let mut notes = BTreeMap::new();
+    let (mut key, mut lines): (Option<String>, Vec<String>) = (None, Vec::new());
+    let mut flush = |key: &mut Option<String>, lines: &mut Vec<String>| {
+        if let Some(key) = key.take()
+            && !lines.is_empty()
+        {
+            notes.insert(key, std::mem::take(lines));
+        }
+        lines.clear();
+    };
+    let mut inside = false;
+    for line in text_of_file.lines() {
+        let trimmed = line.trim();
+        if trimmed == "[[entry]]" {
+            flush(&mut key, &mut lines);
+            inside = true;
+        } else if inside && trimmed.starts_with('#') {
+            lines.push(trimmed.to_owned());
+        } else if inside
+            && key.is_none()
+            && let Some(value) = trimmed.strip_prefix("key = ")
+            && let Ok(toml::Value::String(k)) = value.parse::<toml::Value>()
+        {
+            key = Some(k);
+        }
+    }
+    flush(&mut key, &mut lines);
+    notes
+}
+
 /// The manifest text for `entries`, sorted by key, under the comment lines `header` (each without its `#`): the text
 /// [`parse`] reads back to the same entries.
 pub fn render(header: &[&str], entries: &[Entry]) -> String {
+    render_noted(header, entries, &BTreeMap::new())
+}
+
+/// [`render`], with each entry's comment lines from `notes` (as [`notes`] reads them) written first inside it.
+pub fn render_noted(header: &[&str], entries: &[Entry], notes: &BTreeMap<String, Vec<String>>) -> String {
     let mut sorted: Vec<&Entry> = entries.iter().collect();
     sorted.sort_by(|a, b| a.key.cmp(&b.key));
     let mut out = String::new();
@@ -224,7 +264,11 @@ pub fn render(header: &[&str], entries: &[Entry]) -> String {
     }
     out.push_str("format = 1\n");
     for entry in sorted {
-        let _ = write!(out, "\n[[entry]]\nkey = {}\n", quoted(&entry.key));
+        out.push_str("\n[[entry]]\n");
+        for line in notes.get(&entry.key).into_iter().flatten() {
+            let _ = writeln!(out, "{line}");
+        }
+        let _ = writeln!(out, "key = {}", quoted(&entry.key));
         match &entry.sums {
             Sums::File { size, blake3 } => {
                 let _ = writeln!(out, "kind = \"file\"\nsize = {size}");

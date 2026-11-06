@@ -57,12 +57,18 @@ impl Verify {
 /// when one is not).
 pub(crate) const EMBEDDED: &[(&str, &str)] = &[
     ("bigwalk", include_str!("../manifests/bigwalk.toml")),
+    ("celeste", include_str!("../manifests/celeste.toml")),
     ("elden", include_str!("../manifests/elden.toml")),
     ("fh6", include_str!("../manifests/fh6.toml")),
     ("general", include_str!("../manifests/general.toml")),
     ("gta", include_str!("../manifests/gta.toml")),
+    ("hollowknight", include_str!("../manifests/hollowknight.toml")),
+    ("kovaaks", include_str!("../manifests/kovaaks.toml")),
+    ("lethalcompany", include_str!("../manifests/lethalcompany.toml")),
+    ("motortown", include_str!("../manifests/motortown.toml")),
     ("peak", include_str!("../manifests/peak.toml")),
     ("riders", include_str!("../manifests/riders.toml")),
+    ("ror2", include_str!("../manifests/ror2.toml")),
     ("sekiro", include_str!("../manifests/sekiro.toml")),
     ("shaunwhite", include_str!("../manifests/shaunwhite.toml")),
     ("shred", include_str!("../manifests/shred.toml")),
@@ -72,6 +78,7 @@ pub(crate) const EMBEDDED: &[(&str, &str)] = &[
     ("stuntboost", include_str!("../manifests/stuntboost.toml")),
     ("tmnf", include_str!("../manifests/tmnf.toml")),
     ("tools", include_str!("../manifests/tools.toml")),
+    ("ultrakill", include_str!("../manifests/ultrakill.toml")),
 ];
 
 /// All shipped entries, by key.

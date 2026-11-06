@@ -61,6 +61,14 @@ shape = "f1bd6a1d3ecd1d5d13130dd77dfd80ab235946a6a8a2559fb4ce0fe82f9cc90e"
 blake3 = "c4b9ae2ebe622239e66539b991255521f6b9dcf3fdfa5c663d66f64257208d5d"
 
 [[entry]]
+key = "oracles.corpus.sekiro/d3d11-shaders"
+kind = "tree"
+count = 9680
+bytes = 209977516
+shape = "2dec2ed84dbd84f6bacac17e2b135ef1ab179b2f7c4ec7927e9d0e7a40933dc7"
+blake3 = "9f63fd4e33f87aabb4357d818b5cfed539cd70924de2e5edb4f7fe4ff9eeaeb7"
+
+[[entry]]
 key = "oracles.corpus.sekiro/dcx"
 kind = "tree"
 count = 256
@@ -163,6 +171,14 @@ count = 179
 bytes = 3794508
 shape = "7224d785171b1987cb9ad06e304f39f0b25240dfcc16b1e81bf8fa712de34418"
 blake3 = "546ba7a79bf23311a59d27a41934e6931f6bfb6c73a25f1d30e69faa732e3842"
+
+[[entry]]
+key = "oracles.corpus.sekiro/shader-binders"
+kind = "tree"
+count = 22478
+bytes = 415588500
+shape = "875a6bbfe2b38a09c2960a190c16f30b62689472379913f614e21df3534f89ae"
+blake3 = "a8af6ceee0da7e5f6c33e565077827992b54151d5d52e13efc325b7e7e430b9e"
 
 [[entry]]
 key = "oracles.corpus.sekiro/shaders"

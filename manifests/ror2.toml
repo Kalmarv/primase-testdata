@@ -1,0 +1,11 @@
+# primase-testdata manifest `ror2`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "oracles.corpus.ror2/d3d11-shaders"
+kind = "tree"
+count = 325
+bytes = 735420
+shape = "8187acf6b52817a2c7b86ce5a220303960c89011ea4c364b53f3fde68ed8841d"
+blake3 = "638b3beee5845c99a58f99d30aa545945400fc0bae8ee65284c366c3d39b0c85"

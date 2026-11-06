@@ -27,6 +27,8 @@ Every section and key is optional, and every value is a string. The keys of `[in
 
 Machines can share one oracle home: point each machine's `[oracles] root` at the same copy on a network share, and every machine checks the same bytes against the same manifests, while installs stay in each machine's own `[installs]`. A `[tools]` entry is checked as a file whatever runs it, so a Windows build (fxc, dxc) named on Linux, to run under Wine, passes its manifest check there too.
 
+A test starts a tool with `program(Tool::X)`, a `Program` whose `command()` gives a `ToolCommand` for each run: the program itself, or, where `[tools] wine` names a launcher, a Windows program (`.exe`) as `<launcher> <program> args...`. Its path arguments go through `path_arg`, which under a launcher writes an absolute path as a Wine path (`/tmp/a.dds` as `Z:\tmp\a.dds`: a Windows program reads a leading `/` as an option); other arguments pass unchanged. So `[tools] texconv` names the real `texconv.exe` on Linux too, and its manifest check holds that file. The launcher takes the program and its arguments and runs it with this process's standard streams: on Linux, Wine without a pseudo-terminal (primase-oracles' `tools/wine/wine`; `wine = '/home/me/opt/wine/bin/wine'` in `[tools]`, a key every version of this crate accepts, so one file serves checkouts on older versions too). A Windows program asked for where the machine runs none itself and no launcher is set fails, naming the setting.
+
 "Gate" has three meanings in this crate: an input declared `gate: true` must be present in a complete run; `[run] gate = 'smoke'|'full'` says how much a heavy test covers; and `gate::GateReport` is a comparison against reference output.
 
 ## What it guarantees
@@ -50,5 +52,5 @@ Machines can share one oracle home: point each machine's `[oracles] root` at the
 ## What it does not do
 
 - It ships no game data, keys or tools, and does not download or extract any. Every input is the user's own.
-- It does not run tools or parse game files; it only finds paths and reports comparisons.
+- It does not parse game files; it finds paths, builds the command that starts a configured tool (`program`), and reports comparisons.
 - The self-check reads source text, not syntax trees: it sees queries written in the forms it knows (called through `inputs::`, imported by name, renamed with `as`, imported by a glob, or through a renamed module) and says so for a call it cannot read. It cannot follow a query function re-exported from the inputs module, so a `pub use` of one is itself a problem it reports.

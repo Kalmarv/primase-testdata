@@ -67,9 +67,10 @@ fn add(key: &str, files: &[String], severity: Severity, dir: &Path) -> Result<()
     let name = manifest::file_of(key).ok_or_else(|| format!("{key}: no manifest holds this key"))?;
     let entry = measure_key(key, files, severity)?;
     let target = dir.join(format!("{name}.toml"));
-    let mut entries = match std::fs::read_to_string(&target) {
-        Ok(text) => sums::parse(&name, &text)?,
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Vec::new(),
+    // the notes a person wrote inside entries are kept: the entries are parsed and written again
+    let (mut entries, notes) = match std::fs::read_to_string(&target) {
+        Ok(text) => (sums::parse(&name, &text)?, sums::notes(&text)),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => (Vec::new(), Default::default()),
         Err(e) => return Err(format!("{}: {e}", target.display())),
     };
     entries.retain(|e| e.key != key);
@@ -77,7 +78,7 @@ fn add(key: &str, files: &[String], severity: Severity, dir: &Path) -> Result<()
     let header = header(&name);
     let lines: Vec<&str> = header.iter().map(String::as_str).collect();
     std::fs::create_dir_all(dir).map_err(|e| format!("{}: {e}", dir.display()))?;
-    std::fs::write(&target, sums::render(&lines, &entries))
+    std::fs::write(&target, sums::render_noted(&lines, &entries, &notes))
         .map_err(|e| format!("{}: {e}", target.display()))?;
     println!("{key}: written to {}", target.display());
     Ok(())

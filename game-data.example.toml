@@ -14,6 +14,9 @@ gta = 'D:/placeholder/keys/gta'
 # Optional native raw-SM3 proof host, using Microsoft D3D9 REF (not WARP).
 # ref_sm3 = 'D:/placeholder/tools/ref_sm3.exe'
 unity_tpk = 'D:/placeholder/tools/typetrees.tpk'
+# where this machine runs no Windows programs itself (Linux): the launcher a Windows tool (.exe) runs through, e.g.
+# primase-oracles' tools/wine/wine; its path arguments are then passed as Wine paths (Z:\...)
+# wine = '/home/placeholder/opt/wine/bin/wine'
 
 [oracles]
 # <root>/<set>/<game>/<file>: oracles.codewalker.gta/listing.jsonl is <root>/codewalker/gta/listing.jsonl

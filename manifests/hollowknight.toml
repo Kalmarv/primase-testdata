@@ -1,0 +1,11 @@
+# primase-testdata manifest `hollowknight`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "oracles.corpus.hollowknight/d3d11-shaders"
+kind = "tree"
+count = 34
+bytes = 35108
+shape = "20635953d4b107fd818bdc9a45a97d37e66eeefe0579f3a9c264a249075d440e"
+blake3 = "ec0920b7304a279957021b0fd27689e6d7b6932803f47ae09c159bacbf7bf2ed"

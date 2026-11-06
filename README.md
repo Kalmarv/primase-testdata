@@ -12,7 +12,8 @@ A Rust test-support crate that tells a crate's tests where to find files that ca
 - Skips a test whose input is not configured with one `primase-testdata: SKIP` line naming the missing key
 - Turns those skips into failures for required inputs with `[run] require = 'gate'`, or for all inputs with `'all'`
 - Checks every resolved file or folder against BLAKE3 manifests embedded in the crate, with `[run] verify = 'quick'`, `'content'` or `'off'`
-- Ships manifests for Sekiro, Elden Ring, GTA V, Forza Horizon 6, TrackMania Nations Forever, Riders Republic, Shaun White, SHRED, skate., SkateBIRD, PEAK, Sledding Game, Big Walk, STUNTBOOST and a set of tools
+- Starts a configured tool with `program`, running a Windows program through the `[tools] wine` launcher on Linux, with its path arguments as Wine paths
+- Ships manifests for Sekiro, Elden Ring, GTA V, Forza Horizon 6, TrackMania Nations Forever, Riders Republic, Shaun White, SHRED, skate., SkateBIRD, PEAK, Sledding Game, Big Walk, STUNTBOOST, the shader programs of Celeste, Hollow Knight, KovaaK's, Lethal Company, Motor Town, Risk of Rain 2 and ULTRAKILL, and a set of tools
 - Provides a `check_declared` self-check that finds undeclared or non-literal queries in a crate's sources and stale inputs tables in its README
 - Generates the inputs table for a crate's README with `doc::tables`
 - Counts comparisons against reference output with `gate::GateReport`, and compares JSON documents number by number with `gate::compare_json`

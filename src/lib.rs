@@ -3,7 +3,7 @@
 //!
 //! A crate whose tests read files nobody can ship (a game's own data) declares what they read once, in
 //! `tests/inputs/mod.rs`, with [`inputs!`]. The macro gives the tests typed queries (`install`, `install_file`, `keys`,
-//! `tool`, `oodle`, `oracle`, `debug`). A person who has the files writes one TOML file, names it in the `GAME_DATA`
+//! `tool`, `program`, `oodle`, `oracle`, `debug`). A person who has the files writes one TOML file, names it in the `GAME_DATA`
 //! environment variable ([`config`] shows its layout) and the same file serves every crate that uses this one.
 //!
 //! - An entry the file does not set makes the test print one `SKIP` line naming its configuration key and return,
@@ -89,10 +89,12 @@ pub mod gate;
 mod inputs;
 pub mod manifest;
 pub mod measure;
+mod program;
 mod query;
 mod registry;
 pub mod sums;
 pub use check::{check_declared, problems};
+pub use program::{Program, ToolCommand, wine_path};
 pub use query::Query;
 pub use registry::{Declared, Entry, Names, Registry, SCRATCH, Set, Status};
 
@@ -283,6 +285,30 @@ pub fn resolve(registry: &Registry, query: Query) -> Option<PathBuf> {
             None
         }
     }
+}
+
+/// The program of the tool `key` names (`texconv`, a key of `[tools]`), resolved as [`resolve`] resolves
+/// `Query::Tool(key)`, with how this machine starts it: itself, or a Windows program through the `[tools] wine`
+/// launcher ([`Program`]). `None`, with the SKIP line, where the tool is not configured.
+#[track_caller]
+pub fn program(registry: &Registry, key: &'static str) -> Option<Program> {
+    let path = resolve(registry, Query::Tool(key))?;
+    let launcher = launcher(load()).map(|(setting, launcher)| match present(&launcher) {
+        Ok(true) => launcher,
+        Ok(false) => panic!("{setting} = {} is set but does not exist", launcher.display()),
+        Err(Decision::Fail(why)) => panic!("{setting}: {why}"),
+        Err(_) => unreachable!("present fails only with Decision::Fail"),
+    });
+    Some(Program::new(&format!("tools.{key}"), path, launcher))
+}
+
+/// The launcher a Windows program runs through, with the setting that names it: `[tools] wine` (a `[tools]` key, which
+/// every version of this crate accepts, so a configuration that sets it still loads in one that predates the launcher).
+fn launcher(config: &Config) -> Option<(&'static str, PathBuf)> {
+    config
+        .roots
+        .get("tools.wine")
+        .map(|wine| ("tools.wine", wine.clone()))
 }
 
 /// Where a test gets its Oodle codec: the game's own library on Windows, else nothing to configure.
