@@ -33,7 +33,7 @@ Add it as a dev-dependency only:
 cargo add --dev primase-testdata
 ```
 
-The current release on crates.io is 0.1.7. Manifest entries added since then are on `main` and listed under "Unreleased" in [CHANGELOG.md](CHANGELOG.md).
+The manifests are compiled into the crate, so every manifest entry ships in a release; `main` is always the latest release on crates.io (CI checks it), and [CHANGELOG.md](CHANGELOG.md) lists what each one added.
 
 ### Usage
 

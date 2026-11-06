@@ -27,3 +27,13 @@ Do not attach game files, archives, keys or anything extracted from a game: they
 ## Changing the code
 
 Keep the public items documented (`missing_docs` is on), keep refusals naming the key, section or path involved, and add a test next to the behaviour you change.
+
+## Releasing
+
+Consumers depend on the crates.io release, and the manifests are compiled in, so a change nobody publishes reaches nobody. Every change to `src/`, `manifests/`, `examples/` or `Cargo.toml` is released in the same push:
+
+1. Bump `version` in `[workspace.package]` (0.1.x for additions and fixes, 0.2.0 for a change a consumer must adapt to), then `cargo check` to update `Cargo.lock`.
+2. Move the change's CHANGELOG lines under a `## <version> (<date>)` heading.
+3. Commit as "Release <version>", `cargo publish`, `git tag v<version>`, push the commit and the tag.
+
+CI's `release` job (`scripts/release-check.sh`) fails when the crate differs from the crates.io release of the version `Cargo.toml` states, and warns when that version is not published yet.

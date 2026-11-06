@@ -117,7 +117,7 @@ pub fn shipped() -> &'static Manifest {
 /// The name of the manifest file a key's entry belongs in: its game for an install or an oracle, `tools` for a tool;
 /// `None` for a key no manifest holds (archive keys, the scratch folder, debug keys). A game's file is its key without
 /// hyphens, so the spellings consumers give one game (`installs.shaunwhite`, `oracles.<set>.shaun-white`) name the
-/// one file [`EMBEDDED`] holds.
+/// one file the crate embeds.
 pub fn file_of(key: &str) -> Option<String> {
     if key.starts_with("tools.") {
         return Some("tools".to_owned());

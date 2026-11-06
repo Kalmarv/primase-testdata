@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.8 (2026-11-06)
 
+- A configured path whose existence cannot be told (an IO error: a network share out of resources, a permission refused) fails naming the error instead of reading as absent; absent is only what the system says is not found. A test whose input sits on an unreadable path now fails where it used to skip. `cargo run --example manifest -- verify` reports such a path as FAIL.
 - Manifests: `oracles.dxc.elden/shader-listings` (50,283 files, 3,996,701,341 bytes), dxc 1.9.2609's `-dumpbin` listing of each of Elden Ring's 50,283 DXIL programs (`<path>.txt`, mirroring `oracles.corpus.elden/shaders`); dx's DXIL listing tests compare with them.
 - Manifests: `oracles.d3d-disassembler.sekiro/programs` (10,368 files, 153,015,626 bytes), Sekiro's 432 shader programs (390 `.ppo`, 42 `.vpo`) with `D3DDisassemble`'s listing of each under 23 flag words (`NAME.ppo.asm`, `NAME.ppo.flagNN.asm`), and `oracles.d3d-disassembler.sledding/corpus-unity` (9,708 files, 210,878,281 bytes), the Sledding Game Unity player's 4,854 programs with their listings (`NNNNN.dxbc.asm`), both made by d3dcompiler_47 10.0.26100.4654; dx's listing tests compare with them.
 - Manifests: `oracles.smithbox.elden/param-meta`, Smithbox fdde3225's Elden Ring Param Meta (179 files, 615,530 bytes), the per-param XML whose field attributes name the fields that refer to effect files; fromsoft-formats' effect census is cross-checked against it.
