@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.15 (2026-11-06)
+
+- Manifests: `installs.stuntboost` and `installs.stuntboost/Content` are STUNTBOOST's Steam build 26429886 (2026-11-04; the entries described build 26237614): STUNTBOOST.dll and STUNTBOOST.exe changed, and `Content` holds 1,898 files, 5,008,787,935 bytes (was 1,892, 5,005,234,552). Steam installed two builds that day; together they add six files (with the first, the board `Models/Resources/Board/102.xnb` and its thumbnail; with the second, `Textures/UI/Crown.xnb`, `Duck.xnb`, `DuckMissing.xnb` and `DuckScreenshots/24.xnb`) and changes two levels: `Level_StairsSlide_1` (its geometry, collision and bakes) and `Level_BoosterLaunching_0`, besides fonts, localisation and audio banks.
+- Manifests: `oracles.game-code.stuntboost/levels-build26429886` (318 files, 365,300,235 bytes), the game's own name parser and collision and ledge loader (primase-oracles `stuntboost`, 2753710) over build 26429886's levels. It differs from `levels` (build 26237614, kept as recorded) in two parts: StairsSlide_1, whose invisible `RoomBounds` collision mesh has 80 triangles (was 68) and so one ledge (4,460) and two ledge corners (5,233) more, and BoosterLaunching_0, whose two mandatory checkpoints are named `.Custom(1)` and `.Custom(2)` (were `.Order(1)` and `.Order(2)`).
+
 ## 0.1.14 (2026-11-06)
 
 - `ToolCommand::output_within(limit)` runs a configured tool with a time limit: past it the tool is killed and the error (`TimedOut`) names its key and program, so a tool that hangs (a wrapper whose runtime is broken, a program waiting for input) fails the test instead of hanging it. `ToolCommand::stdin_bytes` gives it its standard input; a tool that exits before reading it all is no error.
