@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.13 (2026-11-06)
+
+- Manifests: `installs.terraria` (Terraria, Steam build 24893155), identified by Terraria.exe, its content pipeline and ReLogic.Native.dll, with `installs.terraria/Content` (15,997 files, 739,703,531 bytes: 15,994 `.xnb`, 15,108 LZX-compressed); and `oracles.xna.terraria/content.jsonl` (3,128,257 bytes), XNA 4.0's own decompressor (`DecompressStream`) over that folder: each `.xnb`'s header and the SHA-256 of its content (primase-oracles `xna/XnaContent.cs`). monogame-formats' LZX test reads them.
+
 ## 0.1.12 (2026-11-06)
 
 - Manifests: `oracles.soulsformats.elden/census-sote` (24 files, 686,382,446 bytes) and `oracles.soulsformats.elden/format-sote` (4 files, 355,204,558 bytes: msb, btl, matbin and metaparam), primase-oracles' Elden Ring harness (6b07350; SoulsFormatsNEXT ee1dd61, UXM 9501be8) on the install with Shadow of the Erdtree (Steam build 25827938). `census` and `format` were made before the DLC was installed: their FLVER, BTL and MSB records lack the DLC's, so tests that walk them leave its files untested. They stay as recorded, and `format` alone holds `havok.jsonl`.

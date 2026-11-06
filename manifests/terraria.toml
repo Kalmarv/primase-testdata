@@ -1,0 +1,26 @@
+# primase-testdata manifest `terraria`: BLAKE3 sums of the real-data inputs a good copy holds.
+# Written by `cargo run --example manifest -- add <key>`; src/sums.rs shows the format, src/digest.rs how the sums are made.
+format = 1
+
+[[entry]]
+key = "installs.terraria"
+kind = "files"
+files = [
+  { path = "Terraria.exe", size = 26597888, blake3 = "97363f66284263b73d9554b26538b0d84d6254ad7c3bf266b29df306cabc538d" },
+  { path = "Microsoft.Xna.Framework.Content.Pipeline.dll", size = 543232, blake3 = "9cba312d7da8f36d0ba4d34a3910da221d700e15436132b76feb3c1bfabac193" },
+  { path = "ReLogic.Native.dll", size = 99840, blake3 = "b2b95c28cd64a958ca10ea8db32b79db26fb7895e7555060f0597ee6654f069b" },
+]
+
+[[entry]]
+key = "installs.terraria/Content"
+kind = "tree"
+count = 15997
+bytes = 739703531
+shape = "9eb93367b49d0cb3782a2d15537b6e81d86e4cae7e965a4006ad13df146b3251"
+blake3 = "3beba53744bc340674e139db852a566c90fb87fe0416c0637cab89700f4dd93a"
+
+[[entry]]
+key = "oracles.xna.terraria/content.jsonl"
+kind = "file"
+size = 3128257
+blake3 = "16153de51587ac108d01f850ab9b7b1ee2ca7e9b57ed392c2f7cc07bd00ce2a3"
