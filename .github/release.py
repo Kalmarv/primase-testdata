@@ -14,7 +14,7 @@ Every step skips what is already done, so a rerun of a failed release finishes i
   release.py build TARGET    build the planned binaries for TARGET into dist/
   release.py publish [--dry-run]   tag, publish and create the Releases (with --dry-run: say what it would do)
 
-Environment: RELEASE_BINS (the binary targets shipped as downloads), PLAN (the plan job's output; computed again when
+Run it from the cargo workspace's folder. Environment: RELEASE_BINS (the binary targets shipped as downloads), PLAN (the plan job's output; computed again when
 unset), GH_TOKEN (gh), CARGO_REGISTRY_TOKEN (cargo publish).
 """
 
@@ -34,8 +34,9 @@ import urllib.error
 import urllib.request
 import zipfile
 
-ROOT = pathlib.Path(__file__).resolve().parent.parent
+ROOT = pathlib.Path.cwd()  # the cargo workspace
 DIST = ROOT / "dist"
+LOCKED = ["--locked"] if (ROOT / "Cargo.lock").exists() else []  # a library repository may not commit its lock file
 
 
 def run(*cmd, check=True, capture=True):
@@ -175,7 +176,7 @@ def verify_cmd():
     crates = [c for u in load_plan() for c in u["publish"]]
     if crates:
         # together, so a crate is verified against the unpublished versions of its siblings
-        run("cargo", "publish", "--dry-run", "--locked", *[a for c in crates for a in ("-p", c)], capture=False)
+        run("cargo", "publish", "--dry-run", *LOCKED, *[a for c in crates for a in ("-p", c)], capture=False)
 
 
 def build_cmd(target):
@@ -183,7 +184,7 @@ def build_cmd(target):
     exe = ".exe" if "windows" in target else ""
     for u in load_plan():
         for b in u["bins"]:
-            run("cargo", "build", "--release", "--locked", "--target", target, "-p", b["package"], "--bin", b["bin"],
+            run("cargo", "build", "--release", *LOCKED, "--target", target, "-p", b["package"], "--bin", b["bin"],
                 capture=False)
             built = ROOT / "target" / target / "release" / f"{b['bin']}{exe}"
             extra = [p for p in sorted(ROOT.iterdir()) if re.match(r"(LICEN[CS]E|COPYING)", p.name, re.I)]
@@ -238,7 +239,7 @@ def publish_crate(name, dry):
         log(f"would publish {name}")
         return
     for attempt in range(8):
-        r = run("cargo", "publish", "--locked", "--no-verify", "-p", name, check=False)
+        r = run("cargo", "publish", *LOCKED, "--no-verify", "-p", name, check=False)
         if r.returncode == 0:
             log(f"published {name}")
             return
