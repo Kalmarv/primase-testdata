@@ -96,9 +96,22 @@ fn verify(keys: &[String]) -> bool {
             println!("SKIP {} (not configured)", entry.key);
             continue;
         };
-        if !path.exists() {
-            println!("SKIP {} ({} does not exist)", entry.key, path.display());
-            continue;
+        // absent is only what the system says is not found: an IO error (a share out of resources) is no absent copy
+        match path.try_exists() {
+            Ok(true) => {}
+            Ok(false) => {
+                println!("SKIP {} ({} does not exist)", entry.key, path.display());
+                continue;
+            }
+            Err(e) => {
+                all_good = false;
+                println!(
+                    "FAIL {}: cannot tell whether {} exists: {e}",
+                    entry.key,
+                    path.display()
+                );
+                continue;
+            }
         }
         match manifest::verify(entry, &path, Verify::Content, threads()) {
             Ok(()) => println!("OK   {}", entry.key),

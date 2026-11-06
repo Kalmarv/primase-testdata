@@ -178,18 +178,37 @@ enum Decision {
 /// The decision for `query` under `config`: a configured path that exists is found and one that does not fails, except
 /// an oracle file whose set this machine does not hold (no `<oracles.root>/<set>` folder in a root that exists): that
 /// set is not configured here, as an unset key is. What is not configured skips, or fails where `[run] require` needs
-/// it (`all`, or `gate` and `gate` says a complete run must have it).
+/// it (`all`, or `gate` and `gate` says a complete run must have it). A path whose existence cannot be told (an IO
+/// error: a network share out of resources, a permission refused) fails naming the error: absent is only what the
+/// system says is not found.
 fn decide(registry: &Registry, config: &Config, query: Query, gate: bool) -> Decision {
+    decide_or_fail(registry, config, query, gate).unwrap_or_else(|fail| fail)
+}
+
+/// Whether `path` exists, or the failure naming the IO error that leaves it unknown. [`Path::exists`] reads every error
+/// as absent, which would skip an input that is there (2026-11-05: a share out of resources skipped 60 present oracles).
+fn present(path: &Path) -> Result<bool, Decision> {
+    path.try_exists()
+        .map_err(|e| Decision::Fail(format!("{}: cannot tell whether it exists: {e}", path.display())))
+}
+
+/// [`decide`], with a failure to tell whether a path exists as the error.
+fn decide_or_fail(
+    registry: &Registry,
+    config: &Config,
+    query: Query,
+    gate: bool,
+) -> Result<Decision, Decision> {
     // an input no machine here holds: used where it is there, else skipped naming why, whatever require says
     if let Some(Declared {
         status: Status::Unheld { why },
         ..
     }) = registry.declaration(query)
     {
-        return match configured(config, query).filter(|p| p.exists()) {
-            Some(path) => Decision::Found(path),
-            None => Decision::Skip(format!("{} is held by no machine here: {why}", query.key())),
-        };
+        return Ok(match configured(config, query) {
+            Some(path) if present(&path)? => Decision::Found(path),
+            _ => Decision::Skip(format!("{} is held by no machine here: {why}", query.key())),
+        });
     }
     let require = match config.require.as_deref() {
         Some("all") => true,
@@ -206,40 +225,42 @@ fn decide(registry: &Registry, config: &Config, query: Query, gate: bool) -> Dec
         (_, None) => format!("{} not configured{}", query.key(), file()),
         (Query::Oracle(set, ..), Some(path)) => {
             let root = config.roots.get("oracles.root");
-            if let Some(root) = root.filter(|r| !r.exists()) {
-                return Decision::Fail(format!(
+            if let Some(root) = root
+                && !present(root)?
+            {
+                return Ok(Decision::Fail(format!(
                     "oracles.root = {} is set but does not exist",
                     root.display()
-                ));
+                )));
             }
             match root.map(|r| r.join(set)) {
-                Some(folder) if !folder.exists() => {
+                Some(folder) if !present(&folder)? => {
                     format!("oracles.{set} not on this machine: no {}", folder.display())
                 }
-                _ if path.exists() => return Decision::Found(path),
+                _ if present(&path)? => return Ok(Decision::Found(path)),
                 _ => {
-                    return Decision::Fail(format!(
+                    return Ok(Decision::Fail(format!(
                         "{} = {} is set but does not exist",
                         query.key(),
                         path.display()
-                    ));
+                    )));
                 }
             }
         }
-        (_, Some(path)) if path.exists() => return Decision::Found(path),
+        (_, Some(path)) if present(&path)? => return Ok(Decision::Found(path)),
         (_, Some(path)) => {
-            return Decision::Fail(format!(
+            return Ok(Decision::Fail(format!(
                 "{} = {} is set but does not exist",
                 query.key(),
                 path.display()
-            ));
+            )));
         }
     };
-    if require {
+    Ok(if require {
         Decision::Fail(format!("{unset}, and [run] require needs it"))
     } else {
         Decision::Skip(unset)
-    }
+    })
 }
 
 /// Resolve `query`, which `registry` must declare, to an existing path, or skip: what is not configured prints one SKIP

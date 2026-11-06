@@ -179,6 +179,20 @@ fn an_absent_oracle_set_skips_and_a_missing_file_in_a_present_one_fails() {
     std::fs::remove_dir_all(&root).unwrap();
 }
 
+/// A path whose existence the system cannot tell (an IO error, here a name no file system takes) fails naming the
+/// error, where an absent one would skip: an input that is there must never read as not installed.
+#[test]
+fn an_io_error_fails_instead_of_reading_as_absent() {
+    let legacy = inputs::Query::Oracle(OracleSet::Corpus, Game::Gta, "legacy-effects").raw();
+    let codecs = inputs::Query::Oracle(OracleSet::Corpus, Game::General, "codecs.tsv").raw();
+    let broken = config(&[], Some("[oracles]\nroot = \"no\\u0000such\"\n")).unwrap();
+    let cannot_tell =
+        |d: Decision| matches!(d, Decision::Fail(why) if why.contains("cannot tell whether it exists"));
+    // unheld: an absent copy skips (an_unheld_input_skips_naming_why_whatever_require_says), an unreadable one fails
+    assert!(cannot_tell(decide(&REGISTRY, &broken, legacy, false)));
+    assert!(cannot_tell(decide(&REGISTRY, &broken, codecs, false)));
+}
+
 #[test]
 fn the_structured_file_gives_each_query_its_path() {
     let c = config(
