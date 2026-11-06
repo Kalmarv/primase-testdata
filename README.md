@@ -35,8 +35,6 @@ Add it as a dev-dependency only:
 cargo add --dev primase-testdata
 ```
 
-The manifests are compiled into the crate, so every manifest entry ships in a release; `main` is always the latest release on crates.io (CI checks it), and [CHANGELOG.md](CHANGELOG.md) lists what each one added.
-
 ### Usage
 
 A crate declares its inputs in `tests/inputs/mod.rs`. This is [examples/declare_inputs.rs](examples/declare_inputs.rs); with `GAME_DATA` unset, `cargo run --example declare_inputs` prints one `SKIP` line and stops.
