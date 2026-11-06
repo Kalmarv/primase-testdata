@@ -99,5 +99,5 @@ blake3 = "72430c9ac3dc2fa6a7777b86f8e99f93671975c37a8ff86a9a8294c8d0a8cec1"
 [[entry]]
 key = "tools.warp"
 kind = "file"
-size = 446464
-blake3 = "31c9f67f7c238878fe170db0eaf1635041202c3166dfef15cd428c8207988659"
+size = 448000
+blake3 = "65f6252ea336061f4ffd25583b9da2f9e4340a30d3fb6ed99619e8ddecadc58e"

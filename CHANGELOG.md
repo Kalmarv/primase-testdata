@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.10 (2026-11-06)
+
+- Manifests: `tools.warp` is the WARP oracle build of primase-oracles fa44129 (448,000 bytes), which adds two lines to
+  its `d3d12draw` case form: `topology` (point and line lists, line and triangle strips; a triangle list when absent)
+  and `adapter` (the first hardware adapter instead of WARP). It answers the 2,545 cases of the earlier forms (514 case
+  files) byte for byte as the build the entry named before (446,464 bytes, blake3 `31c9f67f...`).
+
 ## 0.1.9 (2026-11-06)
 
 - `[tools] wine`: a launcher that runs Windows programs, for a machine that runs none itself (Linux: primase-oracles' `tools/wine/wine`). A `[tools]` key, which every version of this crate accepts, so a configuration that sets it still loads in checkouts on older versions. `program(Tool::X)` (and `primase_testdata::program`) gives a configured tool's `Program`, whose `command()` is a `ToolCommand` for one run: the program itself, or a Windows program (`.exe`) through the launcher, with path arguments (`path_arg`) as Wine paths (`Z:\...`), since a Windows program reads a leading `/` as an option. `[tools]` then names the real `.exe` on Linux, and its manifest check holds that file, where a hand-written wrapper script failed it (and needed `[run] verify = 'off'`). A Windows program asked for on a machine with neither fails, naming the setting. `wine_path` is public.
