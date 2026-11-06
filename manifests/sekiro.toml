@@ -173,6 +173,14 @@ shape = "efde44a98468ee583394758f083b5b67ca8c3e643133cfda38f6e43816d63737"
 blake3 = "4e287483cb8a038ff4864868d8c1a6d7d5c9123f235c892c85bcd5089d553879"
 
 [[entry]]
+key = "oracles.d3d-disassembler.sekiro/programs"
+kind = "tree"
+count = 10368
+bytes = 153015626
+shape = "ff8f22fe79504e2e2c9836812e6c83e45efcbd9077a91f68d3c955beb2e92867"
+blake3 = "5bf4b89f9b08db57d25f03b40b97dc711dbcc78fe9160e0dbbdc584c9c3778a3"
+
+[[entry]]
 key = "oracles.fxr.sekiro/curves.jsonl"
 kind = "file"
 size = 1615381
