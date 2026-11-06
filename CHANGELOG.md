@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.11 (2026-11-06)
+
+- A folder of an install (`installs.<game>/<path>`) may be recorded as a `files` entry, like an install: each file with its size and hash, for a folder the game writes into, whose settings or run history would fail a `tree` entry after one play session. `cargo run --example manifest -- add <key> --except <path>` (repeatable) names every file of the folder but those under the paths; `measure::files_except` lists them, and `measure::entry_for` records an install's folder given files as `files`. Without files it is still a `tree`.
+- Manifests: `installs.gungeon` (Enter the Gungeon), with `installs.gungeon/EtG_Data` (198 files, 310,466,547 bytes) and its `StreamingAssets/Assets` (30 bundles, 69,839,404 bytes); `installs.schedule1` (Schedule I), with `installs.schedule1/Schedule I_Data` (104 files, 6,664,718,013 bytes); `installs.ror2` (Risk of Rain 2), with `installs.ror2/Risk of Rain 2_Data` as `files` but for `Config` and `RunReports`, and its `StreamingAssets/aa` (1,725 files, 2,887,437,250 bytes). unity-formats' player tests read them.
+- Manifests: UnityPy 1.25.4's readings (unity-formats 3bd855fe42a8 `tests/oracles`): `oracles.unitypy.gungeon/{census.json, bundles.jsonl, player-settings.json, clips.json}`, `oracles.unitypy.ror2/{textures.json, clips.json}` and `oracles.unitypy.schedule1/{textures.json, clips.json}`.
+
 ## 0.1.10 (2026-11-06)
 
 - Manifests: `tools.warp` is the WARP oracle build of primase-oracles fa44129 (448,000 bytes), which adds two lines to
