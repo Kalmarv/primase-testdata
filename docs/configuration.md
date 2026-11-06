@@ -43,11 +43,11 @@ A test starts a tool with `program(Tool::X)`, a `Program` whose `command()` give
 
 ## Manifests
 
-`manifests/<game>.toml` (and `tools.toml`) hold, for each input a query can name, what a good copy of it is: a file by its size and BLAKE3 hash, the identifying files of an install by the same, a folder by the digests of its listing (`src/sums.rs` shows the format, `src/digest.rs` how the sums are made). They are embedded in the library, so every consumer that pins this crate checks against the same sums. Archive keys are never in a manifest.
+`manifests/<game>.toml` (and `tools.toml`) hold, for each input a query can name, what a good copy of it is: a file by its size and BLAKE3 hash, the identifying files of an install by the same, a folder by the digests of its listing (a folder of an install that the game writes into, settings or run history, by its other files, named like an install's: `add <key> --except <path>`) (`src/sums.rs` shows the format, `src/digest.rs` how the sums are made). They are embedded in the library, so every consumer that pins this crate checks against the same sums. Archive keys are never in a manifest.
 
 `[run] verify` says how much a run reads. `quick` (the default) compares sizes everywhere, hashes every file up to 256 MiB that an entry lists, and compares a folder's file names and sizes; `content` also hashes every file up to 256 MiB in a folder; `off` compares nothing. A file larger than 256 MiB is identified by its size alone. Each key is checked once per process. An entry marked `check = "warn"` (a tool installed with the system) prints one warning line instead of failing.
 
-`cargo run --example manifest -- add <key>` writes an entry (`--warn` marks a mismatch as a warning, `--dir` writes to another folder), `list <key> [--listing]` prints what the configured copy holds, and `verify [<key>...]` compares the configured copies with the shipped entries, reading every file whatever `[run] verify` says. A new `gate: true` input needs an entry before its crate's `check_declared` passes; commit the changed `manifests/*.toml` here and move the consumers' pins.
+`cargo run --example manifest -- add <key>` writes an entry (`--except <path>`, repeatable, records an install's folder by every file but those under the paths, `--warn` marks a mismatch as a warning, `--dir` writes to another folder), `list <key> [--listing]` prints what the configured copy holds, and `verify [<key>...]` compares the configured copies with the shipped entries, reading every file whatever `[run] verify` says. A new `gate: true` input needs an entry before its crate's `check_declared` passes; commit the changed `manifests/*.toml` here and move the consumers' pins.
 
 ## What it does not do
 

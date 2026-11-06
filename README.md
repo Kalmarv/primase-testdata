@@ -124,6 +124,7 @@ On a machine that holds the inputs, the `manifest` example writes and checks man
 ```sh
 cargo run --example manifest -- add oracles.corpus.sekiro/havok          # a file or a folder
 cargo run --example manifest -- add installs.sekiro sekiro.exe Data1.bhd # the files that identify an install
+cargo run --example manifest -- add 'installs.ror2/Risk of Rain 2_Data' --except Config # an install folder's files but what the game writes
 cargo run --example manifest -- list tools.oodle6 --listing              # print an entry without writing it
 cargo run --example manifest -- verify                                   # every shipped entry against this machine
 ```

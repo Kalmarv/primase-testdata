@@ -958,6 +958,56 @@ fn a_copy_is_compared_with_its_entry() {
     std::fs::remove_dir_all(&dir).unwrap();
 }
 
+/// A folder of an install that the game writes into is recorded by its other files (`files_except`): what is under a
+/// left-out path may change, appear or be absent, and the rest is still held to its sums.
+#[test]
+fn an_install_folder_is_recorded_but_for_what_the_game_writes() {
+    let dir = temp_tree("except");
+    let except = ["dir/deep/".to_owned(), "Config".to_owned()];
+    let files = measure::files_except(&dir, &except).unwrap();
+    assert_eq!(files, ["a.txt", "dir/b.bin"]);
+    let entry = measure::entry_for("installs.g/Data", &dir, &files, Severity::Fail, 2).unwrap();
+    assert!(
+        matches!(&entry.sums, Sums::Files(f) if f.len() == 2),
+        "{:?}",
+        entry.sums
+    );
+    // the same text back from a manifest
+    let text = sums::render(&[], std::slice::from_ref(&entry));
+    assert_eq!(
+        sums::parse("g.toml", &text).unwrap(),
+        std::slice::from_ref(&entry)
+    );
+    // settings written, a left-out file changed: still the good copy
+    std::fs::create_dir_all(dir.join("Config")).unwrap();
+    std::fs::write(dir.join("Config/config.cfg"), b"volume=3\n").unwrap();
+    std::fs::write(dir.join("dir/deep/c"), b"run 1\n").unwrap();
+    assert_eq!(manifest::verify(&entry, &dir, Verify::Content, 2), Ok(()));
+    // a recorded file changed: not
+    std::fs::write(dir.join("dir/b.bin"), [9u8, 9, 9]).unwrap();
+    let why = manifest::verify(&entry, &dir, Verify::Quick, 2).unwrap_err();
+    assert!(
+        why.starts_with("dir/b.bin: ") && why.contains("BLAKE3 hash"),
+        "{why}"
+    );
+    // a prefix of a name is not its folder: `dir/b` leaves out nothing of `dir/b.bin`
+    assert_eq!(
+        measure::files_except(&dir, &["dir/b".to_owned()]).unwrap(),
+        ["Config/config.cfg", "a.txt", "dir/b.bin", "dir/deep/c"]
+    );
+    // a path that is not a relative one, and a list that leaves nothing
+    for bad in ["", "/Config", "../x", "a/./b", "dir\\deep"] {
+        let why = measure::files_except(&dir, &[bad.to_owned()]).unwrap_err();
+        assert!(why.contains("relative to the folder"), "{bad}: {why}");
+    }
+    let why = measure::files_except(&dir, &["a.txt".into(), "dir".into(), "Config".into()]).unwrap_err();
+    assert!(why.contains("no file is left"), "{why}");
+    // without files, an install's folder is still a tree
+    let tree = measure::entry_for("installs.g/Data", &dir, &[], Severity::Fail, 2).unwrap();
+    assert!(matches!(tree.sums, Sums::Tree { .. }), "{:?}", tree.sums);
+    std::fs::remove_dir_all(&dir).unwrap();
+}
+
 /// A manifest key names where its input is, and which file of `manifests/` holds its entry.
 #[test]
 fn a_key_names_its_configuration_root_and_its_manifest_file() {

@@ -2,7 +2,7 @@
 //!
 //! ```text
 //! cargo run --example manifest -- list <key> [--listing]     what the configured copy holds, as an entry
-//! cargo run --example manifest -- add <key> [FILE...] [--warn] [--dir manifests]
+//! cargo run --example manifest -- add <key> [FILE...] [--except PATH...] [--warn] [--dir manifests]
 //!                                                            write the entry for <key> into its manifest file
 //! cargo run --example manifest -- verify [<key>...]          compare the configured copies with the shipped entries
 //! ```
@@ -10,7 +10,9 @@
 //! A key is the one a query for the input has: `installs.sekiro`, `installs.sekiro/sekiro.exe`, `tools.oodle6`,
 //! `oracles.corpus.sekiro/havok`. The copy is found where the `GAME_DATA` file puts it. `add` on an install (`installs.<game>`
 //! with no path) needs the files that identify it, relative to the install folder (`sekiro.exe Data1.bhd ...`): the
-//! folder holds files that vary between machines (logs, mods), which a manifest must not list. `add --warn` marks an
+//! folder holds files that vary between machines (logs, mods), which a manifest must not list. A folder of an install
+//! (`installs.<game>/<path>`) that the game writes into is recorded the same way: `add --except Config --except
+//! RunReports` names every file of it but those paths and what is under them. `add --warn` marks an
 //! entry whose mismatch only warns (a tool installed with the system). `verify` reads every file, whatever `[run] verify`
 //! says. Archive keys (`keys.*`) have no entry.
 use std::path::{Path, PathBuf};
@@ -23,7 +25,7 @@ use primase_testdata::sums::{self, Entry, Severity};
 
 fn usage() -> ExitCode {
     eprintln!(
-        "usage: manifest list <key> [--listing] | add <key> [FILE...] [--warn] [--dir manifests] | verify [<key>...]"
+        "usage: manifest list <key> [--listing] | add <key> [FILE...] [--except PATH...] [--warn] [--dir manifests] | verify [<key>...]"
     );
     ExitCode::from(2)
 }
@@ -63,9 +65,21 @@ fn list(key: &str, listing: bool) -> Result<(), String> {
     Ok(())
 }
 
-fn add(key: &str, files: &[String], severity: Severity, dir: &Path) -> Result<(), String> {
+fn add(key: &str, files: &[String], except: &[String], severity: Severity, dir: &Path) -> Result<(), String> {
     let name = manifest::file_of(key).ok_or_else(|| format!("{key}: no manifest holds this key"))?;
-    let entry = measure_key(key, files, severity)?;
+    let entry = if except.is_empty() {
+        measure_key(key, files, severity)?
+    } else {
+        if !(key.starts_with("installs.") && key.contains('/')) || !files.is_empty() {
+            return Err(format!(
+                "{key}: --except is for a folder of an install (installs.<game>/<path>), without FILE arguments"
+            ));
+        }
+        let path = primase_testdata::locate(key)
+            .ok_or_else(|| format!("{key} is not configured in the GAME_DATA file"))?;
+        let files = measure::files_except(&path, except)?;
+        measure::entry_for(key, &path, &files, severity, threads())?
+    };
     let target = dir.join(format!("{name}.toml"));
     // the notes a person wrote inside entries are kept: the entries are parsed and written again
     let (mut entries, notes) = match std::fs::read_to_string(&target) {
@@ -128,6 +142,7 @@ fn verify(keys: &[String]) -> bool {
 /// The words and flags of the command line.
 struct Args {
     words: Vec<String>,
+    except: Vec<String>,
     warn: bool,
     listing: bool,
     dir: PathBuf,
@@ -136,6 +151,7 @@ struct Args {
 fn parse(args: impl Iterator<Item = String>) -> Option<Args> {
     let mut parsed = Args {
         words: Vec::new(),
+        except: Vec::new(),
         warn: false,
         listing: false,
         dir: PathBuf::from("manifests"),
@@ -146,6 +162,7 @@ fn parse(args: impl Iterator<Item = String>) -> Option<Args> {
             "--warn" => parsed.warn = true,
             "--listing" => parsed.listing = true,
             "--dir" => parsed.dir = PathBuf::from(args.next()?),
+            "--except" => parsed.except.push(args.next()?),
             flag if flag.starts_with("--") => return None,
             _ => parsed.words.push(arg),
         }
@@ -157,11 +174,14 @@ fn main() -> ExitCode {
     let Some(args) = parse(std::env::args().skip(1)) else {
         return usage();
     };
+    if !args.except.is_empty() && args.words.first().map(String::as_str) != Some("add") {
+        return usage();
+    }
     let result = match args.words.split_first() {
         Some((command, rest)) if command == "list" && rest.len() == 1 => list(&rest[0], args.listing),
         Some((command, rest)) if command == "add" && !rest.is_empty() => {
             let severity = if args.warn { Severity::Warn } else { Severity::Fail };
-            add(&rest[0], &rest[1..], severity, &args.dir)
+            add(&rest[0], &rest[1..], &args.except, severity, &args.dir)
         }
         Some((command, rest)) if command == "verify" => {
             return if verify(rest) {
