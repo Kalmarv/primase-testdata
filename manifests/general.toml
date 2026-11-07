@@ -66,7 +66,8 @@ blake3 = "e43a86fc0bdc1f06226fa88aa388c0a2f3b2765014e08c29886829078b1770ea"
 
 [[entry]]
 key = "oracles.d3d-disassembler.general/fxc-sweep-zi"
-kind = "tree"
+kind = "zip"
+size = 347039829
 count = 110713
 bytes = 320536225
 shape = "de440397e0dff40113b5f82c2f6c6aab2091d57e4d82987d3f42ed906cfa386f"
