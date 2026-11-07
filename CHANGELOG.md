@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.5 (2026-11-07)
+
+- Manifests: `oracles.dxc.elden/shader-listings` is recorded as one archive (`kind = "zip"`, `shader-listings.zip`, 4,008,774,993 bytes), with the same 50,283 files, 3,996,701,341 bytes and digests as the folder's record. Breaking for a reader that still calls `oracle` for it: read it through `oracle_tree` (dx does from 0.10). `oracles.corpus.elden/shaders` stays a folder.
+
 ## 0.2.4 (2026-11-07)
 
 - Manifests: `oracles.d3d-disassembler.general/fxc-sweep-zi` and `fxc-sweep-zod` are recorded as one archive each (`kind = "zip"`; `fxc-sweep-zi.zip` 347,039,829 bytes, `fxc-sweep-zod.zip` 478,350,701 bytes), with the same counts, bytes and digests as their folders' records. Breaking for a reader that still calls `oracle` for them: read them through `oracle_tree` (dx does from 0.10).
