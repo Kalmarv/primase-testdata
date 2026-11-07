@@ -57,6 +57,22 @@ shape = "8345993c0f42e039df7d31436860caab1f135779cc2caeb003ac69b8383a7e8d"
 blake3 = "e43a86fc0bdc1f06226fa88aa388c0a2f3b2765014e08c29886829078b1770ea"
 
 [[entry]]
+key = "oracles.d3d-disassembler.general/fxc-sweep-zi"
+kind = "tree"
+count = 110713
+bytes = 320536225
+shape = "de440397e0dff40113b5f82c2f6c6aab2091d57e4d82987d3f42ed906cfa386f"
+blake3 = "290fd985537914df098d5e1ef49b7101d525517c3981aec258c3f4aacc23ca70"
+
+[[entry]]
+key = "oracles.d3d-disassembler.general/fxc-sweep-zod"
+kind = "tree"
+count = 110737
+bytes = 451833501
+shape = "e2b5c5c8dabddedfa9761e54dc8a75383a8f070ac50942759d2d9d32141af0d4"
+blake3 = "30c1e374a5987afe50021105fa3a1219083d9b7efea6e903de504f43cd69cd63"
+
+[[entry]]
 key = "oracles.d3d-disassembler.general/sm3"
 kind = "tree"
 count = 6

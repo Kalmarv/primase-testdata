@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.16 (2026-11-07)
+
+- Manifests: `oracles.d3d-disassembler.general/fxc-sweep-zi` (110,713 files, 320,536,225 bytes) and `oracles.d3d-disassembler.general/fxc-sweep-zod` (110,737 files, 451,833,501 bytes), Microsoft's D3DDisassemble listings of the programs fxc 10.0.26100.4654 builds from four public shader corpora (DXC 2630a187, vkd3d 1e329f31, vkd3d-proton db5628e2, DirectX-Graphics-Samples 68a2b1e9) with `/Zi` (4,613 programs) and with `/Zi /Od` (4,614): each program `NAME.dxbc` beside its listing with no flags (`NAME.dxbc.asm`) and under each of 22 flag words (`NAME.dxbc.flagNN.asm`), and a `MANIFEST.toml` naming the build, the tool and probe hashes and the corpora's commits. They are the only programs with SPDB debug info among the disassembler sets.
+
 ## 0.1.15 (2026-11-06)
 
 - Manifests: `installs.stuntboost` and `installs.stuntboost/Content` are STUNTBOOST's Steam build 26429886 (2026-11-04; the entries described build 26237614): STUNTBOOST.dll and STUNTBOOST.exe changed, and `Content` holds 1,898 files, 5,008,787,935 bytes (was 1,892, 5,005,234,552). Steam installed two builds that day; together they add six files (with the first, the board `Models/Resources/Board/102.xnb` and its thumbnail; with the second, `Textures/UI/Crown.xnb`, `Duck.xnb`, `DuckMissing.xnb` and `DuckScreenshots/24.xnb`) and changes two levels: `Level_StairsSlide_1` (its geometry, collision and bakes) and `Level_BoosterLaunching_0`, besides fonts, localisation and audio banks.
