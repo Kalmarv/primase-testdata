@@ -1141,3 +1141,304 @@ fn unlisted_inputs_are_required_only_where_a_complete_run_needs_them() {
         "{optional:?}"
     );
 }
+
+// --- archives --------------------------------------------------------------------------------------------------
+
+/// How a test archive's member is written.
+#[derive(Clone, Copy, Default)]
+struct Odd {
+    method: u16,
+    flags: u16,
+}
+
+/// A zip archive of `members` (name, bytes, how), written as a store's packer writes one (stored, no extra fields),
+/// or with every size and offset in zip64 form (`zip64`): the archives the reader's tests read.
+fn zip_of(members: &[(&str, &[u8], Odd)], zip64: bool) -> Vec<u8> {
+    let mut out = Vec::new();
+    let mut central = Vec::new();
+    for (name, bytes, odd) in members {
+        let offset = out.len() as u64;
+        let crc = crate::zip::crc32(bytes);
+        let size = bytes.len() as u64;
+        let (s32, o32) = if zip64 {
+            (u32::MAX, u32::MAX)
+        } else {
+            (size as u32, offset as u32)
+        };
+        let local_extra: Vec<u8> = if zip64 {
+            [
+                &1u16.to_le_bytes()[..],
+                &16u16.to_le_bytes(),
+                &size.to_le_bytes(),
+                &size.to_le_bytes(),
+            ]
+            .concat()
+        } else {
+            Vec::new()
+        };
+        out.extend_from_slice(&0x0403_4b50u32.to_le_bytes());
+        out.extend_from_slice(&45u16.to_le_bytes());
+        out.extend_from_slice(&odd.flags.to_le_bytes());
+        out.extend_from_slice(&odd.method.to_le_bytes());
+        out.extend_from_slice(&[0, 0, 0x21, 0]); // 1980-01-01 00:00
+        out.extend_from_slice(&crc.to_le_bytes());
+        out.extend_from_slice(&s32.to_le_bytes());
+        out.extend_from_slice(&s32.to_le_bytes());
+        out.extend_from_slice(&(name.len() as u16).to_le_bytes());
+        out.extend_from_slice(&(local_extra.len() as u16).to_le_bytes());
+        out.extend_from_slice(name.as_bytes());
+        out.extend_from_slice(&local_extra);
+        out.extend_from_slice(bytes);
+        let extra: Vec<u8> = if zip64 {
+            [
+                &1u16.to_le_bytes()[..],
+                &24u16.to_le_bytes(),
+                &size.to_le_bytes(),
+                &size.to_le_bytes(),
+                &offset.to_le_bytes(),
+            ]
+            .concat()
+        } else {
+            Vec::new()
+        };
+        central.extend_from_slice(&0x0201_4b50u32.to_le_bytes());
+        central.extend_from_slice(&[45, 3, 45, 0]);
+        central.extend_from_slice(&odd.flags.to_le_bytes());
+        central.extend_from_slice(&odd.method.to_le_bytes());
+        central.extend_from_slice(&[0, 0, 0x21, 0]);
+        central.extend_from_slice(&crc.to_le_bytes());
+        central.extend_from_slice(&s32.to_le_bytes());
+        central.extend_from_slice(&s32.to_le_bytes());
+        central.extend_from_slice(&(name.len() as u16).to_le_bytes());
+        central.extend_from_slice(&(extra.len() as u16).to_le_bytes());
+        central.extend_from_slice(&[0, 0, 0, 0, 0, 0, 0, 0, 0xa4, 0x81]); // comment, disk, attributes (0644)
+        central.extend_from_slice(&o32.to_le_bytes());
+        central.extend_from_slice(name.as_bytes());
+        central.extend_from_slice(&extra);
+    }
+    let (cd_at, cd_len, n) = (out.len() as u64, central.len() as u64, members.len() as u64);
+    out.extend_from_slice(&central);
+    if zip64 {
+        let record_at = out.len() as u64;
+        out.extend_from_slice(&0x0606_4b50u32.to_le_bytes());
+        out.extend_from_slice(&44u64.to_le_bytes());
+        out.extend_from_slice(&[45, 3, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        out.extend_from_slice(&n.to_le_bytes());
+        out.extend_from_slice(&n.to_le_bytes());
+        out.extend_from_slice(&cd_len.to_le_bytes());
+        out.extend_from_slice(&cd_at.to_le_bytes());
+        out.extend_from_slice(&0x0706_4b50u32.to_le_bytes());
+        out.extend_from_slice(&0u32.to_le_bytes());
+        out.extend_from_slice(&record_at.to_le_bytes());
+        out.extend_from_slice(&1u32.to_le_bytes());
+    }
+    let (n16, len32, at32) = if zip64 {
+        (u16::MAX, u32::MAX, u32::MAX)
+    } else {
+        (n as u16, cd_len as u32, cd_at as u32)
+    };
+    out.extend_from_slice(&0x0605_4b50u32.to_le_bytes());
+    out.extend_from_slice(&[0, 0, 0, 0]);
+    out.extend_from_slice(&n16.to_le_bytes());
+    out.extend_from_slice(&n16.to_le_bytes());
+    out.extend_from_slice(&len32.to_le_bytes());
+    out.extend_from_slice(&at32.to_le_bytes());
+    out.extend_from_slice(&0u16.to_le_bytes());
+    out
+}
+
+/// `bytes` written to a fresh file `name` in its own temporary folder.
+fn temp_file(name: &str, bytes: &[u8]) -> std::path::PathBuf {
+    let dir = std::env::temp_dir().join(format!("primase-testdata-zip-{name}-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    std::fs::create_dir_all(&dir).unwrap();
+    let path = dir.join(format!("{name}.zip"));
+    std::fs::write(&path, bytes).unwrap();
+    path
+}
+
+/// The members of the folder `temp_tree` makes.
+const TREE: [(&str, &[u8], Odd); 3] = [
+    ("dir/deep/c", b"", Odd { method: 0, flags: 0 }),
+    ("a.txt", b"hello\n", Odd { method: 0, flags: 0 }),
+    ("dir/b.bin", &[0, 1, 2], Odd { method: 0, flags: 0 }),
+];
+
+/// CRC-32 is the IEEE one zip records: the published check value of "123456789".
+#[test]
+fn crc32_is_zips() {
+    assert_eq!(crate::zip::crc32(b"123456789"), 0xCBF4_3926);
+    assert_eq!(crate::zip::crc32(b""), 0);
+}
+
+/// An archive's members are listed sorted by name whatever their order in it, and read back as written, in the plain
+/// and the zip64 forms alike.
+#[test]
+fn archives_are_read_in_place_plain_and_zip64() {
+    for zip64 in [false, true] {
+        let path = temp_file(if zip64 { "zip64" } else { "plain" }, &zip_of(&TREE, zip64));
+        let archive = crate::zip::Archive::open(&path).unwrap();
+        let names: Vec<&str> = archive.members().iter().map(|m| m.name.as_str()).collect();
+        assert_eq!(names, ["a.txt", "dir/b.bin", "dir/deep/c"], "zip64 {zip64}");
+        for (name, bytes, _) in TREE {
+            let member = archive.member(name).unwrap();
+            assert_eq!(member.size, bytes.len() as u64);
+            assert_eq!(archive.read(member).unwrap(), bytes, "{name}, zip64 {zip64}");
+        }
+        assert!(archive.member("dir").is_none());
+    }
+}
+
+/// What a packer never writes is refused, naming the member: compression, encryption, a data descriptor, a folder
+/// entry, a path that leaves the entry or is absolute, a name listed twice.
+#[test]
+fn archives_a_packer_does_not_write_are_refused() {
+    let one = |name: &'static str, odd: Odd| zip_of(&[(name, b"x", odd)], false);
+    let cases: Vec<(&str, Vec<u8>, &str)> = vec![
+        (
+            "deflated",
+            one("a", Odd { method: 8, flags: 0 }),
+            "compressed (method 8)",
+        ),
+        ("encrypted", one("a", Odd { method: 0, flags: 1 }), "encrypted"),
+        (
+            "descriptor",
+            one("a", Odd { method: 0, flags: 8 }),
+            "data descriptor",
+        ),
+        ("folder", one("d/", Odd::default()), "a folder entry"),
+        ("dotdot", one("../a", Odd::default()), "not a relative"),
+        ("absolute", one("/a", Odd::default()), "not a relative"),
+        ("backslash", one("d\\a", Odd::default()), "not a relative"),
+        (
+            "twice",
+            zip_of(&[("a", b"x", Odd::default()), ("a", b"y", Odd::default())], false),
+            "a: listed twice",
+        ),
+        (
+            "garbage",
+            b"not an archive at all".to_vec(),
+            "no end-of-central-directory record",
+        ),
+    ];
+    for (name, bytes, want) in cases {
+        let err = crate::zip::Archive::open(&temp_file(name, &bytes))
+            .unwrap_err()
+            .to_string();
+        assert!(err.contains(want), "{name}: {err}");
+    }
+}
+
+/// The archive primase-oracles' `pack_zip.py` writes of `temp_tree`'s folder (`fixtures/packed.zip`), measured by its
+/// `sums.py`: the reader takes it, measures the same sums, and they are the folder's own. A packer or reader that drifts
+/// from the other fails here.
+#[test]
+fn the_packers_archive_has_the_folders_sums() {
+    // `sums.py`'s measure_zip and tree_digests on fixtures/packed.zip (pack_zip.py over temp_tree's folder)
+    let python = Sums::Zip {
+        size: 307,
+        count: 3,
+        bytes: 9,
+        shape: "8c61e7824d519618dc1e22658ddfb4876e2ea95d603a3e03f02c457275c5205c".into(),
+        content: "e6cc87cb1d38951ea475775034d91ee1afe8be2b3cc04b97d241f92307e04fb4".into(),
+    };
+    let path = temp_file("packed", include_bytes!("../fixtures/packed.zip"));
+    let entry = measure::entry_for("oracles.corpus.general/packed", &path, &[], Severity::Fail, 2).unwrap();
+    assert_eq!(entry.sums, python);
+    let folder = temp_tree("packed-folder");
+    let tree = measure::entry_for("oracles.corpus.general/packed", &folder, &[], Severity::Fail, 2).unwrap();
+    let Sums::Tree {
+        count,
+        bytes,
+        shape,
+        content,
+    } = tree.sums
+    else {
+        panic!("{:?}", tree.sums)
+    };
+    let Sums::Zip {
+        count: zc,
+        bytes: zb,
+        shape: zs,
+        content: zcn,
+        ..
+    } = python
+    else {
+        unreachable!()
+    };
+    assert_eq!((count, bytes, shape, content), (zc, zb, zs, zcn));
+    // a `zip` entry is written and read back as itself
+    let text = sums::render(&[], std::slice::from_ref(&entry));
+    assert_eq!(sums::parse("t", &text).unwrap(), vec![entry]);
+}
+
+/// A tree reads a folder and its archive alike: the same names, sizes and bytes.
+#[test]
+fn a_tree_is_the_same_as_a_folder_or_an_archive() {
+    let folder = Tree::folder(&temp_tree("tree-folder")).unwrap();
+    let zip = Tree::zip(&temp_file("tree-zip", &zip_of(&TREE, false))).unwrap();
+    assert_eq!(folder.names(), zip.names());
+    assert_eq!(folder.len(), 3);
+    assert!(folder.as_folder().is_some() && zip.as_folder().is_none());
+    for name in folder.names() {
+        assert_eq!(folder.size(name), zip.size(name));
+        assert_eq!(folder.read(name).unwrap(), zip.read(name).unwrap(), "{name}");
+    }
+    for tree in [&folder, &zip] {
+        assert_eq!(
+            tree.read("nope").unwrap_err().kind(),
+            std::io::ErrorKind::NotFound
+        );
+        assert_eq!(tree.size("dir"), None);
+    }
+}
+
+/// A `zip` entry holds an archive to its size and members (quick) and to its members' bytes (content); a damaged
+/// member is named by its CRC-32.
+#[test]
+fn an_archive_is_verified_like_a_folder() {
+    let good = zip_of(&TREE, false);
+    let path = temp_file("verify", &good);
+    let entry = measure::entry_for("oracles.corpus.general/v", &path, &[], Severity::Fail, 1).unwrap();
+    assert!(matches!(entry.sums, Sums::Zip { .. }));
+    for mode in [Verify::Quick, Verify::Content] {
+        manifest::verify(&entry, &path, mode, 2).unwrap();
+    }
+    // the same members with one byte changed: quick passes (sizes and names agree), content names the member
+    let mut bad = good.clone();
+    let at = bad.windows(6).position(|w| w == b"hello\n").unwrap();
+    bad[at] = b'j';
+    let damaged = temp_file("verify-damaged", &bad);
+    manifest::verify(&entry, &damaged, Verify::Quick, 2).unwrap();
+    let why = manifest::verify(&entry, &damaged, Verify::Content, 2).unwrap_err();
+    assert!(why.contains("a.txt") && why.contains("CRC-32"), "{why}");
+    // one member fewer
+    let fewer = temp_file("verify-fewer", &zip_of(&TREE[..2], false));
+    let why = manifest::verify(&entry, &fewer, Verify::Quick, 2).unwrap_err();
+    assert!(why.contains("bytes, where the good copy"), "{why}");
+}
+
+/// An archive is written out as a folder once, under the scratch folder, and reused; past the limit it is refused.
+#[test]
+fn an_archive_is_extracted_once_within_the_limit() {
+    let zip = Tree::zip(&temp_file("extract", &zip_of(&TREE, true))).unwrap();
+    let scratch = std::env::temp_dir().join(format!("primase-testdata-extract-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&scratch);
+    let err = zip.extract(&scratch, 8).unwrap_err().to_string();
+    assert!(err.contains("9 bytes, more than the 8"), "{err}");
+    let dir = zip.extract(&scratch, 9).unwrap();
+    let listed: Vec<String> = digest::list(&dir).unwrap().into_iter().map(|f| f.path).collect();
+    assert_eq!(listed, ["a.txt", "dir/b.bin", "dir/deep/c"]);
+    assert_eq!(std::fs::read(dir.join("a.txt")).unwrap(), b"hello\n");
+    std::fs::write(dir.join("a.txt"), b"left from the first run").unwrap();
+    assert_eq!(zip.extract(&scratch, 9).unwrap(), dir);
+    assert_eq!(
+        std::fs::read(dir.join("a.txt")).unwrap(),
+        b"left from the first run"
+    );
+    let folder = temp_tree("extract-folder");
+    assert_eq!(
+        Tree::folder(&folder).unwrap().extract(&scratch, 0).unwrap(),
+        folder
+    );
+}

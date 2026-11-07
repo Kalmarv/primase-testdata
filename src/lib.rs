@@ -93,10 +93,13 @@ mod program;
 mod query;
 mod registry;
 pub mod sums;
+mod tree;
+pub mod zip;
 pub use check::{check_declared, problems};
 pub use program::{Program, ToolCommand, wine_path};
 pub use query::Query;
 pub use registry::{Declared, Entry, Names, Registry, SCRATCH, Set, Status};
+pub use tree::Tree;
 
 use config::Config;
 
@@ -155,17 +158,25 @@ fn gate_of(registry: &Registry, query: Query) -> bool {
     }
 }
 
-/// Where `query` points, if configured: its configuration key's path with the query's relative path below it.
+/// Where `query` points, if configured: its configuration key's path with the query's relative path below it. An
+/// oracle the manifests record as an archive (`kind = "zip"`) is that path with `.zip` added.
 fn configured(config: &Config, query: Query) -> Option<PathBuf> {
     let (key, rel) = query.root()?;
     // an install, a tool or keys configured as a file is that file: joining an empty path would add a separator
-    config.roots.get(&key).map(|root| {
+    let path = config.roots.get(&key).map(|root| {
         if rel.as_os_str().is_empty() {
             root.clone()
         } else {
             root.join(rel)
         }
-    })
+    })?;
+    Some(
+        if matches!(query, Query::Oracle(..)) && manifest::is_zip(&query.key()) {
+            zip_beside(path)
+        } else {
+            path
+        },
+    )
 }
 
 /// What [`resolve`] does with a query: the path, a skip or a failure, with why.
@@ -285,6 +296,36 @@ pub fn resolve(registry: &Registry, query: Query) -> Option<PathBuf> {
             None
         }
     }
+}
+
+/// An oracle file or folder: [`resolve`] for `Query::Oracle`, which fails, naming the key, for an entry the manifests
+/// record as an archive: a test that reads that one as a folder would find no folder, so it reads it with
+/// [`oracle_tree`].
+#[track_caller]
+pub fn oracle(registry: &Registry, query: Query) -> Option<PathBuf> {
+    if manifest::is_zip(&query.key()) {
+        panic!(
+            "{} is stored as one archive ({}.zip, kind = \"zip\" in primase-testdata's manifests): read it with \
+             `oracle_tree`, which reads a folder and an archive alike",
+            query.key(),
+            query.key().rsplit('/').next().unwrap_or_default()
+        );
+    }
+    resolve(registry, query)
+}
+
+/// An oracle folder as a [`Tree`] of named files, whether the store holds it as a folder or as one archive (as its
+/// manifest entry says): resolved and checked as [`resolve`] does, then opened. `None`, with the SKIP line, where it is
+/// not configured; a tree that cannot be opened fails, naming the key.
+#[track_caller]
+pub fn oracle_tree(registry: &Registry, query: Query) -> Option<Tree> {
+    let path = resolve(registry, query)?;
+    let tree = if manifest::is_zip(&query.key()) {
+        Tree::zip(&path)
+    } else {
+        Tree::folder(&path)
+    };
+    Some(tree.unwrap_or_else(|e| panic!("{}: {e}", query.key())))
 }
 
 /// The program of the tool `key` names (`texconv`, a key of `[tools]`), resolved as [`resolve`] resolves
@@ -434,15 +475,28 @@ pub fn verify_mode() -> manifest::Verify {
 
 /// Where the configuration puts the input a manifest key names (`installs.sekiro`, `installs.sekiro/sekiro.exe`,
 /// `tools.oodle6`, `oracles.corpus.sekiro/havok`), whether or not it exists; `None` when the configuration does not set
-/// it or the key is not one a manifest holds. The manifest example reads and writes entries through it.
+/// it or the key is not one a manifest holds. An oracle the shipped manifests record as an archive is its `<rel>.zip`.
+/// The manifest example reads and writes entries through it.
 pub fn locate(key: &str) -> Option<PathBuf> {
     let (root, rel) = manifest::root_of(key)?;
     let base = load().roots.get(&root)?;
-    Some(if rel.as_os_str().is_empty() {
+    let path = if rel.as_os_str().is_empty() {
         base.clone()
     } else {
         base.join(rel)
+    };
+    Some(if manifest::is_zip(key) {
+        zip_beside(path)
+    } else {
+        path
     })
+}
+
+/// `path` with `.zip` added: where a folder stored as one archive is.
+pub fn zip_beside(path: PathBuf) -> PathBuf {
+    let mut zip = path.into_os_string();
+    zip.push(".zip");
+    PathBuf::from(zip)
 }
 
 /// How much a heavy real-data test covers (`[run] gate`): a sample, or everything.

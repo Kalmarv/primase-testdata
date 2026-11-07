@@ -9,7 +9,7 @@
 /// - `Query`: a typed [`Query`](crate::Query) (`Query::Oracle(OracleSet::Corpus, Game::Gta, "shaders")`), with `raw()`
 ///   and `key()`;
 /// - `REGISTRY`: the [`Registry`](crate::Registry) of everything declared;
-/// - the queries over it: `resolve`, `install`, `install_file`, `keys`, `tool`, `program`, `oodle`, `oracle`,
+/// - the queries over it: `resolve`, `install`, `install_file`, `keys`, `tool`, `program`, `oodle`, `oracle`, `oracle_tree`,
 ///   `debug` and `expect_found`, and this crate's own helpers re-exported (`scratch`, `own_scratch`, `warp_exclusive`,
 ///   `depth`, `seed`, `threads`, `read_input`, `Depth`, `OodleLibrary`, `OwnScratch`, `Program`, `ToolCommand`, `WarpLock`).
 ///
@@ -305,7 +305,19 @@ macro_rules! inputs {
         #[allow(dead_code)]
         #[track_caller]
         pub fn oracle(set: OracleSet, game: Game, rel: &'static str) -> ::std::option::Option<::std::path::PathBuf> {
-            resolve(Query::Oracle(set, game, rel))
+            $crate::oracle(&REGISTRY, Query::Oracle(set, game, rel).raw())
+        }
+
+        /// An oracle folder as a tree of named files, whether the store holds it as a folder or as one archive
+        /// (`primase_testdata::oracle_tree`); declared and written as `oracle`'s arguments are.
+        #[allow(dead_code)]
+        #[track_caller]
+        pub fn oracle_tree(
+            set: OracleSet,
+            game: Game,
+            rel: &'static str,
+        ) -> ::std::option::Option<$crate::Tree> {
+            $crate::oracle_tree(&REGISTRY, Query::Oracle(set, game, rel).raw())
         }
 
         /// A declared debug key's value (`GAME_DATA_DEBUG=key=value;key=value`); `None` when unset.
@@ -324,8 +336,8 @@ macro_rules! inputs {
 
         #[allow(unused_imports)]
         pub use $crate::{
-            Depth, OodleLibrary, OwnScratch, Program, ToolCommand, WarpLock, depth, own_scratch, read_input, scratch,
-            seed, threads, warp_exclusive,
+            Depth, OodleLibrary, OwnScratch, Program, ToolCommand, Tree, WarpLock, depth, own_scratch, read_input,
+            scratch, seed, threads, warp_exclusive,
         };
     };
 }

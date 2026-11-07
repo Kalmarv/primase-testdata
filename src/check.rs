@@ -193,7 +193,7 @@ fn file_problems(registry: &Registry, text: &str) -> Vec<String> {
         let call = format!("{kind}({})", args.join(", "));
         // (set key or `install`, game argument, relative path argument) of a file query
         let (set, game, rel) = match (kind, args.as_slice()) {
-            ("oracle" | "Query::Oracle", [set, game, rel]) => {
+            ("oracle" | "oracle_tree" | "Query::Oracle", [set, game, rel]) => {
                 match literal_of(set, &sets, names.oracle_sets) {
                     Some(Ok(set)) => (set, game, rel.clone()),
                     Some(Err(e)) => {
@@ -290,7 +290,14 @@ fn renames<'a>(words: &[&'a str], name: &str) -> Vec<&'a str> {
 }
 
 /// The query functions the inputs module gives a test, by the word each is called with in a call.
-const QUERY_FUNCTIONS: [&str; 5] = ["oracle", "install_file", "install", "keys", "debug"];
+const QUERY_FUNCTIONS: [&str; 6] = [
+    "oracle",
+    "oracle_tree",
+    "install_file",
+    "install",
+    "keys",
+    "debug",
+];
 
 /// One `use` statement that names the inputs module.
 struct Import<'a> {

@@ -16,6 +16,10 @@
 //! |---|---|---|---|
 //! | `quick` (the default) | size, and the hash when it is no larger than [`HASH_LIMIT`] | the same for each | the number of files, their sizes and names (the shape digest) |
 //! | `content` | the same | the same | and the hash of every file no larger than [`HASH_LIMIT`] |
+//!
+//! A folder stored as one archive (`kind = "zip"`) is checked as a folder: `quick` reads the archive's size and its
+//! central directory (one open, where a folder's listing opens every directory), `content` also hashes every member
+//! and names one whose bytes do not match the CRC-32 the archive records.
 //! | `off` | nothing | nothing | nothing |
 //!
 //! A key with no entry is not checked. Archive keys are never in a manifest. Entries are written with the `manifest`
@@ -143,6 +147,18 @@ pub fn file_of(key: &str) -> Option<String> {
     Some(game.replace('-', ""))
 }
 
+/// Whether the shipped manifests record `key` as a folder stored as one archive (`kind = "zip"`): its copy is then
+/// `<rel>.zip`, not the folder `<rel>`.
+pub fn is_zip(key: &str) -> bool {
+    matches!(
+        shipped().get(key),
+        Some(Entry {
+            sums: Sums::Zip { .. },
+            ..
+        })
+    )
+}
+
 /// The configuration key a query key is resolved from, and the path below it: `installs.sekiro/sekiro.exe` is
 /// (`installs.sekiro`, `sekiro.exe`), `oracles.corpus.sekiro/havok` is (`oracles.root`, `corpus/sekiro/havok`).
 pub fn root_of(key: &str) -> Option<(String, PathBuf)> {
@@ -208,7 +224,108 @@ pub fn verify(entry: &Entry, path: &Path, mode: Verify, threads: usize) -> Resul
             }
             Ok(())
         }
+        Sums::Zip {
+            size,
+            count,
+            bytes,
+            shape,
+            content,
+        } => {
+            let archive = crate::zip::Archive::open(path).map_err(|e| e.to_string())?;
+            if archive.len() != *size {
+                return Err(format!(
+                    "the archive is {} bytes, where the good copy's is {size}",
+                    archive.len()
+                ));
+            }
+            let members = archive.members();
+            let total: u64 = members.iter().map(|m| m.size).sum();
+            if members.len() != *count || total != *bytes {
+                return Err(format!(
+                    "{} members of {total} bytes, where the good copy has {count} of {bytes}",
+                    members.len()
+                ));
+            }
+            if digest::shape_of(members.iter().map(|m| (m.name.as_str(), m.size))) != *shape {
+                return Err(format!(
+                    "{} members of {total} bytes, as many as the good copy has, but their names or sizes differ (the shape digest differs)",
+                    members.len()
+                ));
+            }
+            if mode == Verify::Content {
+                let hashes = zip_member_hashes(&archive, threads)?;
+                let got = digest::content_of(
+                    members
+                        .iter()
+                        .zip(&hashes)
+                        .map(|(m, h)| (m.name.as_str(), m.size, h.as_deref())),
+                );
+                if got != *content {
+                    return Err(
+                        "the members' names and sizes agree but their content differs (content digest)"
+                            .to_owned(),
+                    );
+                }
+            }
+            Ok(())
+        }
     }
+}
+
+/// The BLAKE3 hash of every member of `archive` no larger than [`HASH_LIMIT`] (`None` for the others), in member
+/// order, on `threads` threads. A member whose bytes do not have the CRC-32 the archive records for it is named as the
+/// error: the archive is damaged there.
+fn zip_member_hashes(archive: &crate::zip::Archive, threads: usize) -> Result<Vec<Option<String>>, String> {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    let members = archive.members();
+    let next = AtomicUsize::new(0);
+    let hashes: Mutex<Vec<Option<String>>> = Mutex::new(vec![None; members.len()]);
+    let failure: Mutex<Option<String>> = Mutex::new(None);
+    std::thread::scope(|scope| {
+        for _ in 0..threads.max(1) {
+            scope.spawn(|| {
+                loop {
+                    let i = next.fetch_add(1, Ordering::Relaxed);
+                    let Some(member) = members.get(i) else { break };
+                    let result = archive.read(member).map_err(|e| e.to_string()).and_then(|bytes| {
+                        if crate::zip::crc32(&bytes) == member.crc32 {
+                            Ok(bytes)
+                        } else {
+                            Err(format!(
+                                "{}: its bytes do not have the CRC-32 the archive records",
+                                member.name
+                            ))
+                        }
+                    });
+                    match result {
+                        Ok(bytes) if member.size <= HASH_LIMIT => {
+                            let hash = blake3::hash(&bytes).to_hex().to_string();
+                            if let Ok(mut all) = hashes.lock()
+                                && let Some(slot) = all.get_mut(i)
+                            {
+                                *slot = Some(hash);
+                            }
+                        }
+                        Ok(_) => {}
+                        Err(why) => {
+                            if let Ok(mut first) = failure.lock() {
+                                first.get_or_insert(why);
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    });
+    if let Ok(mut first) = failure.lock()
+        && let Some(why) = first.take()
+    {
+        return Err(why);
+    }
+    hashes
+        .into_inner()
+        .map_err(|_| "a hashing thread panicked".to_owned())
 }
 
 /// A file's size, and its hash when `blake3` is given.

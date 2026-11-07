@@ -30,7 +30,19 @@
 //! shape = "…"                     # the shape digest
 //! blake3 = "…"                    # the content digest
 //! check = "warn"                  # optional: a mismatch warns instead of failing the test
+//!
+//! [[entry]]
+//! key = "oracles.d3d-disassembler.general/fxc-sweep-zi"   # a folder stored as one archive, `<rel>.zip`
+//! kind = "zip"
+//! size = 347039829                # the archive file's size
+//! count = 110713                  # its members, and their sums as the folder's: the same
+//! bytes = 320536225               # count, bytes, shape and blake3 a `tree` entry of the
+//! shape = "…"                     # unpacked folder has
+//! blake3 = "…"
 //! ```
+//!
+//! A `zip` entry records the members as a `tree` entry records a folder's files, so an archive packed from a folder
+//! has the folder's sums: its record shows it holds the same files with the same bytes.
 //!
 //! This file uses only the standard library and `toml`, so the manifest example and the tool that wrote the shipped
 //! manifests both read it as it is.
@@ -78,6 +90,20 @@ pub enum Sums {
         /// The shape digest of the listing.
         shape: String,
         /// The content digest of the listing.
+        content: String,
+    },
+    /// A folder stored as one archive (`<rel>.zip`, read by [`crate::zip`]): the archive's size, and its members'
+    /// sums as a [`Sums::Tree`] records a folder's files.
+    Zip {
+        /// The archive file's size in bytes.
+        size: u64,
+        /// The number of members.
+        count: usize,
+        /// Their sizes added.
+        bytes: u64,
+        /// The shape digest of the members.
+        shape: String,
+        /// The content digest of the members.
         content: String,
     },
 }
@@ -192,6 +218,14 @@ pub fn parse(name: &str, text_of_file: &str) -> Result<Vec<Entry>, String> {
                 shape: hash(t, "shape", &what)?.ok_or_else(|| format!("{what}: `shape` is missing"))?,
                 content: hash(t, "blake3", &what)?.ok_or_else(|| format!("{what}: `blake3` is missing"))?,
             },
+            "zip" => Sums::Zip {
+                size: number(t, "size", &what)?,
+                count: usize::try_from(number(t, "count", &what)?)
+                    .map_err(|_| format!("{what}: `count` is too large"))?,
+                bytes: number(t, "bytes", &what)?,
+                shape: hash(t, "shape", &what)?.ok_or_else(|| format!("{what}: `shape` is missing"))?,
+                content: hash(t, "blake3", &what)?.ok_or_else(|| format!("{what}: `blake3` is missing"))?,
+            },
             other => return Err(format!("{what}: unknown kind `{other}`")),
         };
         entries.push(Entry { key, sums, severity });
@@ -296,6 +330,18 @@ pub fn render_noted(header: &[&str], entries: &[Entry], notes: &BTreeMap<String,
                 let _ = writeln!(
                     out,
                     "kind = \"tree\"\ncount = {count}\nbytes = {bytes}\nshape = \"{shape}\"\nblake3 = \"{content}\""
+                );
+            }
+            Sums::Zip {
+                size,
+                count,
+                bytes,
+                shape,
+                content,
+            } => {
+                let _ = writeln!(
+                    out,
+                    "kind = \"zip\"\nsize = {size}\ncount = {count}\nbytes = {bytes}\nshape = \"{shape}\"\nblake3 = \"{content}\""
                 );
             }
         }

@@ -2,7 +2,7 @@
 //!
 //! ```text
 //! cargo run --example manifest -- list <key> [--listing]     what the configured copy holds, as an entry
-//! cargo run --example manifest -- add <key> [FILE...] [--except PATH...] [--warn] [--dir manifests]
+//! cargo run --example manifest -- add <key> [FILE...] [--except PATH...] [--warn] [--zip] [--dir manifests]
 //!                                                            write the entry for <key> into its manifest file
 //! cargo run --example manifest -- verify [<key>...]          compare the configured copies with the shipped entries
 //! ```
@@ -13,7 +13,9 @@
 //! folder holds files that vary between machines (logs, mods), which a manifest must not list. A folder of an install
 //! (`installs.<game>/<path>`) that the game writes into is recorded the same way: `add --except Config --except
 //! RunReports` names every file of it but those paths and what is under them. `add --warn` marks an
-//! entry whose mismatch only warns (a tool installed with the system). `verify` reads every file, whatever `[run] verify`
+//! entry whose mismatch only warns (a tool installed with the system). `add --zip` on an oracle folder records its archive
+//! `<rel>.zip` instead (`kind = "zip"`: the archive's size and its members' sums, which are the folder's); once shipped,
+//! queries for the key read the archive. `verify` reads every file, whatever `[run] verify`
 //! says. Archive keys (`keys.*`) have no entry.
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -25,7 +27,7 @@ use primase_testdata::sums::{self, Entry, Severity};
 
 fn usage() -> ExitCode {
     eprintln!(
-        "usage: manifest list <key> [--listing] | add <key> [FILE...] [--except PATH...] [--warn] [--dir manifests] | verify [<key>...]"
+        "usage: manifest list <key> [--listing] | add <key> [FILE...] [--except PATH...] [--warn] [--zip] [--dir manifests] | verify [<key>...]"
     );
     ExitCode::from(2)
 }
@@ -34,10 +36,16 @@ fn threads() -> usize {
     primase_testdata::threads().get()
 }
 
-/// The entry for the copy of `key` this machine holds.
-fn measure_key(key: &str, files: &[String], severity: Severity) -> Result<Entry, String> {
+/// The entry for the copy of `key` this machine holds; with `zip`, its archive `<rel>.zip` (an oracle folder stored as
+/// one archive).
+fn measure_key(key: &str, files: &[String], severity: Severity, zip: bool) -> Result<Entry, String> {
     let path = primase_testdata::locate(key)
         .ok_or_else(|| format!("{key} is not configured in the GAME_DATA file"))?;
+    let path = if zip && path.extension().is_none_or(|e| e != "zip") {
+        primase_testdata::zip_beside(path)
+    } else {
+        path
+    };
     measure::entry_for(key, &path, files, severity, threads())
 }
 
@@ -50,7 +58,7 @@ fn header(name: &str) -> Vec<String> {
 }
 
 fn list(key: &str, listing: bool) -> Result<(), String> {
-    let entry = measure_key(key, &[], Severity::Fail)?;
+    let entry = measure_key(key, &[], Severity::Fail, false)?;
     print!("{}", sums::render(&[], std::slice::from_ref(&entry)));
     if listing && let Some(path) = primase_testdata::locate(key) {
         for file in digest::list(&path).map_err(|e| e.to_string())? {
@@ -65,10 +73,17 @@ fn list(key: &str, listing: bool) -> Result<(), String> {
     Ok(())
 }
 
-fn add(key: &str, files: &[String], except: &[String], severity: Severity, dir: &Path) -> Result<(), String> {
+fn add(
+    key: &str,
+    files: &[String],
+    except: &[String],
+    severity: Severity,
+    zip: bool,
+    dir: &Path,
+) -> Result<(), String> {
     let name = manifest::file_of(key).ok_or_else(|| format!("{key}: no manifest holds this key"))?;
     let entry = if except.is_empty() {
-        measure_key(key, files, severity)?
+        measure_key(key, files, severity, zip)?
     } else {
         if !(key.starts_with("installs.") && key.contains('/')) || !files.is_empty() {
             return Err(format!(
@@ -144,6 +159,7 @@ struct Args {
     words: Vec<String>,
     except: Vec<String>,
     warn: bool,
+    zip: bool,
     listing: bool,
     dir: PathBuf,
 }
@@ -153,6 +169,7 @@ fn parse(args: impl Iterator<Item = String>) -> Option<Args> {
         words: Vec::new(),
         except: Vec::new(),
         warn: false,
+        zip: false,
         listing: false,
         dir: PathBuf::from("manifests"),
     };
@@ -160,6 +177,7 @@ fn parse(args: impl Iterator<Item = String>) -> Option<Args> {
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--warn" => parsed.warn = true,
+            "--zip" => parsed.zip = true,
             "--listing" => parsed.listing = true,
             "--dir" => parsed.dir = PathBuf::from(args.next()?),
             "--except" => parsed.except.push(args.next()?),
@@ -181,7 +199,7 @@ fn main() -> ExitCode {
         Some((command, rest)) if command == "list" && rest.len() == 1 => list(&rest[0], args.listing),
         Some((command, rest)) if command == "add" && !rest.is_empty() => {
             let severity = if args.warn { Severity::Warn } else { Severity::Fail };
-            add(&rest[0], &rest[1..], &args.except, severity, &args.dir)
+            add(&rest[0], &rest[1..], &args.except, severity, args.zip, &args.dir)
         }
         Some((command, rest)) if command == "verify" => {
             return if verify(rest) {

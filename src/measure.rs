@@ -1,7 +1,7 @@
 //! Measuring a copy: the manifest entry for the file, the named files or the folder at a path. The manifest example and the
 //! tool that wrote the shipped manifests both make their entries here.
 //!
-//! This file uses only the standard library, [`crate::digest`] and [`crate::sums`].
+//! This file uses only the standard library, [`crate::digest`], [`crate::sums`] and [`crate::zip`].
 use std::path::{Path, PathBuf};
 
 use crate::digest::{self, HASH_LIMIT};
@@ -53,6 +53,33 @@ pub fn entry_for(
             });
         }
         Sums::Files(sums)
+    } else if meta.is_file() && is_archive_of(key, path) {
+        let archive = crate::zip::Archive::open(path).map_err(|e| e.to_string())?;
+        let members = archive.members();
+        let hashes = members
+            .iter()
+            .map(|m| {
+                if m.size > HASH_LIMIT {
+                    return Ok(None);
+                }
+                archive
+                    .read(m)
+                    .map(|bytes| Some(blake3::hash(&bytes).to_hex().to_string()))
+                    .map_err(|e| format!("{}: {e}", path.display()))
+            })
+            .collect::<Result<Vec<_>, String>>()?;
+        Sums::Zip {
+            size: archive.len(),
+            count: members.len(),
+            bytes: members.iter().map(|m| m.size).sum(),
+            shape: digest::shape_of(members.iter().map(|m| (m.name.as_str(), m.size))),
+            content: digest::content_of(
+                members
+                    .iter()
+                    .zip(&hashes)
+                    .map(|(m, h)| (m.name.as_str(), m.size, h.as_deref())),
+            ),
+        }
     } else if meta.is_file() {
         Sums::File {
             size: meta.len(),
@@ -74,6 +101,12 @@ pub fn entry_for(
         sums,
         severity,
     })
+}
+
+/// Whether `path` is the archive of the oracle folder `key` names: `<rel>.zip` for an `oracles.*` key whose own name is
+/// not a `.zip` file.
+fn is_archive_of(key: &str, path: &Path) -> bool {
+    key.starts_with("oracles.") && !key.ends_with(".zip") && path.extension().is_some_and(|e| e == "zip")
 }
 
 /// The files of the folder at `path`, relative to it and `/`-separated, but for each path of `except` and everything

@@ -89,11 +89,17 @@ fn walk(dir: &Path, prefix: &str, depth: usize, out: &mut Vec<Listed>) -> io::Re
 
 /// The shape digest of a listing: names and sizes.
 pub fn shape_digest(listing: &[Listed]) -> String {
+    shape_of(listing.iter().map(|f| (f.path.as_str(), f.size)))
+}
+
+/// The shape digest of files given as (path, size), in the order given: the same digest whether the files are a
+/// folder's or an archive's members.
+pub fn shape_of<'a>(files: impl IntoIterator<Item = (&'a str, u64)>) -> String {
     let mut hasher = blake3::Hasher::new();
-    for file in listing {
-        hasher.update(file.path.as_bytes());
+    for (path, size) in files {
+        hasher.update(path.as_bytes());
         hasher.update(&[0]);
-        hasher.update(file.size.to_string().as_bytes());
+        hasher.update(size.to_string().as_bytes());
         hasher.update(b"\n");
     }
     hasher.finalize().to_hex().to_string()
@@ -102,13 +108,24 @@ pub fn shape_digest(listing: &[Listed]) -> String {
 /// The content digest of a listing, from the hashes of its files in listing order (`None` for a file larger than
 /// [`HASH_LIMIT`], which [`hash_files`] leaves out).
 pub fn content_digest(listing: &[Listed], hashes: &[Option<String>]) -> String {
+    content_of(
+        listing
+            .iter()
+            .zip(hashes)
+            .map(|(f, h)| (f.path.as_str(), f.size, h.as_deref())),
+    )
+}
+
+/// The content digest of files given as (path, size, hash), in the order given (`None` for a file larger than
+/// [`HASH_LIMIT`]).
+pub fn content_of<'a>(files: impl IntoIterator<Item = (&'a str, u64, Option<&'a str>)>) -> String {
     let mut hasher = blake3::Hasher::new();
-    for (file, hash) in listing.iter().zip(hashes) {
-        hasher.update(file.path.as_bytes());
+    for (path, size, hash) in files {
+        hasher.update(path.as_bytes());
         hasher.update(&[0]);
-        hasher.update(file.size.to_string().as_bytes());
+        hasher.update(size.to_string().as_bytes());
         hasher.update(&[0]);
-        hasher.update(hash.as_deref().unwrap_or("-").as_bytes());
+        hasher.update(hash.unwrap_or("-").as_bytes());
         hasher.update(b"\n");
     }
     hasher.finalize().to_hex().to_string()
