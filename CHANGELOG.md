@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 (2026-11-07)
+
+- Manifests: `oracles.corpus.general/slim` is re-recorded (16,564 files, 180,644,672 bytes): three rows of its `slim.tsv` named a Direct3D 9 comment block's kind by its raw bytes (control characters and NULs inside a text file); they now read `comment:0x1c000000` and `comment:0x0f000002`. The programs and listings are unchanged; the 0.1.17 and 0.2.0 record of the set no longer matches the folder.
+
 ## 0.2.0 (2026-11-07)
 
 - Oracle folders can be stored as one archive: an entry `kind = "zip"` records `<rel>.zip` by its size and its members' count, bytes, shape and content digests, the digests the folder would have. `oracle_tree(set, game, rel)` (in `inputs!`, beside `oracle`) gives a `Tree` that reads a folder and an archive alike: `names`, `size`, `read`, `len`, `as_folder` and `extract` (to the scratch root, with a byte limit). The archive reader (`zip`) is the crate's own, no new dependency: stored members only, zip64, every refusal naming the member. `quick` verification reads the central directory instead of listing the folder; `content` hashes every member and checks its CRC-32.
