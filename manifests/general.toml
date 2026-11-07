@@ -50,7 +50,8 @@ blake3 = "f230c4ccc9e178ad54e41ffeb360fb9d407fff3db51171fb1ec5f5ac33af3a6c"
 
 [[entry]]
 key = "oracles.corpus.general/slim"
-kind = "tree"
+kind = "zip"
+size = 184734588
 count = 16566
 bytes = 180659652
 shape = "b96670f457a009bea160bd90cf03c5c09adba0fceea17fb5753e8f908fd1cce9"

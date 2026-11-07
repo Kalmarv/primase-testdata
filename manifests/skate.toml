@@ -56,7 +56,8 @@ blake3 = "0543dfbd0fffad1b475260ae09c6d7171aa34ea74cb9c3d68f3c6c48220eda59"
 
 [[entry]]
 key = "oracles.corpus.skate/shaders"
-kind = "tree"
+kind = "zip"
+size = 190258104
 count = 19446
 bytes = 187185614
 shape = "e894d79034d0fc7b4e86df7b761c7d52580038daf2e957a73fb3c24cd2aee087"

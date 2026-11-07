@@ -191,7 +191,8 @@ blake3 = "4e287483cb8a038ff4864868d8c1a6d7d5c9123f235c892c85bcd5089d553879"
 
 [[entry]]
 key = "oracles.d3d-disassembler.sekiro/programs"
-kind = "tree"
+kind = "zip"
+size = 154867728
 count = 10368
 bytes = 153015626
 shape = "ff8f22fe79504e2e2c9836812e6c83e45efcbd9077a91f68d3c955beb2e92867"

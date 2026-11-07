@@ -97,15 +97,16 @@ size = 34181857
 blake3 = "96c667eb80870f73dc7f47be244666eeea4b00557b08fe749a7449c7a0a269ff"
 
 [[entry]]
-key = "oracles.game-code.shaunwhite/uv-rotation.tsv"
-kind = "file"
-size = 1636
-blake3 = "e1913ebf28adb763604647484c8ae683114c9a5f4f4aae858e9aee805646edea"
-
-[[entry]]
 key = "oracles.d3d-disassembler.shaun-white/sdb2"
-kind = "tree"
+kind = "zip"
+size = 56087016
 count = 14612
 bytes = 54362778
 shape = "38f67dc43aec7bba71e04f3828aeffd77d0ddcbf5bcc92f1da0ade44836889af"
 blake3 = "81f8987e7343951da6faa1bf09edce5b4e14ddad55c94621f1b0fa1f2e138d5a"
+
+[[entry]]
+key = "oracles.game-code.shaunwhite/uv-rotation.tsv"
+kind = "file"
+size = 1636
+blake3 = "e1913ebf28adb763604647484c8ae683114c9a5f4f4aae858e9aee805646edea"

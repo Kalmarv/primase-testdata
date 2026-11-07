@@ -109,7 +109,8 @@ blake3 = "3fe531a5c96d50aa845a286c7fcce6a1a9b6c49dab7b11b2951092778ccb698c"
 
 [[entry]]
 key = "oracles.corpus.elden/shaders"
-kind = "tree"
+kind = "zip"
+size = 1153322031
 count = 50283
 bytes = 1141969523
 shape = "3a5c0f3424d21888351dc093359d806691a2ee8e65b606f1d34bd32192f18a0d"
