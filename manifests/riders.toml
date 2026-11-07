@@ -35,10 +35,10 @@ blake3 = "dcf76c3611d66e7321dc29ac5107e69f93e7a4dc000f1c78a9678dc8bb042716"
 [[entry]]
 key = "oracles.d3d-disassembler.riders/shader-pack"
 kind = "tree"
-count = 4888
-bytes = 44321119
-shape = "359175c1da4a8d6ecbaa219e1c2c1192d381c9afa3b09fe45960b5392625c119"
-blake3 = "8b6e062996f10339ed5878381fc6ae253506afadb170447d604cf35561508153"
+count = 4886
+bytes = 43378516
+shape = "17d6b9cab7fd7fafa8b29e4b6534b21ebcddb9d1ad9ca3d86c42965fe9758d66"
+blake3 = "151839fe61ca31ddd704f5b1bd065acbbf4478495e7d03a47ebdc81d33a84fe0"
 
 [[entry]]
 key = "oracles.rrassetstudio.riders/meshes"

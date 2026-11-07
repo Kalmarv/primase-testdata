@@ -49,6 +49,14 @@ shape = "33b9d453a86b86246d732496c2763f4864f206b9ab44eac7dd303912ae08d949"
 blake3 = "f230c4ccc9e178ad54e41ffeb360fb9d407fff3db51171fb1ec5f5ac33af3a6c"
 
 [[entry]]
+key = "oracles.corpus.general/slim"
+kind = "tree"
+count = 16564
+bytes = 180644654
+shape = "f2637da92265d809a18fd74ac8b7fe20d1cc8ab63537f66ffe1ea6f69dafb29d"
+blake3 = "d8bb9338e4a6c1270c930b6a9ebe30efbb630d7ce4507e913e47f538b6accf36"
+
+[[entry]]
 key = "oracles.corpus.general/unitypy-samples"
 kind = "tree"
 count = 4
