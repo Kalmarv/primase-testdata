@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 (2026-11-07)
+
+- Manifests: `oracles.corpus.general/slim` is re-recorded (16,566 files, 180,659,652 bytes; 8,287 programs). iridia's code after the 0.2.1 record reaches 12 llvm-cov regions and 3 branch sides (its constant-buffer layouts in `iridia-dxbc/src/reflection.rs`) that only the rest of the pool reached; the coverage fill adds the one program that reaches them, `vkd3d__cbuffer__2__ps_5_0` from the fxc sweep (`60e54bed….dxbc` with its listing), and its `slim.tsv` row. The 0.2.1 record of the set no longer matches the folder.
+
 ## 0.2.1 (2026-11-07)
 
 - Manifests: `oracles.corpus.general/slim` is re-recorded (16,564 files, 180,644,672 bytes): three rows of its `slim.tsv` named a Direct3D 9 comment block's kind by its raw bytes (control characters and NULs inside a text file); they now read `comment:0x1c000000` and `comment:0x0f000002`. The programs and listings are unchanged; the 0.1.17 and 0.2.0 record of the set no longer matches the folder.
