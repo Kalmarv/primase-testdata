@@ -724,6 +724,24 @@ fn the_self_check_refuses_a_reexport_of_the_queries() {
     std::fs::remove_dir_all(&root).unwrap();
 }
 
+/// An entry of the crate the walk cannot read (here a link to nothing, which has no metadata) is a problem naming it,
+/// not a file the check passes over: sources it cannot see would leave the check green.
+#[cfg(unix)]
+#[test]
+fn an_entry_the_check_cannot_read_is_a_problem() {
+    let root = std::env::temp_dir().join(format!("primase-testdata-unreadable-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(root.join("tests")).unwrap();
+    std::os::unix::fs::symlink(root.join("nowhere"), root.join("tests/gone.rs")).unwrap();
+    let problems = problems(&REGISTRY, &root);
+    assert!(
+        problems.iter().any(|p| p.contains("gone.rs: cannot tell what it is")),
+        "{}",
+        problems.join("\n")
+    );
+    std::fs::remove_dir_all(&root).unwrap();
+}
+
 /// The configuration is read and parsed once for the process, not once per query.
 #[test]
 fn the_configuration_is_read_once() {

@@ -36,6 +36,7 @@ pub fn check_declared(registry: &Registry, crate_dir: impl AsRef<Path>) {
 
 /// What [`check_declared`] fails on, in the crate whose folder is `crate_dir`:
 /// - what the registry fails to say about itself ([`Registry::problems`]);
+/// - a folder or entry of the crate the walk cannot read (an IO error), since its sources would go unchecked;
 /// - in each source file that uses the inputs module (a path through `inputs::`), a query for a file of an install or
 ///   an oracle set (`oracle(..)`, `install_file(..)`, `Query::Oracle(..)`, `Query::Install(.., Some(..))`) whose
 ///   relative path is not a string literal or that the registry does not declare: the game may be a variable where the
@@ -49,7 +50,9 @@ pub fn check_declared(registry: &Registry, crate_dir: impl AsRef<Path>) {
 ///   [`doc::tables`].
 pub fn problems(registry: &Registry, crate_dir: &Path) -> Vec<String> {
     let mut problems = registry.problems();
-    for path in rust_files(crate_dir) {
+    let (files, unreadable) = rust_files(crate_dir);
+    problems.extend(unreadable);
+    for path in files {
         let shown = path
             .strip_prefix(crate_dir)
             .unwrap_or(&path)
@@ -102,29 +105,50 @@ pub fn problems(registry: &Registry, crate_dir: &Path) -> Vec<String> {
     problems
 }
 
-/// The `.rs` files under `dir`, build output and hidden folders aside, sorted.
-fn rust_files(dir: &Path) -> Vec<PathBuf> {
+/// The `.rs` files under `dir`, build output and hidden folders aside, sorted; and each folder or entry the walk could
+/// not read, with the error. A folder skipped on an IO error would leave its files unchecked and the check green.
+fn rust_files(dir: &Path) -> (Vec<PathBuf>, Vec<String>) {
     let mut out = Vec::new();
+    let mut unreadable = Vec::new();
     let mut pending = vec![dir.to_path_buf()];
     while let Some(d) = pending.pop() {
-        let Ok(entries) = std::fs::read_dir(&d) else {
-            continue;
+        let entries = match std::fs::read_dir(&d) {
+            Ok(entries) => entries,
+            Err(e) => {
+                unreadable.push(format!("{}: unreadable folder: {e}", d.display()));
+                continue;
+            }
         };
-        for e in entries.flatten() {
+        for e in entries {
+            let e = match e {
+                Ok(e) => e,
+                Err(e) => {
+                    unreadable.push(format!("{}: unreadable entry: {e}", d.display()));
+                    continue;
+                }
+            };
             let p = e.path();
             let name = e.file_name();
             let name = name.to_string_lossy();
-            if p.is_dir() {
-                if name != "target" && !name.starts_with('.') {
-                    pending.push(p);
+            // links followed, as the test build reads them
+            match std::fs::metadata(&p) {
+                Ok(meta) if meta.is_dir() => {
+                    if name != "target" && !name.starts_with('.') {
+                        pending.push(p);
+                    }
                 }
-            } else if p.extension().is_some_and(|x| x == "rs") {
-                out.push(p);
+                Ok(_) => {
+                    if p.extension().is_some_and(|x| x == "rs") {
+                        out.push(p);
+                    }
+                }
+                Err(e) => unreadable.push(format!("{}: cannot tell what it is: {e}", p.display())),
             }
         }
     }
     out.sort();
-    out
+    unreadable.sort();
+    (out, unreadable)
 }
 
 /// Whether `text` uses an inputs module: a path through a segment `inputs`.
