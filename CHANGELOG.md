@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.6 (2026-11-07)
+
+- Manifests: six sets are recorded as one archive each (`kind = "zip"`), with the same counts, bytes and digests as their folders' records: `oracles.corpus.general/slim` (`slim.zip`, 184,734,588 bytes), `oracles.corpus.elden/shaders` (`shaders.zip`, 1,153,322,031 bytes), `oracles.corpus.skate/shaders` (`shaders.zip`, 190,258,104 bytes), `oracles.d3d-disassembler.shaun-white/sdb2` (`sdb2.zip`, 56,087,016 bytes), `oracles.d3d-disassembler.sekiro/programs` (`programs.zip`, 154,867,728 bytes) and `oracles.corpus.sekiro/shader-binders` (`shader-binders.zip`, 420,408,762 bytes). Breaking for a reader that still calls `oracle` for them: read them through `oracle_tree` (dx, iridia, locum and fromsoft-formats do).
+
 ## 0.2.5 (2026-11-07)
 
 - Manifests: `oracles.dxc.elden/shader-listings` is recorded as one archive (`kind = "zip"`, `shader-listings.zip`, 4,008,774,993 bytes), with the same 50,283 files, 3,996,701,341 bytes and digests as the folder's record. Breaking for a reader that still calls `oracle` for it: read it through `oracle_tree` (dx does from 0.10). `oracles.corpus.elden/shaders` stays a folder.
