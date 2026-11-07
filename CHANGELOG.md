@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 (2026-11-07)
+
+- Oracle folders can be stored as one archive: an entry `kind = "zip"` records `<rel>.zip` by its size and its members' count, bytes, shape and content digests, the digests the folder would have. `oracle_tree(set, game, rel)` (in `inputs!`, beside `oracle`) gives a `Tree` that reads a folder and an archive alike: `names`, `size`, `read`, `len`, `as_folder` and `extract` (to the scratch root, with a byte limit). The archive reader (`zip`) is the crate's own, no new dependency: stored members only, zip64, every refusal naming the member. `quick` verification reads the central directory instead of listing the folder; `content` hashes every member and checks its CRC-32.
+- Breaking: `oracle` fails for an entry recorded as an archive, naming `oracle_tree`, instead of returning a path that is no folder. Entries already recorded keep their form until their consumers read them through `oracle_tree`.
+- `check_declared` reports a folder or entry of the crate it cannot read (an IO error) instead of passing over its sources.
+- `cargo run --example manifest -- add <key> --zip` records a configured archive.
+
 ## 0.1.17 (2026-11-07)
 
 - Manifests: `oracles.corpus.general/slim` (16,564 files, 180,644,654 bytes), the slim shader set: 8,286 DXBC, DXIL and Direct3D 9 programs chosen from 108,394 distinct ones (the oracle home's game corpora and disassembler sets, ten outside projects' test corpora, FidelityFX SDK v1.1.4) by a set cover of their disassembly features, plus the programs that reach the llvm-cov regions and branch sides the set alone did not reach in dx and iridia, so the set reaches all the full pool reaches in both. Each program `programs/<fam>/<sha256>.<fam>` beside Microsoft's listing (`.dxil.txt` from dxc 1.9.2609 -dumpbin, `.dxbc.asm` and `.d3d9.asm` from D3DDisassemble 10.0.26100.4654, flags 0, LF line ends, the closing NUL stripped), `slim.tsv` (why each program is there and where it lives for good) and `microsoft-refused.tsv` (the 10 programs Microsoft's tools refuse). It is the pre-push gate's shader set; primase-oracles `producers/slim-set` makes it.

@@ -95,6 +95,11 @@ fn main() {
 }
 ```
 
+An oracle folder can be stored as one archive (`<rel>.zip`, its manifest entry `kind = "zip"`), which a network share
+reads far faster than many small files. `inputs::oracle_tree(set, game, "rel")` reads either form: a `Tree` lists the
+files (`names`), gives their sizes and reads one (`read`), and `extract` writes them out for a tool that needs real
+paths. `inputs::oracle` fails, naming `oracle_tree`, for an entry stored as an archive.
+
 Integration tests use the module with `mod inputs;`; unit tests add `#[cfg(test)] #[path = "../tests/inputs/mod.rs"] mod inputs;` to the crate root. Each crate also runs the self-check as one test:
 
 ```rust

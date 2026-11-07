@@ -735,7 +735,9 @@ fn an_entry_the_check_cannot_read_is_a_problem() {
     std::os::unix::fs::symlink(root.join("nowhere"), root.join("tests/gone.rs")).unwrap();
     let problems = problems(&REGISTRY, &root);
     assert!(
-        problems.iter().any(|p| p.contains("gone.rs: cannot tell what it is")),
+        problems
+            .iter()
+            .any(|p| p.contains("gone.rs: cannot tell what it is")),
         "{}",
         problems.join("\n")
     );
