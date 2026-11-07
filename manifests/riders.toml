@@ -18,7 +18,8 @@ files = [
 
 [[entry]]
 key = "oracles.corpus.riders/anvil-programs"
-kind = "tree"
+kind = "zip"
+size = 94705334
 count = 13790
 bytes = 91671512
 shape = "472289fb4b83d741307cd5de5e1fda3b66965661af6e4a5c338e3c00b8b129a8"
