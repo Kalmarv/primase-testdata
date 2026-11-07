@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4 (2026-11-07)
+
+- Manifests: `oracles.d3d-disassembler.general/fxc-sweep-zi` and `fxc-sweep-zod` are recorded as one archive each (`kind = "zip"`; `fxc-sweep-zi.zip` 347,039,829 bytes, `fxc-sweep-zod.zip` 478,350,701 bytes), with the same counts, bytes and digests as their folders' records. Breaking for a reader that still calls `oracle` for them: read them through `oracle_tree` (dx does from 0.10).
+
 ## 0.2.3 (2026-11-07)
 
 - Manifests: `oracles.corpus.riders/anvil-programs` is recorded as one archive (`kind = "zip"`, `anvil-programs.zip`, 94,705,334 bytes): the same 13,790 files of 91,671,512 bytes and the same digests as the folder's record. No crate reads the set; read it through `oracle_tree`.
