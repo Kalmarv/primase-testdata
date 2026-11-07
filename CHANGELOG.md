@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3 (2026-11-07)
+
+- Manifests: `oracles.corpus.riders/anvil-programs` is recorded as one archive (`kind = "zip"`, `anvil-programs.zip`, 94,705,334 bytes): the same 13,790 files of 91,671,512 bytes and the same digests as the folder's record. No crate reads the set; read it through `oracle_tree`.
+
 ## 0.2.2 (2026-11-07)
 
 - Manifests: `oracles.corpus.general/slim` is re-recorded (16,566 files, 180,659,652 bytes; 8,287 programs). iridia's code after the 0.2.1 record reaches 12 llvm-cov regions and 3 branch sides (its constant-buffer layouts in `iridia-dxbc/src/reflection.rs`) that only the rest of the pool reached; the coverage fill adds the one program that reaches them, `vkd3d__cbuffer__2__ps_5_0` from the fxc sweep (`60e54bed….dxbc` with its listing), and its `slim.tsv` row. The 0.2.1 record of the set no longer matches the folder.
