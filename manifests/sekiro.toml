@@ -174,7 +174,8 @@ blake3 = "546ba7a79bf23311a59d27a41934e6931f6bfb6c73a25f1d30e69faa732e3842"
 
 [[entry]]
 key = "oracles.corpus.sekiro/shader-binders"
-kind = "tree"
+kind = "zip"
+size = 420408762
 count = 22478
 bytes = 415588500
 shape = "875a6bbfe2b38a09c2960a190c16f30b62689472379913f614e21df3534f89ae"
